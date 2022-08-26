@@ -5,7 +5,7 @@
   border: solid;
   border-radius: 10px;
   border-color: $text-collor;
-  margin: 10px;
+  margin: 5px;
   text-align: center;
 } 
 
@@ -23,7 +23,6 @@
   right: 0;
   bottom: 0;
   left: 0;
-  height: 1px;
 }
 
 @mixin border-radius {

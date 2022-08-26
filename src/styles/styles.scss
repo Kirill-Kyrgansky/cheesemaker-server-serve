@@ -34,12 +34,20 @@ textarea {
 
 .title-2 {
   @include title-2;
+  margin: auto;
+}
+
+.sction-footer {
+  background-image: url(/public/allImage/fone2.png);
 }
 
 .header {
   display: flex;
   align-items: stretch;
-  padding-top: 20px;
+  padding: 20px 0px;
+  background-image: url(/public/allImage/header.png);
+  background-color:$main-collor;
+  background-size: 100% 140px;
 }
 
 .section {
@@ -53,16 +61,20 @@ textarea {
 
 .wrap {
   background-image: url(/public/allImage/fone.png);
-  padding: 10px 0px;
+  background-color:$main-collor;
+  background-repeat: no-repeat;
+  max-width: 1920px;
+  margin: auto;
+  padding: 25px 0px
 }
 
 .z-1 {
   z-index: -1;
 }
 
-.home-page-wrap {
-  margin-bottom: 15px;
-}
+// .home-page-wrap {
+//   margin-bottom: 15px;
+// }
 
 .container {
   width: 100%;
@@ -114,12 +126,30 @@ textarea {
   align-items: center;
 }
 
+.column-centered {
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-width: 300px;
+}
+
+.flex-start {  
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.text-footer-info {
+  margin-top: 45px;
+}
+
 .arrow-bottom-container {
   display: flex;
   position: sticky;
   bottom: 20px;
   justify-content: flex-end;
-  margin-top: -77px;
+  margin-top: -50px;
 }
 
 .wrap-cheesemaker-order {
@@ -333,7 +363,7 @@ textarea {
   top: auto;
   left: 0%;
   right: 0%;
-  bottom: -10%;
+  // bottom: -10%;
 }
 
 .border-line {
@@ -357,13 +387,11 @@ textarea {
 }
 
 .bottom {
-  // margin-top: 100px;
-  top: 30px;
+  padding: 30px 0px;
 }
 
 .searching-wrap {
-  // margin-top: 70px;
-  background-color: $main-collor;
+  padding-bottom: 25px;
 }
 
 p {
@@ -580,10 +608,10 @@ input::placeholder {
 //   transition: 0.4s;
 // }
 .catalog-element {
-    background-color: #faf3db;
+    background-color: #ffeacade;
     border-radius: 10px;
     position: relative;
-    box-shadow: -3px 11px 20px 1px rgb(0 0 0 / 54%);
+    box-shadow: -3px 11px 20px 1px #3723118a;
     max-width: 450px;
     display: flex;
     flex-direction: column;
@@ -617,7 +645,7 @@ input::placeholder {
   right: -4px;
   width: 100%;
   z-index: 999;
-  background-image: url(/public/allImage/section-background-image-cheese.bc207c6ac8fd586c306b\ \(1\).png);
+  background-image: url(/public/allImage/fone.png);
 
 }
 
@@ -798,7 +826,9 @@ input::placeholder {
 
 .footer-list {
   display: flex;
-}
+  flex-direction: column;
+  align-items: center;
+  align-content: center;}
 
 .logo-footer {
   width: auto;

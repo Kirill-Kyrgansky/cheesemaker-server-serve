@@ -1,5 +1,5 @@
 <template>
-  <div class="border-surround filter">
+  <div class="border-surround filter" v-if="false">
     <h3 class="title-3 text-centered">Найти</h3>
     <div class="v-select">
       <p
