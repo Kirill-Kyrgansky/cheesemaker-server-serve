@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,400&display=swap');
+
+@mixin btn-text {
+  font-weight: 400;
+  font-size: 14px;
+  color: $main-collor;
+}
+@mixin paragraph-small {
+  font-weight: 500;
+  font-size: 16px;
+  color: $text-collor;
+  text-decoration: none;
+}
+
+@mixin paragraph {
+  font-weight: 500;
+  font-size: 18px;
+  color: $text-collor;
+  text-decoration: none;
+}
+
+
+@mixin paragraph-bold {
+  font-weight: 600;
+  font-size: medium;
+  color: $text-collor;
+}
+
+@mixin title-1 {
+  font-weight: 800;
+  color:$text-collor;
+  font-size: xxx-large;
+  text-decoration: none;
+}
+
+@mixin title-2 {
+  font-weight: 800;
+  color: $text-collor;
+  font-size: 25px;
+  text-decoration: none;
+}
+
+@mixin title-3 {
+  font-weight: 600;
+  color: $text-collor;
+  font-size: medium;
+  text-decoration: none;
+
+}
