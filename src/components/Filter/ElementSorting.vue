@@ -1,4 +1,4 @@
-<template><div style="position:absolute; height: 100%; z-index: 999; left: -20px; width: 300px;">
+<template><div style="position:absolute; height: 100%; z-index: 999; left: -20px; width: 300px;" v-if="false">
   <div class="border-surround" style="border-top-right-radius: 0px">
     <div class="filter">
       <h3 class="title-3 text-centered">Найти</h3>
@@ -7,14 +7,15 @@
           {{ selected }}
         </p>
         <div class="options" v-if="areOptionsVisible">
-          <a
+          <div  v-for="option in CATEGORY"
+            :key="option.id"><a
             class="input bold search"
-            v-for="option in CATEGORY"
-            :key="option.id"
+            v-if="option.active"
             @click="selectOption(option)"
           >
             {{ option.name }}
           </a>
+          </div>
         </div>
       </div>
     </div>
@@ -87,6 +88,7 @@ export default {
   mounted() {
     document.addEventListener('click', this.hideSelect.bind(this), true);
     this.GET_CATEGORY_FROM_API();
+
   },
   beforeUnmount() {
     document.removeEventListener('click', this.hideSelect);

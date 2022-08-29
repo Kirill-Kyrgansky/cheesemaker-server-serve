@@ -26,7 +26,6 @@ export default {
     })
       .then((products) => {
         commit('SET_PRODUCTS_TO_STATE', products.data);
-        console.log(products.data);
         return products;
       })
       .catch((error) => {
@@ -42,7 +41,6 @@ export default {
     })
       .then((category) => {
         commit('SET_CATEGORY_TO_STATE', category.data);
-        console.log(category);
         return category;
       })
       .catch((error) => {

@@ -1,7 +1,7 @@
 <template>
   <div class="catalog-items-products" v-if="this.product.inStockQuantity > 0">
     <!--product quantity checked-->
-    <div class="catalog-element products" v-if="true">
+    <div class="catalog-element products" >
       <div class="catalog-items-products-img">
         <img
           :src="product.image"
@@ -27,9 +27,10 @@
         <img src="/allImage/Icons/buybuttone.png" class="element-catalog-bottom-img-cart" />
       </button>
     </div>
+    <transition name="description">
     <div
       class="products description pointer"
-      v-show="description"
+      v-if="description"
       @mouseleave="description = false"
     >
       <div class="description-text">
@@ -40,6 +41,7 @@
         </div>
       </div>
     </div>
+    </transition>
   </div>
 </template>
 
@@ -97,3 +99,13 @@ export default {
   },
 };
 </script>
+<style>
+
+.description-enter-active, .description-leave-active {
+  transition: opacity .5s ease;
+}
+
+.description-enter-from, .description-leave-to {
+  opacity: 0;
+}
+</style>

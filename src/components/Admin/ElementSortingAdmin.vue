@@ -1,34 +1,57 @@
 <template>
-  <div class="border-surround filter admin-panel" v-if="false">
+  <div class="border-surround filter admin-panel">
     <h3 class="title-3 text-centered">Найти</h3>
     <div class="v-select">
       <p class="input">{{ selected }}</p>
       <div class="options-admin">
-        <p
-          href="#"
-          class="paragraph input search"
-          v-for="option in CATEGORY"
-          :key="option.id"
-          @click="selectOption(option)"
-        >
-          {{ option.name }}
-          <span @click="deliteCategory(option.id)">X</span>
-        </p>
+        <div v-for="option in CATEGORY" :key="option.id" >
+          <div class="input search" v-if="option.active">
+            <p href="#" class="paragraph" @click="selectOption(option)">
+              {{ option.name }}
+            </p>
+            <div class="centered">
+            <img
+              @click="deliteCategory(option.id)"
+              src="/allImage/Icons/cross.svg"
+              class="img-question"
+            />
+            <input
+              type="checkbox"
+              @click="сhangeVisibility(option.id, option.active)"
+              v-model="option.active"
+              v-if="option.id != 1"
+            />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="options-admin margin-10-0" >
+        <div v-for="option in CATEGORY" :key="option.id" >
+          <div class="input search" v-if="!option.active">
+            <p href="#" class="paragraph" @click="selectOption(option)">
+              {{ option.name }}
+            </p>
+            <div class="centered">
+            <img
+              @click="deliteCategory(option.id)"
+              src="/allImage/Icons/cross.svg"
+              class="img-question"
+            />
+            <input
+              type="checkbox"
+              @click="сhangeVisibility(option.id, option.active)"
+              v-model="option.active"
+            />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="admin-panel margin-10-0">
       <p class="paragraph-small">{{ searchValue }}</p>
-        <p class="paragraph-small margin-10-0">Добавить категорию:</p>
-        <input
-          class="input"
-          type="text"
-          v-model="formCategories.name"
-        />
-        <button
-          class="btn"
-          v-on:click="addCategories()"
-          >Создать
-        </button>
+      <p class="paragraph-small margin-10-0">Добавить категорию:</p>
+      <input class="input" type="text" v-model="formCategories.name" />
+      <button class="btn" v-on:click="addCategories()">Создать</button>
     </div>
   </div>
 </template>
@@ -70,6 +93,24 @@ export default {
     ...mapGetters(['CATEGORY', 'SEARCH_VALUE']),
   },
   methods: {
+    сhangeVisibility(index, isActive) {
+      let active = {
+        active: !isActive,
+      };
+      axios
+        .patch(`http://localhost:3000/category/${index}`, active)
+        .then((res) => {
+          location.reload(res);
+          if (res == 404) {
+            alert('Ошибка в работе сервера. Перезагрузите страницу');
+          }
+          console.log(res);
+        })
+        .catch((error) => {
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          console.log(error);
+        });
+    },
     deliteCategory(index) {
       const isTrue = confirm('Вы уверены?');
       if (isTrue === true) {

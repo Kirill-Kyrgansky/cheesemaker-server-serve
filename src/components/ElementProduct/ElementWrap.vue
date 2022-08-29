@@ -72,7 +72,7 @@ export default {
       this.isVisible = !this.isVisible;
       setTimeout(() => {
         this.isVisible = !this.isVisible;
-      }, 1000);
+      }, 2000);
       this.ADD_TO_CART(data);
     },
     optionSelect(CATEGORY) {
@@ -104,12 +104,11 @@ export default {
 </script>
 
 <style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s ease;
 }
-.fade-enter,
-.fade-leave-to {
+
+.fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
 </style>
