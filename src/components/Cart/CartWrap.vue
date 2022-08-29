@@ -6,7 +6,7 @@
           <img
               src="/allImage/Icons/cross.svg"
               class="header-link-icon pointer close"
-              @click="close"
+              @click="close" 
             />
         </div>
         <h2 class="title-2">Заказ успешно сформирован!</h2>
