@@ -6,8 +6,8 @@ export default {
   PRODUCTS(state) {
     return state.products;
   },
-  CATEGORIES(state) {
-    return state.categories;
+  CATEGORY(state) {
+    return state.category;
   },
   DELIVERY_POINTS(state) {
     return state.deliveryPoints;

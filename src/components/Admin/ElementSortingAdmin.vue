@@ -7,11 +7,11 @@
         <p
           href="#"
           class="paragraph input search"
-          v-for="option in CATEGORIES"
+          v-for="option in CATEGORY"
           :key="option.id"
           @click="selectOption(option)"
         >
-          {{ option.text }}
+          {{ option.name }}
           <span @click="deliteCategory(option.id)">X</span>
         </p>
       </div>
@@ -22,7 +22,7 @@
         <input
           class="input"
           type="text"
-          v-model="formCategories.text"
+          v-model="formCategories.name"
         />
         <button
           class="btn"
@@ -67,14 +67,14 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['CATEGORIES', 'SEARCH_VALUE']),
+    ...mapGetters(['CATEGORY', 'SEARCH_VALUE']),
   },
   methods: {
     deliteCategory(index) {
       const isTrue = confirm('Вы уверены?');
       if (isTrue === true) {
         axios
-          .delete(`http://localhost:3000/categories/${index}`)
+          .delete(`http://localhost:3000/category/${index}`)
           .then((res) => {
             location.reload(res);
           })
@@ -85,11 +85,11 @@ export default {
       }
     },
     addCategories() {
-      if (this.formCategories.text.length === 0) {
+      if (this.formCategories.name.length === 0) {
         alert('Ошибка, пустая строка. Введите название новой категории');
       } else {
         axios
-          .post('http://localhost:3000/categories', this.formCategories)
+          .post('http://localhost:3000/category', this.formCategories)
           .then((res) => {
             location.reload(res);
           })

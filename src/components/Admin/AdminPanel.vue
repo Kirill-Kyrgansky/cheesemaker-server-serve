@@ -66,11 +66,11 @@
           v-model="form.category"
         >
           <option
-            v-for="category in CATEGORIES"
-            :value="category.text"
+            v-for="category in CATEGORY"
+            :value="category.name"
             :key="category.id"
         >
-            {{ category.text }}
+            {{ category.name }}
           </option>
         </select>
         <div class="text-centered">
@@ -133,7 +133,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['CATEGORIES']),
+    ...mapGetters(['CATEGORY']),
   },
   mounted() {
     this.form = this.product;

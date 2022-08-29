@@ -49,7 +49,7 @@ export default {
     AdminPanel,
   },
   computed: {
-    ...mapGetters(['PRODUCTS', 'CATEGORIES']),
+    ...mapGetters(['PRODUCTS', 'CATEGORY']),
   },
 };
 </script>

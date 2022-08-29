@@ -2,7 +2,7 @@
   <div class="section wrap-cheesemaker">
     <ElementSortingAdmin
       :selected="selected"
-      :options="CATEGORIES"
+      :options="CATEGORY"
       @select="sortByCategories"
     />
     <div class="container">
@@ -50,26 +50,26 @@ export default {
       this.sortedProducts = [];
       const vm = this;
       this.PRODUCTS.map((item) => {
-        if (item.category === category.text) {
+        if (item.category === category.name) {
           vm.sortedProducts.push(item);
         }
       });
-      this.selected = category.text;
+      this.selected = category.name;
     },
-    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_CATEGORIES_FROM_API']),
+    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_CATEGORY_FROM_API']),
     addToCart(data) {
       this.ADD_TO_CART(data);
     },
-    optionSelect(CATEGORIES) {
-      this.selected = CATEGORIES.text;
+    optionSelect(CATEGORY) {
+      this.selected = CATEGORY.name;
     },
   },
   mounted() {
     this.GET_PRODUCTS_FROM_API();
-    this.GET_CATEGORIES_FROM_API();
+    this.GET_CATEGORY_FROM_API();
   },
   computed: {
-    ...mapGetters(['PRODUCTS', 'CATEGORIES', 'SEARCH_VALUE']),
+    ...mapGetters(['PRODUCTS', 'CATEGORY', 'SEARCH_VALUE']),
     filteredProducts() {
       if (this.sortedProducts.length) {
         return this.sortedProducts;

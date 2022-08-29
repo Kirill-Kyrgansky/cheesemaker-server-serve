@@ -14,7 +14,7 @@ const store = new createStore({
     isAdmin: true,
     searchValue: '',
     products: [],
-    categories: [],
+    category: [],
     deliveryPoints: [],
     cart: [],
     orders: [],

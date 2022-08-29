@@ -1,4 +1,4 @@
-<template><div style="position:absolute; height: 100%; z-index: 999; left: -20px;" v-if="false">
+<template><div style="position:absolute; height: 100%; z-index: 999; left: -20px; width: 300px;">
   <div class="border-surround" style="border-top-right-radius: 0px">
     <div class="filter">
       <h3 class="title-3 text-centered">Найти</h3>
@@ -9,11 +9,11 @@
         <div class="options" v-if="areOptionsVisible">
           <a
             class="input bold search"
-            v-for="option in CATEGORIES"
+            v-for="option in CATEGORY"
             :key="option.id"
             @click="selectOption(option)"
           >
-            {{ option.text }}
+            {{ option.name }}
           </a>
         </div>
       </div>
@@ -58,10 +58,10 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['CATEGORIES', 'SEARCH_VALUE']),
+    ...mapGetters(['CATEGORY', 'SEARCH_VALUE']),
   },
   methods: {
-    ...mapActions(['GET_SEARCH_VALUE_TO_VUEX', 'GET_CATEGORIES_FROM_API']),
+    ...mapActions(['GET_SEARCH_VALUE_TO_VUEX', 'GET_CATEGORY_FROM_API']),
     search(value) {
       this.GET_SEARCH_VALUE_TO_VUEX(value);
     },
@@ -86,7 +86,7 @@ export default {
   },
   mounted() {
     document.addEventListener('click', this.hideSelect.bind(this), true);
-    this.GET_CATEGORIES_FROM_API();
+    this.GET_CATEGORY_FROM_API();
   },
   beforeUnmount() {
     document.removeEventListener('click', this.hideSelect);

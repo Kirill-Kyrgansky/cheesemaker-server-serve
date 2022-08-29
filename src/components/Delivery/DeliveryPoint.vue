@@ -16,7 +16,7 @@
               href="tel:+79912105757"
               class="title-3"
             >
-              {{ deliveryPoint.phoneTitle }}
+              {{ deliveryPoint.phone }}
             </a>
           </div>
           <div

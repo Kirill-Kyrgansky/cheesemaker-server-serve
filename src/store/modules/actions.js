@@ -21,7 +21,7 @@ export default {
   GET_PRODUCTS_FROM_API({
     commit,
   }) {
-    return axios(`${URL}/products`, {
+    return axios(`${URL}/product`, {
       method: 'GET',
     })
       .then((products) => {
@@ -34,15 +34,16 @@ export default {
         return error;
       });
   },
-  GET_CATEGORIES_FROM_API({
+  GET_CATEGORY_FROM_API({
     commit,
   }) {
-    return axios(`${URL}/categories`, {
+    return axios(`${URL}/category`, {
       method: 'GET',
     })
-      .then((categories) => {
-        commit('SET_CATEGORIES_TO_STATE', categories.data);
-        return categories;
+      .then((category) => {
+        commit('SET_CATEGORY_TO_STATE', category.data);
+        console.log(category);
+        return category;
       })
       .catch((error) => {
         console.log(error);

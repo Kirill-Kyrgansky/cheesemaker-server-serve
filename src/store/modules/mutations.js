@@ -22,8 +22,8 @@ export default {
   SET_PRODUCTS_TO_STATE: (state, products) => {
     state.products = products;
   },
-  SET_CATEGORIES_TO_STATE: (state, categories) => {
-    state.categories = categories;
+  SET_CATEGORY_TO_STATE: (state, category) => {
+    state.category = category;
   },
   SET_DELIVERY_POINTS_FROM_API: (state, deliveryPoints) => {
     state.deliveryPoints = deliveryPoints;
