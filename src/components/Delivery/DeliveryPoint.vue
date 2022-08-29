@@ -4,20 +4,23 @@
       <div class="map">
         <div
           class="map-border"
-          v-for="deliveryPoint in DELIVERY_POINTS"
-          :key="deliveryPoint.id"
+          v-for="pickpoint in DELIVERY_POINTS"
+          :key="pickpoint.id"
         >
           <div class="map-cart-text">
-            <h3 class="title-3">{{ deliveryPoint.name }}</h3>
+            <h3 class="title-3">{{ pickpoint.name }}</h3>
             <p class="paragraph margin-10-0">
-              {{ deliveryPoint.address }}
+              {{ pickpoint.address }}
             </p>
             <a
               href="tel:+79912105757"
               class="title-3"
             >
-              {{ deliveryPoint.phone }}
+              {{ pickpoint.phone }}
             </a>
+             <p class="paragraph margin-10-0">
+              {{ pickpoint.workhours }}
+            </p>
           </div>
           <div
             style="position: relative;
@@ -25,14 +28,14 @@
             border-radius: 15px"
           >
             <a
-              :href="deliveryPoint.linkYandex"
+              :href="pickpoint.linkYandex"
               style="color: #eee;
               font-size: 12px;
               position: absolute;
               top: 0px"
               >Славный сыровар</a
             ><a
-              :href="deliveryPoint.linkPoint"
+              :href="pickpoint.linkPoint"
               style="color: #eee;
               font-size: 12px;
               position: absolute;
@@ -40,7 +43,7 @@
               >Молочный магазин в Белгородской области</a
             ><iframe
               title="map"
-              :src="deliveryPoint.mapFrame"
+              :src="pickpoint.mapFrame"
               height="250"
               frameborder="0"
               allowfullscreen="true"

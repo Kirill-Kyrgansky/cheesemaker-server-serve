@@ -15,7 +15,7 @@ const store = new createStore({
     searchValue: '',
     products: [],
     category: [],
-    deliveryPoints: [],
+    pickpoints: [],
     cart: [],
     orders: [],
   },

@@ -25,8 +25,8 @@ export default {
   SET_CATEGORY_TO_STATE: (state, category) => {
     state.category = category;
   },
-  SET_DELIVERY_POINTS_FROM_API: (state, deliveryPoints) => {
-    state.deliveryPoints = deliveryPoints;
+  SET_DELIVERY_POINTS_FROM_API: (state, pickpoints) => {
+    state.pickpoints = pickpoints;
   },
   REMOVE_FROM_CART(state, index) {
     state.cart.splice(index, 1);

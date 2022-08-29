@@ -10,7 +10,7 @@ export default {
     return state.category;
   },
   DELIVERY_POINTS(state) {
-    return state.deliveryPoints;
+    return state.pickpoints;
   },
   CART(state) {
     return state.cart;

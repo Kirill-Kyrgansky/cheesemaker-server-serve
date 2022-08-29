@@ -126,6 +126,11 @@ textarea {
   align-items: center
 }
 
+.position-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .arrow-bottom {
   position: sticky;
   z-index: 9999;
@@ -381,6 +386,10 @@ textarea {
 
 .text-centered {
   text-align: center;
+}
+
+.cart-container {
+  padding: 30px 0px;
 }
 
 .cart-done {
@@ -678,9 +687,9 @@ input::placeholder {
 }
 
 .delivery {
-  width: 300px;
   text-align: center;
   display: block;
+  margin: 0px
 }
 
 .select {
@@ -737,7 +746,7 @@ input::placeholder {
 }
 
 .catalog-element-wrap {
-  margin: 20px;
+  // margin: 20px;
   text-align: center;
 }
 
@@ -829,7 +838,7 @@ input::placeholder {
   justify-content: flex-start;
   align-items: stretch;
   @include border-radius;
-  margin: 100px 0px;
+  // margin: 100px 0px;
   box-shadow: 10px 10px 10px -4px rgb(0 0 0 / 20%);
 }
 
@@ -838,7 +847,7 @@ input::placeholder {
   justify-content: space-around;
   align-items: center;
   align-content: flex-start;
-  margin: 10px 0px;
+  // margin: 10px 0px;
 }
 
 .cart-element {
@@ -856,7 +865,9 @@ input::placeholder {
 }
 
 .cart-sucsess {
-  padding: 0px 20px 20px 20px;
+  padding: 50px;
+  background-image: url(/public/allImage/fone.png);
+
 }
 
 .text-align-right {
@@ -868,6 +879,7 @@ input::placeholder {
   align-items: center;
   justify-content: flex-end;
   margin-right: 50px;
+  margin-bottom: 1;
 }
 
 .cart-footer-element {

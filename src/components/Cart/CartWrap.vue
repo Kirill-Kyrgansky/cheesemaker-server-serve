@@ -1,9 +1,13 @@
 <template>
   <section class="section">
     <div class="cart-done" v-if="sucsess">
-      <div class="cart cart-sucsess">
-        <div class="order-title">
-          <p class="title-1 close pointer button-on" @click="close">X</p>
+      <div class="cart cart-sucsess order-title">
+        <div class=" position-end">
+          <img
+              src="/allImage/Icons/cross.svg"
+              class="header-link-icon pointer close"
+              @click="close"
+            />
         </div>
         <h2 class="title-2">Заказ успешно сформирован!</h2>
         <p class="paragraph">Письмо с информацией отправлено вам на почту.</p>
@@ -11,7 +15,7 @@
         <p class="paragraph">Спасибо за заказ!</p>
       </div>
     </div>
-    <div class="container cart" v-if="isVisible">
+    <div class="container cart cart-container" v-if="isVisible">
       <p class="title-2 text-centered margin-10-0" v-if="cart_data <= 1">
         Корзина пуста
       </p>
@@ -33,16 +37,16 @@
           <div class="options cart-options" v-if="areOptionsVisible">
             <p
               class="paragraph input search-cart"
-              v-for="deliveryPoint in DELIVERY_POINTS"
-              :key="deliveryPoint.id"
-              @click="selectOption(deliveryPoint)"
+              v-for="pickpoint in DELIVERY_POINTS"
+              :key="pickpoint.id"
+              @click="selectOption(pickpoint)"
             >
-              {{ deliveryPoint.name }}
+              {{ pickpoint.name }}
             </p>
           </div>
         </div>
         <div class="cart-footer-element">
-          <button class="btn" @click="orderUsers()">Заказать</button>
+          <button class="header-link" @click="orderUsers()">Заказать</button>
         </div>
       </div>
     </div>
@@ -134,8 +138,8 @@ export default {
         this.areOptionsVisible == true;
       }
     },
-    selectOption(deliveryPoint) {
-      this.selected = deliveryPoint.name;
+    selectOption(pickpoint) {
+      this.selected = pickpoint.name;
       this.areOptionsVisible = false;
     },
     hideSelect() {

@@ -1,12 +1,10 @@
 <template>
   <div>
     <div class="cart-element-wrap catalog-element-wrap">
-      <div
-        @click="deliteFromCart"
-        class="cart-element first-cart-element pointer"
-      >
-        <p class="title-1">Х</p>
-      </div>
+        <img @click="deliteFromCart"
+              src="/allImage/Icons/cross.svg"
+              class="header-link-icon pointer"
+            />
       <div class="cart-element">
         <img
           :src="cart_item_data.image"

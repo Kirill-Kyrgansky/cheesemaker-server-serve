@@ -51,12 +51,12 @@ export default {
   GET_DELIVERY_POINTS_FROM_API({
     commit,
   }) {
-    return axios(`${URL}/pickpoints`, {
+    return axios(`${URL}/pickpoint`, {
       method: 'GET',
     })
-      .then((deliveryPoints) => {
-        commit('SET_DELIVERY_POINTS_FROM_API', deliveryPoints.data);
-        return deliveryPoints;
+      .then((pickpoints) => {
+        commit('SET_DELIVERY_POINTS_FROM_API', pickpoints.data);
+        return pickpoints;
       })
       .catch((error) => {
         console.log(error);
