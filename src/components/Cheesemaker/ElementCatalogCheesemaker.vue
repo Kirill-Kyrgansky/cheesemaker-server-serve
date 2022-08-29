@@ -8,14 +8,11 @@
       />
       <div class="text-align-right">
         <h3 class="title-3 text-centered">{{ product.name }}</h3>
-        <p class="paragraph text-centered">
-          {{ product.description }}
-        </p>
         <p class="paragraph-tiny bold margin-10-0 text-centered">
           1 {{ product.unit }}.
         </p>
       </div>
-      <p class="paragraph-small margin-10-0">
+      <p class="paragraph-small margin-10-0 text-centered">
         Введите кол-во приготовленного продукта:
       </p>
       <input

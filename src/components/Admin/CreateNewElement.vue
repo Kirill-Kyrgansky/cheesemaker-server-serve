@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog-element" id="admin">
+  <div class="catalog-items" id="admin">
     <div class="catalog-element-wrap text-centered">
         <label class="text-reader">
           <input type="file" @change="loadTextFromFile" />

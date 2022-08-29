@@ -7,7 +7,7 @@
         @select="sortByCategories"
       />
       <div class="container">
-        <div class="catalog-items">
+        <div class="catalog-items-admin">
           <ElementCatalogCheesemaker
             v-for="product in filteredProducts"
             :key="product.id"

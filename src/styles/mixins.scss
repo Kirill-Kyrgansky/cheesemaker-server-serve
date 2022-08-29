@@ -27,12 +27,12 @@
 
 @mixin border-radius {
   background-color: $main-collor;
-  border: 4px solid $text-collor-opacity;
+  border: 2.5px solid $text-collor-opacity;
   border-radius: 10px;
 }
 
 @mixin grid-20-10 {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr ));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr ));
   gap: 10px 10px;
 }

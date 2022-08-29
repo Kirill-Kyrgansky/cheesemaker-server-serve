@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog-items">
+  <div class="catalog-items-admin">
     <div class="catalog-element">
       <img
         :src="product.image"
@@ -9,11 +9,9 @@
       <div class="text-align-right">
         <h3 class="title-3 text-centered">{{ product.name }}</h3>
         <p class="paragraph text-centered">{{ product.description }}</p>
-        <div class="space-between">
-          <p class="paragraph-tiny bold margin-10-0">
+        <p class="paragraph-tiny bold margin-10-0 text-centered">
             {{ product.price }}&nbsp;₽&nbsp;/&nbsp;1 {{ product.unit }}.
-          </p>
-        </div>
+          </p>  
       </div>
       <AdminPanel :product="product" />
     </div>

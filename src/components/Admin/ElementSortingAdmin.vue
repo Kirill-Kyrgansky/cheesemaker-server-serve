@@ -1,5 +1,5 @@
 <template>
-  <div class="border-surround filter admin-panel">
+  <div class="border-surround filter admin-panel" v-if="false">
     <h3 class="title-3 text-centered">Найти</h3>
     <div class="v-select">
       <p class="input">{{ selected }}</p>

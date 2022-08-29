@@ -1,27 +1,25 @@
-<template>
-  <div class="border-surround filter" v-if="false">
-    <h3 class="title-3 text-centered">Найти</h3>
-    <div class="v-select">
-      <p
-        class="input"
-        @click="areOptionsVisible = !areOptionsVisible"
-      >
-        {{ selected }}
-      </p>
-      <div
-        class="options"
-        v-if="areOptionsVisible"
-      >
-        <a
-          class="input bold search"
-          v-for="option in CATEGORIES"
-          :key="option.id"
-          @click="selectOption(option)"
-        >
-          {{ option.text }}
-        </a>
+<template><div style="position:absolute; height: 100%; z-index: 999; left: -20px;" v-if="false">
+  <div class="border-surround" style="border-top-right-radius: 0px">
+    <div class="filter">
+      <h3 class="title-3 text-centered">Найти</h3>
+      <div class="v-select">
+        <p class="input" @click="areOptionsVisible = !areOptionsVisible">
+          {{ selected }}
+        </p>
+        <div class="options" v-if="areOptionsVisible">
+          <a
+            class="input bold search"
+            v-for="option in CATEGORIES"
+            :key="option.id"
+            @click="selectOption(option)"
+          >
+            {{ option.text }}
+          </a>
+        </div>
       </div>
     </div>
+    <img src="/allImage/Icons/arrowquad.png" class="img-filter"/>
+  </div>
   </div>
 </template>
 <script>

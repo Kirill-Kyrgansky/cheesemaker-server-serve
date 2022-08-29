@@ -6,7 +6,7 @@
       @select="sortByCategories"
     />
     <div class="container">
-      <div class="catalog-items">
+      <div class="catalog-items-admin">
         <CreateElementCatalog :product="product" />
         <ElementCatalogAdmin
           v-for="product in filteredProducts"
