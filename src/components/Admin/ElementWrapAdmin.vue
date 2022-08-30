@@ -22,7 +22,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import CreateElementCatalog from './CreateElementCatalog';
 import ElementCatalogAdmin from './ElementCatalogAdmin.vue';
-import ElementSortingAdmin from './ElementSortingAdmin.vue';
+import ElementSortingAdmin from '../Filter/ElementSortingAdmin.vue';
 
 export default {
   name: 'ElementWrapAdmin',

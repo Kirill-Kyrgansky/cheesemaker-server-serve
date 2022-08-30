@@ -4,44 +4,44 @@
     <div class="v-select">
       <p class="input">{{ selected }}</p>
       <div class="options-admin">
-        <div v-for="option in CATEGORY" :key="option.id" >
+        <div v-for="option in CATEGORY" :key="option.id">
           <div class="input search" v-if="option.active">
             <p href="#" class="paragraph" @click="selectOption(option)">
               {{ option.name }}
             </p>
             <div class="centered">
-            <img
-              @click="deliteCategory(option.id)"
-              src="/allImage/Icons/cross.svg"
-              class="img-question"
-            />
-            <input
-              type="checkbox"
-              @click="сhangeVisibility(option.id, option.active)"
-              v-model="option.active"
-              v-if="option.id != 1"
-            />
+              <img
+                @click="deliteCategory(option.id)"
+                src="/allImage/Icons/cross.svg"
+                class="img-question"
+              />
+              <input
+                type="checkbox"
+                @click="сhangeVisibility(option.id, option.active)"
+                v-model="option.active"
+                v-if="option.id != 1"
+              />
             </div>
           </div>
         </div>
       </div>
-      <div class="options-admin margin-10-0" >
-        <div v-for="option in CATEGORY" :key="option.id" >
+      <div class="options-admin margin-10-0">
+        <div v-for="option in CATEGORY" :key="option.id">
           <div class="input search" v-if="!option.active">
             <p href="#" class="paragraph" @click="selectOption(option)">
               {{ option.name }}
             </p>
             <div class="centered">
-            <img
-              @click="deliteCategory(option.id)"
-              src="/allImage/Icons/cross.svg"
-              class="img-question"
-            />
-            <input
-              type="checkbox"
-              @click="сhangeVisibility(option.id, option.active)"
-              v-model="option.active"
-            />
+              <img
+                @click="deliteCategory(option.id)"
+                src="/allImage/Icons/cross.svg"
+                class="img-question"
+              />
+              <input
+                type="checkbox"
+                @click="сhangeVisibility(option.id, option.active)"
+                v-model="option.active"
+              />
             </div>
           </div>
         </div>
@@ -65,9 +65,7 @@ export default {
     return {
       areOptionsVisible: false,
       searchValue: '',
-      formCategories: {
-        text: '',
-      },
+      formCategories: { active: true, comment: 'NoComment' },
     };
   },
   props: {
@@ -98,7 +96,7 @@ export default {
         active: !isActive,
       };
       axios
-        .patch(`http://localhost:3000/category/${index}`, active)
+        .patch(`http://localhost:3000/categories/${index}`, active)
         .then((res) => {
           location.reload(res);
           if (res == 404) {
@@ -115,7 +113,7 @@ export default {
       const isTrue = confirm('Вы уверены?');
       if (isTrue === true) {
         axios
-          .delete(`http://localhost:3000/category/${index}`)
+          .delete(`http://localhost:3000/categories/${index}`)
           .then((res) => {
             location.reload(res);
           })
@@ -127,10 +125,11 @@ export default {
     },
     addCategories() {
       if (this.formCategories.name.length === 0) {
+        this.formCategories.author_id = 1;
         alert('Ошибка, пустая строка. Введите название новой категории');
       } else {
         axios
-          .post('http://localhost:3000/category', this.formCategories)
+          .post('http://localhost:3000/categories', this.formCategories)
           .then((res) => {
             location.reload(res);
           })

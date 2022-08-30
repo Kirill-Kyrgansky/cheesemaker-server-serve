@@ -1,5 +1,5 @@
 import axios from 'axios';
-// let URL = 'http://172.16.0.179:3000'
+let testURL = 'http://172.16.0.179:3000'
 let URL = 'http://localhost:3000'
 export default {
 
@@ -36,11 +36,12 @@ export default {
   GET_CATEGORY_FROM_API({
     commit,
   }) {
-    return axios(`${URL}/category`, {
+    return axios(`${testURL}/categories`, {
       method: 'GET',
     })
       .then((category) => {
         commit('SET_CATEGORY_TO_STATE', category.data);
+        console.log(category);
         return category;
       })
       .catch((error) => {
