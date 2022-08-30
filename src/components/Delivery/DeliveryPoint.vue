@@ -7,6 +7,7 @@
               type="checkbox"
               @click="сhangeVisibility(pickpoint.id, pickpoint.active)"
               v-model="pickpoint.active"
+              v-if="ISADMIN"
             />
           <div class="map-cart-text">
             <h3 class="title-3">{{ pickpoint.name }}</h3>
@@ -109,7 +110,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['DELIVERY_POINTS']),
+    ...mapGetters(['DELIVERY_POINTS', 'ISADMIN']),
   },
   mounted() {
     this.GET_DELIVERY_POINTS_FROM_API();
