@@ -65,7 +65,7 @@ export default {
     return {
       areOptionsVisible: false,
       searchValue: '',
-      formCategories: { ACTIVE: true, COMMENT: 'NoComment' },
+      formCategories: { ACTIVE: 1, COMMENT: 'NoComment' },
     };
   },
   props: {
