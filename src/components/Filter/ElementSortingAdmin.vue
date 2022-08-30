@@ -4,42 +4,42 @@
     <div class="v-select">
       <p class="input">{{ selected }}</p>
       <div class="options-admin">
-        <div v-for="option in CATEGORY" :key="option.id">
+        <div v-for="option in CATEGORY" :key="option.ID">
           <div class="input search" v-if="option.active">
             <p href="#" class="paragraph" @click="selectOption(option)">
               {{ option.NAME }}
             </p>
             <div class="centered">
               <img
-                @click="deliteCategory(option.id)"
+                @click="deliteCategory(option.ID)"
                 src="/allImage/Icons/cross.svg"
                 class="img-question"
               />
               <input
                 type="checkbox"
-                @click="сhangeVisibility(option.id, option.active)"
+                @click="сhangeVisibility(option.ID, option.active)"
                 v-model="option.active"
-                v-if="option.id != 1"
+                v-if="option.ID != 1"
               />
             </div>
           </div>
         </div>
       </div>
       <div class="options-admin margin-10-0">
-        <div v-for="option in CATEGORY" :key="option.id">
+        <div v-for="option in CATEGORY" :key="option.ID">
           <div class="input search" v-if="!option.active">
             <p href="#" class="paragraph" @click="selectOption(option)">
               {{ option.NAME }}
             </p>
             <div class="centered">
               <img
-                @click="deliteCategory(option.id)"
+                @click="deliteCategory(option.ID)"
                 src="/allImage/Icons/cross.svg"
                 class="img-question"
               />
               <input
                 type="checkbox"
-                @click="сhangeVisibility(option.id, option.active)"
+                @click="сhangeVisibility(option.ID, option.active)"
                 v-model="option.active"
               />
             </div>
@@ -65,7 +65,7 @@ export default {
     return {
       areOptionsVisible: false,
       searchValue: '',
-      formCategories: { active: true, comment: 'NoComment' },
+      formCategories: { active: true, COMMENT: 'NoComment' },
     };
   },
   props: {
@@ -125,7 +125,7 @@ export default {
     },
     addCategories() {
       if (this.formCategories.NAME.length === 0) {
-        this.formCategories.author_id = 1;
+        this.formCategories.AUTHOR_ID = 1;
         alert('Ошибка, пустая строка. Введите название новой категории');
       } else {
         axios
