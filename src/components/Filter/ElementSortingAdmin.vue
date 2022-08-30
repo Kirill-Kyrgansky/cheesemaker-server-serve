@@ -96,7 +96,7 @@ export default {
         active: !isActive,
       };
       axios
-        .patch(`http://localhost:3000/categories/${index}`, active)
+        .patch(`http://172.16.0.179/api/categories/${index}`, active)
         .then((res) => {
           location.reload(res);
           if (res == 404) {
@@ -113,7 +113,7 @@ export default {
       const isTrue = confirm('Вы уверены?');
       if (isTrue === true) {
         axios
-          .delete(`http://localhost:3000/categories/${index}`)
+          .delete(`http://172.16.0.179/api/categories/${index}`)
           .then((res) => {
             location.reload(res);
           })
@@ -129,7 +129,7 @@ export default {
         alert('Ошибка, пустая строка. Введите название новой категории');
       } else {
         axios
-          .post('http://localhost:3000/categories', this.formCategories)
+          .post('http://172.16.0.179/api/categories', this.formCategories)
           .then((res) => {
             location.reload(res);
           })
