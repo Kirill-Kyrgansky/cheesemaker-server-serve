@@ -5,7 +5,7 @@
       <p class="input">{{ selected }}</p>
       <div class="options-admin">
         <div v-for="option in CATEGORY" :key="option.ID">
-          <div class="input search" v-if="option.active">
+          <div class="input search" v-if="option.ACTIVE">
             <p href="#" class="paragraph" @click="selectOption(option)">
               {{ option.NAME }}
             </p>
@@ -17,8 +17,8 @@
               />
               <input
                 type="checkbox"
-                @click="сhangeVisibility(option.ID, option.active)"
-                v-model="option.active"
+                @click="сhangeVisibility(option.ID, option.ACTIVE)"
+                v-model="option.ACTIVE"
                 v-if="option.ID != 1"
               />
             </div>
@@ -27,7 +27,7 @@
       </div>
       <div class="options-admin margin-10-0">
         <div v-for="option in CATEGORY" :key="option.ID">
-          <div class="input search" v-if="!option.active">
+          <div class="input search" v-if="!option.ACTIVE">
             <p href="#" class="paragraph" @click="selectOption(option)">
               {{ option.NAME }}
             </p>
@@ -39,8 +39,8 @@
               />
               <input
                 type="checkbox"
-                @click="сhangeVisibility(option.ID, option.active)"
-                v-model="option.active"
+                @click="сhangeVisibility(option.ID, option.ACTIVE)"
+                v-model="option.ACTIVE"
               />
             </div>
           </div>
@@ -65,7 +65,7 @@ export default {
     return {
       areOptionsVisible: false,
       searchValue: '',
-      formCategories: { active: true, COMMENT: 'NoComment' },
+      formCategories: { ACTIVE: true, COMMENT: 'NoComment' },
     };
   },
   props: {
@@ -93,7 +93,7 @@ export default {
   methods: {
     сhangeVisibility(index, isActive) {
       let active = {
-        active: !isActive,
+        ACTIVE: !isActive,
       };
       axios
         .patch(`http://172.16.0.179/api/categories/${index}`, active)
@@ -125,7 +125,7 @@ export default {
     },
     addCategories() {
       if (this.formCategories.NAME.length === 0) {
-        this.formCategories.AUTHOR_ID = 1;
+        this.formCategories.AUTHOR_ID
         alert('Ошибка, пустая строка. Введите название новой категории');
       } else {
         axios
