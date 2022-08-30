@@ -125,7 +125,7 @@ export default {
     },
     addCategories() {
       if (this.formCategories.NAME.length === 0) {
-        this.formCategories.AUTHOR_ID
+        this.formCategories ={AUTHOR_ID: true}
         alert('Ошибка, пустая строка. Введите название новой категории');
       } else {
         axios
