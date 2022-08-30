@@ -7,7 +7,7 @@
         <div v-for="option in CATEGORY" :key="option.id">
           <div class="input search" v-if="option.active">
             <p href="#" class="paragraph" @click="selectOption(option)">
-              {{ option.name }}
+              {{ option.NAME }}
             </p>
             <div class="centered">
               <img
@@ -29,7 +29,7 @@
         <div v-for="option in CATEGORY" :key="option.id">
           <div class="input search" v-if="!option.active">
             <p href="#" class="paragraph" @click="selectOption(option)">
-              {{ option.name }}
+              {{ option.NAME }}
             </p>
             <div class="centered">
               <img
@@ -50,7 +50,7 @@
     <div class="admin-panel margin-10-0">
       <p class="paragraph-small">{{ searchValue }}</p>
       <p class="paragraph-small margin-10-0">Добавить категорию:</p>
-      <input class="input" type="text" v-model="formCategories.name" />
+      <input class="input" type="text" v-model="formCategories.NAME" />
       <button class="btn" v-on:click="addCategories()">Создать</button>
     </div>
   </div>
@@ -60,7 +60,7 @@ import { mapGetters, mapActions } from 'vuex';
 import axios from 'axios';
 
 export default {
-  name: 'ElementSortingAdmin',
+  NAME: 'ElementSortingAdmin',
   data() {
     return {
       areOptionsVisible: false,
@@ -124,7 +124,7 @@ export default {
       }
     },
     addCategories() {
-      if (this.formCategories.name.length === 0) {
+      if (this.formCategories.NAME.length === 0) {
         this.formCategories.author_id = 1;
         alert('Ошибка, пустая строка. Введите название новой категории');
       } else {
