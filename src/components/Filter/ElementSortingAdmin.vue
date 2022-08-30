@@ -65,7 +65,7 @@ export default {
     return {
       areOptionsVisible: false,
       searchValue: '',
-      formCategories: { ACTIVE: 1, COMMENT: 'NoComment' },
+      formCategories: { ACTIVE: 1, COMMENT: 'NoComment', NAME: '' },
     };
   },
   props: {
@@ -124,8 +124,9 @@ export default {
       }
     },
     addCategories() {
+                            this.formCategories.AUTHOR_ID = 1
+
       if (this.formCategories.NAME.length === 0) {
-        this.formCategories.AUTHOR_ID = 1
         alert('Ошибка, пустая строка. Введите название новой категории');
       } else {
         axios
@@ -134,8 +135,10 @@ export default {
             location.reload(res);
           })
           .catch((error) => {
+                        console.log(error);
+            console.log(this.formCategories);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
-            console.log(error);
+
           });
       }
     },
