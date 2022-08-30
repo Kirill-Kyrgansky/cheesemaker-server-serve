@@ -1,5 +1,5 @@
 import axios from 'axios';
-let testURL = 'http://172.16.0.179:3000'
+let testURL = 'http://172.16.0.179/api'
 let URL = 'http://localhost:3000'
 export default {
 
