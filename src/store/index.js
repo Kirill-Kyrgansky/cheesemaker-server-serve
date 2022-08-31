@@ -11,7 +11,8 @@ const store = new createStore({
   mutations,
   state: {
     isAuth: true,
-    isAdmin: true,
+    isAdmin: false,
+    isSuperAdmin: false,
     searchValue: '',
     products: [],
     category: [],

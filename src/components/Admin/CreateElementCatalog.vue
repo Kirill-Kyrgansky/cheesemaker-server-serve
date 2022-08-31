@@ -33,7 +33,7 @@
               placeholder="Цена"
               required
             />
-          <select  class="input" name="list"  v-model="form.unit"> <!--unit-->
+          <select  class="input" name="list"  v-model="form.unit"> 
           <option v-for="unit in units" :value="unit.name" :key="unit.id"
           >
             {{ unit.name }}
@@ -52,6 +52,7 @@
             required
           />
         </label>
+        <div >
         <select
           class="input"
           name="list"
@@ -65,6 +66,7 @@
             {{ category.name }}
           </option>
         </select>
+        </div>
         <div class="text-centered">
           <button class="btn" @click="submitForm()">Создать</button>
         </div>
@@ -89,7 +91,7 @@ export default {
         price: '',
         unit: 'шт',
         inStockQuantity: '',
-        category: 'Вся продукция',
+        category: '',
       },
       units: [
         { id: 1, name: 'шт' },

@@ -20,5 +20,8 @@ export default {
   },
   ISADMIN(state) {
     return state.isAdmin
+  }, 
+  ISSUPERADMIN(state) {
+    return state.isSuperAdmin
   }
 };

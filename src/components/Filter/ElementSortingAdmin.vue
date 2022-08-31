@@ -4,43 +4,51 @@
     <div class="v-select">
       <p class="input">{{ selected }}</p>
       <div class="options-admin">
-        <div v-for="option in CATEGORY" :key="option.ID">
-          <div class="input search" v-if="option.ACTIVE">
+        <h3 class="title-3 text-centered">Активные категории</h3>
+
+        <div v-for="option in CATEGORY" :key="option.id">
+          <div class="input search" v-if="option.active == true">
             <p href="#" class="paragraph" @click="selectOption(option)">
-              {{ option.NAME }}
+              {{ option.name }}
             </p>
             <div class="centered">
               <img
-                @click="deliteCategory(option.ID)"
+                @click="changeCategory(option.id, option.name)"
                 src="/allImage/Icons/cross.svg"
                 class="img-question"
               />
               <input
+                true-value="1"
+                false-value="0"
                 type="checkbox"
-                @click="сhangeVisibility(option.ID, option.ACTIVE)"
-                v-model="option.ACTIVE"
-                v-if="option.ID != 1"
+                v-model="option.active"
+                @click="сhangeVisibility(option.id, option.active, option.name)"
+                v-if="option.id != 1"
               />
             </div>
           </div>
         </div>
       </div>
       <div class="options-admin margin-10-0">
-        <div v-for="option in CATEGORY" :key="option.ID">
-          <div class="input search" v-if="!option.ACTIVE">
+        <h3 class="title-3 text-centered">Неактивные категории</h3>
+
+        <div v-for="option in CATEGORY" :key="option.id">
+          <div class="input search" v-if="option.active == false">
             <p href="#" class="paragraph" @click="selectOption(option)">
-              {{ option.NAME }}
+              {{ option.name }}
             </p>
             <div class="centered">
               <img
-                @click="deliteCategory(option.ID)"
+                @click="changeCategory(option.id, option.name)"
                 src="/allImage/Icons/cross.svg"
                 class="img-question"
               />
               <input
+                true-value="1"
+                false-value="0"
                 type="checkbox"
-                @click="сhangeVisibility(option.ID, option.ACTIVE)"
-                v-model="option.ACTIVE"
+                v-model="option.active"
+                @click="сhangeVisibility(option.id, option.active, option.name)"
               />
             </div>
           </div>
@@ -50,7 +58,7 @@
     <div class="admin-panel margin-10-0">
       <p class="paragraph-small">{{ searchValue }}</p>
       <p class="paragraph-small margin-10-0">Добавить категорию:</p>
-      <input class="input" type="text" v-model="formCategories.NAME" />
+      <input class="input" type="text" v-model="formCategories.name" />
       <button class="btn" v-on:click="addCategories()">Создать</button>
     </div>
   </div>
@@ -65,7 +73,7 @@ export default {
     return {
       areOptionsVisible: false,
       searchValue: '',
-      formCategories: { ACTIVE: 1, COMMENT: 'NoComment', NAME: '' },
+      formCategories: { active: true, comment: 'NoComment', name: '' },
     };
   },
   props: {
@@ -90,32 +98,41 @@ export default {
   computed: {
     ...mapGetters(['CATEGORY', 'SEARCH_VALUE']),
   },
+  mounted() {},
   methods: {
-    сhangeVisibility(index, isActive) {
-      let active = {
-        ACTIVE: !isActive,
+    сhangeVisibility(index, isActive, name) {
+      let sendForm = {
+        active: Number(!isActive),
+        name: name,
+        author_id: 1,
       };
       axios
-        .patch(`http://172.16.0.179/api/categories/${index}`, active)
+        .patch(`http://172.16.0.179/api/categories/${index}`, sendForm)
         .then((res) => {
           location.reload(res);
           if (res == 404) {
             alert('Ошибка в работе сервера. Перезагрузите страницу');
           }
-          console.log(res);
         })
         .catch((error) => {
           alert('Ошибка в работе приложения. Обратитесь к администратору.');
           console.log(error);
         });
     },
-    deliteCategory(index) {
-      const isTrue = confirm('Вы уверены?');
-      if (isTrue === true) {
+    changeCategory(index, name) {
+      let newName = prompt('Введите новое имя категории.', name);
+      if (newName != null) {
+        let sendForm = {
+          name: newName,
+          author_id: 1,
+        };
         axios
-          .delete(`http://172.16.0.179/api/categories/${index}`)
+          .patch(`http://172.16.0.179/api/categories/${index}`, sendForm)
           .then((res) => {
             location.reload(res);
+            if (res == 404) {
+              alert('Ошибка в работе сервера. Перезагрузите страницу');
+            }
           })
           .catch((error) => {
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -124,9 +141,8 @@ export default {
       }
     },
     addCategories() {
-                            this.formCategories.AUTHOR_ID = 1
-
-      if (this.formCategories.NAME.length === 0) {
+      this.formCategories.author_id = 1;
+      if (this.formCategories.name.length === 0) {
         alert('Ошибка, пустая строка. Введите название новой категории');
       } else {
         axios
@@ -135,10 +151,9 @@ export default {
             location.reload(res);
           })
           .catch((error) => {
-                        console.log(error);
+            console.log(error);
             console.log(this.formCategories);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
-
           });
       }
     },

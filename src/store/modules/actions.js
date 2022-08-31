@@ -52,7 +52,7 @@ export default {
   GET_DELIVERY_POINTS_FROM_API({
     commit,
   }) {
-    return axios(`${URL}/pickpoint`, {
+    return axios(`${testURL}/pickpoints`, {
       method: 'GET',
     })
       .then((pickpoints) => {
