@@ -1,30 +1,30 @@
 <template>
-  <div class="admin-panel" id="admin">
+  <div class="admin-panel">
     <div class="catalog-element-wrap text-centered">
-        <label class="text-reader">
-          <input type="file" @change="loadTextFromFile" />
-        </label>
-        <div class="catalog-element-text">
-          <label for="name">
-            <input
-              type="text"
-              id="name"
-              v-model="form.name"
-              class="input"
-              placeholder="Название"
-              required
-            />
-          </label>
-          <textarea
-            placeholder="Описание"
+      <label class="text-reader">
+        <input type="file" @change="handleImage" accept="image/*" />
+      </label>
+      <div class="catalog-element-text">
+        <label for="name">
+          <input
             type="text"
+            id="name"
+            v-model="product.name"
             class="input"
-            v-model="form.description"
+            placeholder="Название"
             required
-          ></textarea>
-        </div>
-        <div class="centered centered-vertical">
-          <label for="description">
+          />
+        </label>
+        <textarea
+          placeholder="Описание"
+          type="text"
+          class="input"
+          v-model="product.description"
+          required
+        ></textarea>
+      </div>
+      <div class="centered centered-vertical">
+        <!-- <label for="description">
             <input
               type="number"
               id="description"
@@ -34,12 +34,12 @@
               v-model="form.price"
               required
             />
-          </label>
-          <select
+          </label> -->
+        <!-- <select
           class="input"
           name="list"
           v-model="form.unit"
-          > <!--unit-->
+          > 
             <option
               v-for="unit in units"
               :value="unit.name"
@@ -47,10 +47,10 @@
             >
               {{ unit.name }}
             </option>
-          </select>
-        </div>
-        <p class="paragraph">Кол-во произведенного продука:</p>
-        <label for="production-quantity">
+          </select> -->
+      </div>
+      <!-- <p class="paragraph">Кол-во произведенного продука:</p> -->
+      <!-- <label for="production-quantity">
           <input
             type="number"
             id="production-quantity"
@@ -59,24 +59,36 @@
             placeholder="Кол-во"
             required
           />
-        </label>
-        <select
-          class="input"
-          name="list"
-          v-model="form.category"
+        </label> -->
+      <select class="input" name="list">
+        <!-- v-model="product.category" -->
+        <option
+          v-for="category in CATEGORY"
+          :value="category.name"
+          :key="category.id"
         >
-          <option
-            v-for="category in CATEGORY"
-            :value="category.name"
-            :key="category.id"
+          {{ category.name }}
+        </option>
+      </select>
+      <div class="text-centered">
+        <button class="btn" @click="ApplyProductChanges(product.id)">
+          Применить изменения
+        </button>
+        <button
+          class="btn"
+          @click="isVisibleProduct(product.id)"
+          v-if="product.active"
         >
-            {{ category.name }}
-          </option>
-        </select>
-        <div class="text-centered">
-          <button class="btn" @click="submitForm(product.id)">Изменить</button>
-          <button class="btn" @click="deleteProduct(product.id)">Удалить</button>
-        </div>
+          Удалить
+        </button>
+        <button
+          class="btn"
+          @click="isVisibleProduct(product.id)"
+          v-if="!product.active"
+        >
+          Показать
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -118,17 +130,17 @@ export default {
           name: 'кг',
         },
       ],
-      form:
-      {
-        id: '',
-        image: '',
-        name: '',
-        description: '',
-        price: '',
-        unit: 'шт',
-        inStockQuantity: '',
-        category: '',
-      },
+      // form:
+      // {
+      //   id: '',
+      //   image: '',
+      //   name: '',
+      //   description: '',
+      //   price: '',
+      //   unit: 'шт',
+      //   inStockQuantity: '',
+      //   category: '',
+      // },
       selectedUnit: 'шт',
     };
   },
@@ -139,29 +151,32 @@ export default {
     this.form = this.product;
   },
   methods: {
-    deleteProduct(index) {
-      const isTrue = confirm('Вы уверены?');
-      if (isTrue === true) {
-        axios.delete(`http://localhost:3000/products/${index}`)
-          .then((res) => {
-            location.reload(res);
-          })
-          .catch((error) => {
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-            console.log(error);
-          });
-      }
+    handleImage(e) {
+      const selectedImage = e.target.files[0]; // get first file
+      this.createBase64Image(selectedImage);
+      let type = selectedImage.type.split('/')[1];
+      this.product.ext = type;
     },
-    submitForm(index) {
-      const formArray = Object.values(this.form);
-      if (formArray.includes('') === true) {
-        alert('Заполните пожалуйста все поля.');
-      } else {
-        if (this.form.category === 'Вся продукция') {
-          return alert('Выберите категорию!');
-        }
+    createBase64Image(fileObject) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.image = e.target.result;
+        const { image } = this;
+        let base64 = image.split(',')[1];
+        this.product.image = base64;
+      };
+      reader.readAsDataURL(fileObject);
+    },
+    isVisibleProduct(index) {
+      let proof = confirm(
+        'Подтвердите удаление товара. Удаляйте товар, только в том случае если именно его не будет больше НИКОГДА, а не если когда он закончился!'
+      );
+      if (proof == true) {
+        this.product.active = !this.product.active;
+        console.log(this.product);
+        console.log(index);
         axios
-          .put(`http://localhost:3000/products/${index}`, this.form)
+          .patch(`http://172.16.0.179/api/products/${index}`, this.product)
           .then((res) => {
             location.reload(res);
           })
@@ -170,6 +185,18 @@ export default {
             console.log(error);
           });
       }
+      return;
+    },
+    ApplyProductChanges(index) {
+      axios
+        .patch(`http://172.16.0.179/api/products/${index}`, this.product)
+        .then((res) => {
+          location.reload(res);
+        })
+        .catch((error) => {
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          console.log(error);
+        });
     },
     loadTextFromFile(ev) {
       const file = ev.target.files[0];

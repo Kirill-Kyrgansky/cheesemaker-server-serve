@@ -14,6 +14,7 @@
           :product="product"
           @addToCart="addToCart"
         />
+        
       </div>
     </div>
   </div>

@@ -2,7 +2,6 @@ import axios from 'axios';
 let testURL = 'http://172.16.0.179/api'
 let URL = 'http://localhost:3000'
 export default {
-
   GET_SEARCH_VALUE_TO_VUEX({
     commit,
   }, value) {
@@ -79,4 +78,5 @@ export default {
         return error;
       });
   },
+  
 };

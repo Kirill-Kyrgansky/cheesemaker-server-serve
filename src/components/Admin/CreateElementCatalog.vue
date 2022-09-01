@@ -86,12 +86,12 @@ export default {
       productCreate:
       {
         name: '',
-        active: "0",
+        active: '',
         image: '',
-        category_id: "5",
+        category_id: '5',
         comment: 'None',
         description: '',
-        author_id: "1",
+        author_id: '1',
         image: '',
         ext: ''
       },
@@ -115,9 +115,6 @@ export default {
     ...mapGetters(['CATEGORY']),
   },
     methods: {
-      createProduct() {
-        console.log(this.productCreate);
-      },
     handleImage(e) {
       const selectedImage = e.target.files[0]; // get first file
       this.createBase64Image(selectedImage);
@@ -134,6 +131,18 @@ export default {
       };
       reader.readAsDataURL(fileObject);
     },
+    createProduct() {
+        let createNewProduct = this.productCreate
+        axios 
+        .post ('http://172.16.0.179/api/products', createNewProduct)
+        .then((res) => {
+            location.reload(res);
+          })
+          .catch((error) => {
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            console.log(error);
+          });
+      },
   },
 };
 </script>

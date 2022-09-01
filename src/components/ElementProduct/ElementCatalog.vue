@@ -1,13 +1,13 @@
 <template>
-  <div class="catalog-items-products" v-if="this.product.inStockQuantity > 0">
+  <div class="catalog-items-products"  v-if="product.active">
     <!--product quantity checked-->
     <div class="catalog-element products" >
       <div class="catalog-items-products-img">
         <img
-          :src="product.image"
-          :alt="product.name"
-          class="catalog-element-img"
-        />
+        :src="'http://172.16.0.179' + product.image_path.slice('2')"
+        :alt="product.name"
+        class="catalog-element-img"
+      />
       </div>
       <p class="paragraph bold text-centered">{{ product.name }}</p>
       <!-- <p class="paragraph text-centered">{{ product.description }}</p> -->

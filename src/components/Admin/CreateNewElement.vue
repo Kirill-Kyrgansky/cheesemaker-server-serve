@@ -112,7 +112,7 @@ export default {
       form:
       {
         name: '',
-        active: "1",
+        active: '',
         image: '',
         category_id: "5",
         comment: 'None',

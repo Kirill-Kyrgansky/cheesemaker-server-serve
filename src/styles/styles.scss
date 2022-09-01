@@ -134,7 +134,7 @@ textarea {
 }
 
 .arrow-bottom {
-  position: sticky;
+  position: absolute;
   z-index: 9999;
   bottom: 10px;
   right: 20px;
@@ -235,6 +235,7 @@ textarea {
 .description {
   position: absolute; 
   height: 99%; 
+  width: 99%; 
   background-image: url(/public/allImage/fonebox2.svg);
   box-shadow: -3px 11px 20px 1px rgb(55 35 17 / 54%);
   max-width: 450px;
@@ -798,7 +799,7 @@ input::placeholder {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  margin-bottom: 15px;
+  margin-bottom: 50px;
 }
 
 .login {

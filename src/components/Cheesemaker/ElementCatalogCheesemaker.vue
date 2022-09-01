@@ -2,7 +2,7 @@
   <div class="catalog-items">
     <div class="catalog-element">
       <img
-        :src="product.image"
+        :src="'http://172.16.0.179' + product.image_path.slice('2')"
         :alt="product.name"
         class="catalog-element-img"
       />

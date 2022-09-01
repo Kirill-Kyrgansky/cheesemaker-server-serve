@@ -7,7 +7,7 @@
             />
       <div class="cart-element">
         <img
-          :src="cart_item_data.image"
+          :src="'http://172.16.0.179' + cart_item_data.image_path.slice('2')"
           class="cart-img"
           :alt="cart_item_data.name"
         />

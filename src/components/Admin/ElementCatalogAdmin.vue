@@ -1,9 +1,9 @@
-<template>
-  <div class="catalog-items-admin">
-    <div class="catalog-element">
-      <input type="checkbox" v-if="ISADMIN" />
+<template >
+  <div class="catalog-items-admin"  v-if="product.active || ISSUPERADMIN">
+    <div class="catalog-element" >
+      <p class="title-2 cancellation " v-if="!product.active">Отключен</p>
       <img
-        :src="product.image"
+        :src="'http://172.16.0.179' + product.image_path.slice('2')"
         :alt="product.name"
         class="catalog-element-img"
       />
@@ -17,6 +17,7 @@
       <AdminPanel :product="product" />
     </div>
   </div>
+  
 </template>
 
 <script>
@@ -52,7 +53,7 @@ export default {
         active: !isActive,
       };
       axios
-        .patch(`http://localhost:3000/pickpoint/${index}`, active)
+        .patch(`http://172.16.0.179/api/pickpoint/${index}`, active)
         .then((res) => {
           location.reload(res);
           if (res == 404) {
@@ -70,7 +71,7 @@ export default {
     AdminPanel,
   },
   computed: {
-    ...mapGetters(['PRODUCTS', 'CATEGORY', 'ISADMIN']),
+    ...mapGetters(['PRODUCTS', 'CATEGORY', 'ISADMIN', 'ISSUPERADMIN']),
   },
 };
 </script>
