@@ -63,7 +63,7 @@
         <select
           class="input"
           name="list"
-          v-model="form.category"
+          v-model="form.category_id"
         >
           <option
             v-for="category in CATEGORY"
@@ -111,14 +111,15 @@ export default {
       ],
       form:
       {
-        id: '',
-        image: '',
         name: '',
+        active: "1",
+        image: '',
+        category_id: "5",
+        comment: 'None',
         description: '',
-        price: '',
-        unit: 'шт',
-        inStockQuantity: '',
-        category: '',
+        author_id: "1",
+        image: '',
+        ext: ''
       },
       selectedUnit: 'шт',
     };

@@ -25,7 +25,7 @@
             </transition>
             <div class="header-list desctop">
               <a href="#/products" class="header-link"> Продукция </a>
-              <a v-if="isAdmin" href="#/admin" class="header-link"> Админка </a>
+              <a  href="#/admin" class="header-link"> Админка </a>
               <a href="#/cheesemaker" class="header-link"> Сыровар </a>
               <a href="#/cheesemaker-orders" class="header-link">
                 Заказы

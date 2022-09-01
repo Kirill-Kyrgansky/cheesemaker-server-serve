@@ -21,7 +21,7 @@ export default {
   GET_PRODUCTS_FROM_API({
     commit,
   }) {
-    return axios(`${URL}/product`, {
+    return axios(`${testURL}/products`, {
       method: 'GET',
     })
       .then((products) => {
