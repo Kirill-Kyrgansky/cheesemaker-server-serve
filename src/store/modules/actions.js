@@ -32,6 +32,21 @@ export default {
         return error;
       });
   },
+  GET_PRICES_FROM_API({
+    commit,
+  }) {
+    return axios(`${testURL}/prices`, {
+      method: 'GET',
+    })
+      .then((prices) => {
+        commit('SET_PRICES_TO_STATE', prices.data);
+        return prices;
+      })
+      .catch((error) => {
+        console.log(error);
+        return error;
+      });
+  },
   GET_CATEGORY_FROM_API({
     commit,
   }) {

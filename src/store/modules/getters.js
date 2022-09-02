@@ -6,6 +6,9 @@ export default {
   PRODUCTS(state) {
     return state.products;
   },
+  PRICES(state) {
+    return state.prices;
+  },
   CATEGORY(state) {
     return state.category;
   },

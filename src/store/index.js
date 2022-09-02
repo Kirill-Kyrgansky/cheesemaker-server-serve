@@ -19,6 +19,7 @@ const store = new createStore({
     pickpoints: [],
     cart: [],
     orders: [],
+    prices: [],
   },
   getters,
 });

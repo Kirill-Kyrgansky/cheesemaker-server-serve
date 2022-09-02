@@ -19,6 +19,9 @@ export default {
       state.cart.push(product);
     }
   },
+  SET_PRICES_TO_STATE: (state, prices) => {
+    state.prices = prices;
+  },
   SET_PRODUCTS_TO_STATE: (state, products) => {
     state.products = products;
   },

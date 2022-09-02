@@ -67,7 +67,7 @@ export default {
       });
       this.selected = category.name;
     },
-    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART']),
+    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_PRICES_FROM_API']),
     addToCart(data) {
       this.isVisible = !this.isVisible;
       setTimeout(() => {
@@ -90,6 +90,7 @@ export default {
   },
   mounted() {
     this.GET_PRODUCTS_FROM_API();
+    this.GET_PRICES_FROM_API();
   },
   computed: {
     ...mapGetters(['PRODUCTS', 'CATEGORY', 'SEARCH_VALUE']),
