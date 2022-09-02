@@ -19,7 +19,6 @@
     "nodemailer": "^6.7.5",
     "sass": "^1.52.3",
     "sass-loader": "^13.0.0",
-    "v-click-outside": "^3.2.0",
     "vant": "^3.5.2",
     "vue": "^3.2.13",
     "vue-router": "^4.1.2",

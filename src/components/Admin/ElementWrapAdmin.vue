@@ -57,7 +57,7 @@ export default {
       });
       this.selected = category.name;
     },
-    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_CATEGORY_FROM_API']),
+    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_CATEGORY_FROM_API', 'GET_PRICES_FROM_API']),
     addToCart(data) {
       this.ADD_TO_CART(data);
     },
@@ -68,9 +68,10 @@ export default {
   mounted() {
     this.GET_PRODUCTS_FROM_API();
     this.GET_CATEGORY_FROM_API();
+    this.GET_PRICES_FROM_API();
   },
   computed: {
-    ...mapGetters(['PRODUCTS', 'CATEGORY', 'SEARCH_VALUE']),
+    ...mapGetters(['PRODUCTS', 'CATEGORY', 'SEARCH_VALUE', 'PRICES']),
     filteredProducts() {
       if (this.sortedProducts.length) {
         return this.sortedProducts;

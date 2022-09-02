@@ -23,32 +23,7 @@
           required
         ></textarea>
       </div>
-      <div class="centered centered-vertical">
-        <!-- <label for="description">
-            <input
-              type="number"
-              id="description"
-              class="input small-index"
-              @click="productPrice = ''"
-              placeholder="Цена"
-              v-model="form.price"
-              required
-            />
-          </label> -->
-        <!-- <select
-          class="input"
-          name="list"
-          v-model="form.unit"
-          > 
-            <option
-              v-for="unit in units"
-              :value="unit.name"
-              :key="unit.id"
-            >
-              {{ unit.name }}
-            </option>
-          </select> -->
-      </div>
+
       <!-- <p class="paragraph">Кол-во произведенного продука:</p> -->
       <!-- <label for="production-quantity">
           <input
@@ -60,16 +35,6 @@
             required
           />
         </label> -->
-      <select class="input" name="list">
-        <!-- v-model="product.category" -->
-        <option
-          v-for="category in CATEGORY"
-          :value="category.name"
-          :key="category.id"
-        >
-          {{ category.name }}
-        </option>
-      </select>
       <div class="text-centered">
         <button class="btn" @click="ApplyProductChanges(product.id)">
           Применить изменения
@@ -88,6 +53,78 @@
         >
           Показать
         </button>
+      </div>
+      <button
+        class="btn"
+        @click="priceChange = !priceChange"
+      >
+        Настройка цен
+      </button>
+      <div class="border-no-absolutle margin-10-0" v-if="priceChange">
+        <div v-for="price in PRICES" :key="price.id">
+          <div v-if="price.product_id == product.id" >
+            <div class="cart-element-wrap" >
+            <input
+              type="number"
+              id="description"
+              class="input small-index"
+              placeholder="price.item_price"
+              v-model="price.item_price"
+              v-if="price.visible"
+              required
+            />
+            <p class="paragraph" v-if="price.visible">&nbsp;₽ | 1 &nbsp;</p>
+            <select v-model="price.item_measure" class="input" v-if="price.visible">
+              <option>кг</option>
+              <option>л</option>
+              <option>шт</option>
+            </select>
+            <button class="btn" @click="chagePriceChanges(price)" v-if="price.visible">
+              Применить
+            </button>
+            </div>
+          </div>
+          <div v-if="price.product_id == product.id" class="cart-element-wrap">
+            <input
+              type="checkbox"
+              true-value="1"
+              false-value="0"
+              v-model="price.active"
+              @click="ApplyPriceChanges(price.active, price, price.id)"
+              v-if="!price.visible"
+            />
+            <p class="paragraph" v-if="!price.visible">
+              {{ price.item_price }}&nbsp;₽ | 1 &nbsp; {{ price.item_measure }}
+            </p>
+            <button class="btn" @click="price.visible = !price.visible" v-if="!price.visible">
+              Изменить
+            </button>
+          </div>
+        </div>
+        <div class="centered pickpoint-map-container">
+          <label for="description">
+            <input
+              type="number"
+              id="description"
+              class="input small-index"
+              placeholder="Цена"
+              v-model="item_price"
+              required
+            />
+          </label>
+          <p class="paragraph margin-0-10">| 1</p>
+          <select v-model="item_measure" class="input">
+            <option>кг</option>
+            <option>л</option>
+            <option>шт</option>
+          </select>
+          <button
+            class="btn"
+            @click="addPriceProduct(item_measure, item_price)"
+          >
+            Добавить
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -116,41 +153,47 @@ export default {
   data() {
     return {
       avatar: '',
-      units: [
-        {
-          id: 1,
-          name: 'шт',
-        },
-        {
-          id: 2,
-          name: 'л',
-        },
-        {
-          id: 3,
-          name: 'кг',
-        },
-      ],
-      // form:
-      // {
-      //   id: '',
-      //   image: '',
-      //   name: '',
-      //   description: '',
-      //   price: '',
-      //   unit: 'шт',
-      //   inStockQuantity: '',
-      //   category: '',
-      // },
-      selectedUnit: 'шт',
+      check: [],
+      item_price: '',
+      item_measure: 'кг',
+      priceChange: false,
+      isActivePrice: true,
     };
   },
   computed: {
-    ...mapGetters(['CATEGORY']),
+    ...mapGetters(['PRICES']),
   },
   mounted() {
     this.form = this.product;
+    this.isActivePrice = this.PRICES.active;
   },
   methods: {
+    chagePriceChanges(price) {
+      axios
+      .patch(`http://172.16.0.179/api/prices/${price.id}`, price)
+      .then((res) => {
+        location.reload(res)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    },
+    addPriceProduct(item_measure, item_price) {
+      let formAddPrice = {};
+      formAddPrice.item_measure = item_measure;
+      formAddPrice.item_price = item_price;
+      formAddPrice.product_id = this.product.id;
+      formAddPrice.active = 0;
+      formAddPrice.author_id = 1;
+      axios
+        .post('http://172.16.0.179/api/prices/', formAddPrice)
+        .then((res) => {
+          location.reload(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     handleImage(e) {
       const selectedImage = e.target.files[0]; // get first file
       this.createBase64Image(selectedImage);
@@ -192,6 +235,19 @@ export default {
         .patch(`http://172.16.0.179/api/products/${index}`, this.product)
         .then((res) => {
           location.reload(res);
+        })
+        .catch((error) => {
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          console.log(error);
+        });
+    },
+    ApplyPriceChanges(isActive, price, index) {
+      price.active = Number(!isActive);
+      console.log(price);
+      axios
+        .patch(`http://172.16.0.179/api/prices/${index}`, price)
+        .then((res) => {
+          alert('Изменения применены');
         })
         .catch((error) => {
           alert('Ошибка в работе приложения. Обратитесь к администратору.');

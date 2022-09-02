@@ -7,7 +7,7 @@ import './styles/styles.scss';
 import './styles/variables.scss';
 import 'material-symbols';
 import store from './store';
-import vClickOutside from 'click-outside-vue3';
+import vClickOutside from 'click-outside-vue3'
 
 const app = createApp(App);
 
