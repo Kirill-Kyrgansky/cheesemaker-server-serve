@@ -37,8 +37,7 @@ export default {
   SET_ORDERS_FROM_API: (state, orders) => {
     state.orders = orders;
   },
-  SET_FACT_WEIGHT_AND_PRICE: (state, factWeight, factPrice) => {
-    state.orders.factWeight = factWeight;
-    state.orders.factPrice = factPrice;
-  },
+  SET_STORAGES_TO_STATE: (state, storages) => {
+    state.storages = storages
+  }
 };

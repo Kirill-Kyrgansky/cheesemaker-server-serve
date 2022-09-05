@@ -172,7 +172,8 @@ export default {
       axios
       .patch(`http://172.16.0.179/api/prices/${price.id}`, price)
       .then((res) => {
-        location.reload(res)
+        alert('Цена успешно изменена')
+        price.visible = !price.visible
       })
       .catch((error) => {
         console.log(error);

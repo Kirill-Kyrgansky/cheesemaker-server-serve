@@ -93,5 +93,19 @@ export default {
         return error;
       });
   },
-  
+  GET_STORAGES_FROM_API({
+    commit,
+  }) {
+    return axios(`${testURL}/storages`, {
+      method: 'GET',
+    })
+      .then((storages) => {
+        commit('SET_STORAGES_TO_STATE', storages.data);
+        return storages;
+      })
+      .catch((error) => {
+        console.log(error);
+        return error;
+      });
+  },
 };

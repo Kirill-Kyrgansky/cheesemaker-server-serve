@@ -8,19 +8,26 @@
       />
       <div class="text-align-right">
         <h3 class="title-3 text-centered">{{ product.name }}</h3>
-        <p class="paragraph-tiny bold margin-10-0 text-centered">
-          1 {{ product.unit }}.
-        </p>
       </div>
       <p class="paragraph-small margin-10-0 text-centered">
         Введите кол-во приготовленного продукта:
       </p>
-      <input
-        class="input"
-        type="number"
-        v-model="form.producedByCheesemaker"
-        step="0.01"
-      />
+      <input class="input" type="number" v-model="form.amount" step="0.01" />
+      <select class="input" v-model="form.item_measure">
+        <option>кг</option>
+        <option>л</option>
+        <option>шт</option>
+      </select>
+      <select class="input">
+        <option
+          v-for="storage in STORAGES"
+          :key="storage.id"
+          :value="this.form.storage"
+        >
+          {{ storage.name }}
+        </option>
+      </select>
+      <input type="date" class="input" v-model="form.date" />
       <button class="btn" @click="addProductProduced()">Добавить</button>
     </div>
   </div>
@@ -43,8 +50,12 @@ export default {
       ],
       productId: '',
       form: {
-        producedByCheesemaker: 0.01,
-        productId: '',
+        amount: 0.01,
+        manufacturer_id: 1,
+        item_measure: 'кг',
+        operation: 'приход',
+        author_id: 1,
+        storage: '',
       },
     };
   },
@@ -63,24 +74,24 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['PRODUCTS', 'CATEGORY']),
+    ...mapGetters(['PRODUCTS', 'CATEGORY', 'STORAGES']),
   },
   methods: {
     addProductProduced() {
-      if (this.form.producedByCheesemaker <= 0) {
-        alert('Значение не может быть меньше либо равно нулю.');
+      if (this.form.date == undefined) {
+        alert('Введите дату производства продукта');
       } else {
-        this.form.productId = this.product.id;
-        axios
-          .post('http://localhost:3000/garbage', this.form)
-          .then((res) => {
-            location.reload(res);
-            alert('Продукт добавлен');
-          })
-          .catch((error) => {
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-            console.log(error);
-          });
+        this.form.product_id = this.product.id;
+        console.log(this.form);
+        // axios
+        //   .post('http://172.16.0.179/api/productions', this.form)
+        //   .then((res) => {
+        //     alert('Продукт добавлен');
+        //   })
+        //   .catch((error) => {
+        //     alert('Ошибка в работе приложения. Обратитесь к администратору.');
+        //     console.log(error);
+        //   });
       }
     },
     isEmpty() {

@@ -43,6 +43,10 @@ textarea {
   max-width: 30%;
 }
 
+.create-storage {
+  margin-top: 20px;
+}
+
 .sction-footer-bg {
   background-image: url(/public/allImage/footer.png);
   background-size: 100% 100%;
@@ -112,6 +116,10 @@ textarea {
   padding: 0px 20px;
   border-bottom: 4px solid $text-collor-opacity;
 
+}
+
+.width-200 {
+  width: 200px
 }
 
 .text-decoration {
@@ -694,7 +702,7 @@ input::placeholder {
     border-radius: 10px;
     position: relative;
     box-shadow: -3px 11px 20px 1px #3723118a;
-    max-width: 450px;
+    max-width: 350px;
     display: flex;
     flex-direction: column;
     align-items: center;

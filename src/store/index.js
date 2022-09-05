@@ -20,6 +20,7 @@ const store = new createStore({
     cart: [],
     orders: [],
     prices: [],
+    storages: [],
   },
   getters,
 });

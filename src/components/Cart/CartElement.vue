@@ -25,7 +25,7 @@
       </div>
       <textarea
         type="text"
-        class="input input-cart"
+        class="input input-cart width-200"
         placeholder="Комментарии"
         v-model="computedProperty.commentForProduct"
       ></textarea>

@@ -45,7 +45,7 @@ export default {
     ElementCatalogCheesemaker,
   },
   methods: {
-    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_CATEGORY_FROM_API']),
+    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_CATEGORY_FROM_API', 'GET_STORAGES_FROM_API']),
     sortByCategories(category) {
       this.sortedProducts = [];
       const vm = this;
@@ -66,6 +66,7 @@ export default {
   mounted() {
     this.GET_PRODUCTS_FROM_API();
     this.GET_CATEGORY_FROM_API();
+    this.GET_STORAGES_FROM_API();
   },
   computed: {
     ...mapGetters(['PRODUCTS', 'CATEGORY', 'SEARCH_VALUE']),

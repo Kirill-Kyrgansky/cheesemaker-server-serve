@@ -16,7 +16,7 @@
         class="img-question"
         @mouseover="description = !description"
       />
-      <div class="v-select" v-click-outside="onClickOutside">
+      <div class="v-select width-200" v-click-outside="onClickOutside">
         <p class="input" @click="areOptionsVisible = !areOptionsVisible">
           {{ selected }}
         </p>

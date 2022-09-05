@@ -14,7 +14,6 @@
           :product="product"
           @addToCart="addToCart"
         />
-        
       </div>
     </div>
   </div>
@@ -24,6 +23,7 @@ import { mapGetters, mapActions } from 'vuex';
 import CreateElementCatalog from './CreateElementCatalog';
 import ElementCatalogAdmin from './ElementCatalogAdmin.vue';
 import ElementSortingAdmin from '../Filter/ElementSortingAdmin.vue';
+import CreateStorage from './CreateStorage.vue';
 
 export default {
   name: 'ElementWrapAdmin',
@@ -45,7 +45,8 @@ export default {
     ElementCatalogAdmin,
     ElementSortingAdmin,
     CreateElementCatalog,
-  },
+    CreateStorage
+},
   methods: {
     sortByCategories(category) {
       this.sortedProducts = [];
@@ -57,7 +58,7 @@ export default {
       });
       this.selected = category.name;
     },
-    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_CATEGORY_FROM_API', 'GET_PRICES_FROM_API']),
+    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_CATEGORY_FROM_API', 'GET_PRICES_FROM_API', 'GET_STORAGES_FROM_API']),
     addToCart(data) {
       this.ADD_TO_CART(data);
     },
@@ -69,6 +70,7 @@ export default {
     this.GET_PRODUCTS_FROM_API();
     this.GET_CATEGORY_FROM_API();
     this.GET_PRICES_FROM_API();
+    this.GET_STORAGES_FROM_API();
   },
   computed: {
     ...mapGetters(['PRODUCTS', 'CATEGORY', 'SEARCH_VALUE', 'PRICES']),

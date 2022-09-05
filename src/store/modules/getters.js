@@ -26,5 +26,8 @@ export default {
   }, 
   ISSUPERADMIN(state) {
     return state.isSuperAdmin
+  },
+  STORAGES(state) {
+    return state.storages
   }
 };
