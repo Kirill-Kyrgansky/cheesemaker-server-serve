@@ -18,11 +18,12 @@
         <option>л</option>
         <option>шт</option>
       </select>
-      <select class="input">
+      <select class="input" v-model="selectStore">
+        <option disabled>Выбрать склад</option>
         <option
           v-for="storage in STORAGES"
           :key="storage.id"
-          :value="this.form.storage"
+          :value="storage.id"
         >
           {{ storage.name }}
         </option>
@@ -41,22 +42,19 @@ export default {
   name: 'ElementCatalogCheesemaker',
   data() {
     return {
-      productAmount: '',
-      productАvailability: false,
       units: [
         { value: 0, text: 'шт' },
         { value: 1, text: 'кг' },
         { value: 2, text: 'л' },
       ],
-      productId: '',
       form: {
         amount: 0.01,
         manufacturer_id: 1,
         item_measure: 'кг',
         operation: 'приход',
         author_id: 1,
-        storage: '',
       },
+      selectStore: 'Выбрать склад'
     };
   },
   props: {
@@ -78,11 +76,13 @@ export default {
   },
   methods: {
     addProductProduced() {
-      if (this.form.date == undefined) {
-        alert('Введите дату производства продукта');
-      } else {
+      if (this.selectStore == 'Выбрать склад') {
+        alert('Выберете склад!')
+      }
         this.form.product_id = this.product.id;
+        this.form.store = this.selectStore
         console.log(this.form);
+        
         // axios
         //   .post('http://172.16.0.179/api/productions', this.form)
         //   .then((res) => {
@@ -92,7 +92,6 @@ export default {
         //     alert('Ошибка в работе приложения. Обратитесь к администратору.');
         //     console.log(error);
         //   });
-      }
     },
     isEmpty() {
       if (this.product.inStock == 0) {

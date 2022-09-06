@@ -14,7 +14,6 @@
           @addToCart="addToCart"
         />
       </div>
-
       <transition name="fade">
         <div class="successfully" v-if="isVisible">
           <p class="title-3 text-centered">Товар успешно добавлен в корзину!</p>
@@ -23,7 +22,7 @@
     </div>
   </div>
   <div class="arrow-bottom-container">
-<img src="/allImage/Icons/arrow.png"       class="arrow-bottom button-on"
+<img src="/allImage/Icons/arrow.png" class="arrow-bottom button-on"
       @click="scrollTop"/>
   </div>
 </template>

@@ -16,7 +16,7 @@
         <p class="title-3">{{ cart_item_data.name }}</p>
       </div>
       <div class="cart-element">
-        <p class="title-3">
+        <p class="title-3" >
           {{ cart_item_data.price }}&nbsp;₽&nbsp;1 {{ cart_item_data.unit }}.
         </p>
       </div>

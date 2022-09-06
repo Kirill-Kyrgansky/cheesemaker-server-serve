@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog-items-products" v-if="product.active">
+  <div class="catalog-items-products" >
     <!--product quantity checked-->
     <div class="catalog-element products">
       <div class="catalog-items-products-img">
@@ -118,6 +118,9 @@ export default {
       return true;
     },
     addToCart() {
+      if (this.selected == 'Выбрать вес') {
+        alert('error')
+      }
       this.$emit('addToCart', this.product);
     },
   },

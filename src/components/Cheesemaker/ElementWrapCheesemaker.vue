@@ -43,7 +43,7 @@ export default {
   components: {
     ElementSorting,
     ElementCatalogCheesemaker,
-  },
+},
   methods: {
     ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_CATEGORY_FROM_API', 'GET_STORAGES_FROM_API']),
     sortByCategories(category) {
