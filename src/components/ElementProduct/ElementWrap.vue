@@ -22,8 +22,11 @@
     </div>
   </div>
   <div class="arrow-bottom-container">
-<img src="/allImage/Icons/arrow.png" class="arrow-bottom button-on"
-      @click="scrollTop"/>
+    <img
+      src="/allImage/Icons/arrow.png"
+      class="arrow-bottom button-on"
+      @click="scrollTop"
+    />
   </div>
 </template>
 <script>
@@ -66,13 +69,19 @@ export default {
       });
       this.selected = category.name;
     },
-    ...mapActions(['GET_PRODUCTS_FROM_API', 'ADD_TO_CART', 'GET_PRICES_FROM_API']),
-    addToCart(data) {
+    ...mapActions([
+      'GET_PRODUCTS_FROM_API',
+      'ADD_TO_CART',
+      'GET_PRICES_FROM_API',
+    ]),
+    addToCart(data, selected) {
       this.isVisible = !this.isVisible;
       setTimeout(() => {
         this.isVisible = !this.isVisible;
       }, 2000);
+      data.price_id = selected.id
       this.ADD_TO_CART(data);
+      console.log(data);
     },
     optionSelect(CATEGORY) {
       this.selected = CATEGORY.name;
@@ -104,11 +113,13 @@ export default {
 </script>
 
 <style>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s ease;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
 }
 
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>

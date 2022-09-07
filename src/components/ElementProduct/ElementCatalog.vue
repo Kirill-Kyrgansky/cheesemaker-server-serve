@@ -1,7 +1,14 @@
 <template>
-  <div class="catalog-items-products" >
+  <div class="catalog-items-products">
     <!--product quantity checked-->
     <div class="catalog-element products">
+      <transition name="fade">
+        <div class="error-mesage" v-if="isVisible">
+          <p class="title-3 text-centered">
+            Укажите пожалуйста цену и вес товара
+          </p>
+        </div>
+      </transition>
       <div class="catalog-items-products-img">
         <img
           :src="'http://172.16.0.179' + product.image_path.slice('2')"
@@ -18,7 +25,7 @@
       />
       <div class="v-select width-200" v-click-outside="onClickOutside">
         <p class="input" @click="areOptionsVisible = !areOptionsVisible">
-          {{ selected }}
+          {{ selected.name }}
         </p>
         <div class="options" v-if="areOptionsVisible">
           <div v-for="price in PRICES" :key="price.id">
@@ -40,6 +47,7 @@
         />
       </button>
     </div>
+
     <transition name="description">
       <div
         class="products description pointer"
@@ -78,7 +86,8 @@ export default {
       description: false,
       choice: false,
       areOptionsVisible: false,
-      selected: 'Выбрать вес',
+      selected: {name: 'Выбрать вес'},
+      isVisible: false,
     };
   },
   props: {
@@ -104,7 +113,8 @@ export default {
     },
     selectOption(PRICES) {
       this.areOptionsVisible = false;
-      this.selected = PRICES.item_price + ' ₽ | 1 ' + PRICES.item_measure;
+      this.selected.name = PRICES.item_price + ' ₽ | 1 ' + PRICES.item_measure;
+      this.selected.id = PRICES.id
       this.selectedMeasure = PRICES.item_measure;
     },
     quantityProduct() {
@@ -118,10 +128,14 @@ export default {
       return true;
     },
     addToCart() {
+      // console.log(this.selected);
       if (this.selected == 'Выбрать вес') {
-        alert('error')
+        setTimeout(() => {
+          this.isVisible = !this.isVisible;
+        }, 2000);
+        return (this.isVisible = !this.isVisible);
       }
-      this.$emit('addToCart', this.product);
+      this.$emit('addToCart', this.product, this.selected);
     },
   },
 };

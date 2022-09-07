@@ -61,6 +61,21 @@ textarea {
   background-size: 100% 140px;
 }
 
+.error-mesage{
+  width: 91%;
+    height: 70px;
+    background-color: #FDD99E;
+    border: 2.5px solid #6E492A;
+    border-radius: 10px;
+    position: absolute;
+    top: 10px;
+    z-index: 999;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    background-image: url(http://172.16.2.181:8080/img/fonebox2.32716d15.svg);
+}
+
 .section {
   padding-left: 60px;
   padding-right: 60px;

@@ -2,12 +2,12 @@
   <section class="section">
     <div class="cart-done" v-if="sucsess">
       <div class="cart cart-sucsess order-title">
-        <div class=" position-end">
+        <div class="position-end">
           <img
-              src="/allImage/Icons/cross.svg"
-              class="header-link-icon pointer close"
-              @click="close" 
-            />
+            src="/allImage/Icons/cross.svg"
+            class="header-link-icon pointer close"
+            @click="close"
+          />
         </div>
         <h2 class="title-2">Заказ успешно сформирован!</h2>
         <p class="paragraph">Письмо с информацией отправлено вам на почту.</p>
@@ -95,38 +95,72 @@ export default {
       'DECREMENT_CART_ITEM',
       'GET_DELIVERY_POINTS_FROM_API',
     ]),
+    currentDate(date) {
+      var dd = date.getDate();
+      if (dd < 10) dd = '0' + dd;
+      var mm = date.getMonth() + 1;
+      if (mm < 10) mm = '0' + mm;
+      var yyyy = date.getFullYear();
+      if (yyyy < 10) yyyy = '0' + yyyy;
+      return yyyy + '-' + mm + '-' + dd;
+    },
+
     orderUsers() {
-      if (this.selected === 'Выберите адрес доставки') {
-        alert('Выберите адрес доставки');
-      } else {
-        this.isVisible = !this.isVisible;
-        const cart = this.cart_data; // created new object and deliite
-        for (const i in cart) {
-          delete cart[i].category;
-          delete cart[i].description;
-          delete cart[i].image;
-          delete cart[i].inStockQuantity;
-        }
-        const props = { data: {}, cart };
-        const date = new Date();
-        props.data.order = date.toLocaleDateString('ru', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
+      // if (this.selected === 'Выберите адрес доставки') {
+      //   alert('Выберите адрес доставки');
+      // } else {
+      let date = new Date();
+      let order = {
+        delivery_date: 1,
+        payment_type: 1,
+        status: 'в обработке',
+        comment: 'None',
+        author_id: 1,
+      };
+      order.date = this.currentDate(date);
+      axios
+        .post('http://172.16.0.179/api/orders', order)
+        .then((order) => {
+          let order_id = parseInt(order.data.detail.match(/\d+/));
+          this.contentAdd(order_id);
+        })
+        .catch((error) => {
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          console.log(error);
         });
-        props.data.adress = this.selected;
-        props.data.fullName = 'Иванов Иван Иванович';
-        props.data.phoneNumber = '8-999-232-22-21';
-        axios
-          .post('http://localhost:3000/orders', props)
-          .then(() => {
-            this.sucsess = !this.sucsess;
-          })
-          .catch((error) => {
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-            console.log(error);
-          });
+      // }
+    },
+    contentAdd(order_id) {
+      let date = new Date();
+      const cart = this.cart_data;
+      for (const i in cart) {
+        cart[i].date = this.currentDate(date);
+        cart[i].product_id = cart[i].id;
+        cart[i].order_id = order_id;
+        cart[i].author_id = 1;
+        cart[i].status = 'в обработке';
+        cart[i].amount = 1;
+        delete cart[i].active;
+        delete cart[i].description;
+        delete cart[i].image;
+        delete cart[i].inStockQuantity;
+        delete cart[i].name;
+        cart[i].manufacturer_id = 1;
+        delete cart[i].image_path;
+        delete cart[i].id;
+        this.sendForm(cart[i]);
       }
+    },
+    sendForm(cartElement) {
+      axios
+        .post('http://172.16.0.179/api/contents/', cartElement)
+        .then((order) => {
+          console.log('good');
+        })
+        .catch((error) => {
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          console.log(error);
+        });
     },
     deliteFromCart(index) {
       this.DELITE_FROM_CART(index);

@@ -10,7 +10,7 @@
           </h1>
         </div>
       </div>
-      <router-view :adminLogin="adminLogin" :cart_data="CART"></router-view>
+      <router-view :cart_data="CART"/>
     </div>
     <ElementFooter />
   </div>
@@ -41,6 +41,5 @@ export default {
     },
     ...mapActions(['ADD_TO-CART']),
   },
-  mounted() {},
 };
 </script>

@@ -80,18 +80,16 @@ export default {
         alert('Выберете склад!')
       }
         this.form.product_id = this.product.id;
-        this.form.store = this.selectStore
-        console.log(this.form);
-        
-        // axios
-        //   .post('http://172.16.0.179/api/productions', this.form)
-        //   .then((res) => {
-        //     alert('Продукт добавлен');
-        //   })
-        //   .catch((error) => {
-        //     alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        //     console.log(error);
-        //   });
+        this.form.storage_id = this.selectStore        
+        axios
+          .post('http://172.16.0.179/api/productions', this.form)
+          .then((res) => {
+            alert('Продукт добавлен');
+          })
+          .catch((error) => {
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            console.log(error);
+          });
     },
     isEmpty() {
       if (this.product.inStock == 0) {
