@@ -23,18 +23,23 @@
           required
         ></textarea>
       </div>
-
-      <select class="input" v-model="selectCategory">
-        <option disabled>{{product.category_id}}</option>
+      <p>Категория: {{selectCategory.name}}</p>
+      <select class="input" v-model="selectCategory.id">
         <option
           v-for="category in CATEGORY"
           :key="category.id"
           :value="category.id"
+          :selected="selectCategory.name"
         >
           {{ category.name }}
         </option>
       </select>
-
+      <!-- <div  v-for="category in CATEGORY"
+          :key="category.id">
+      <input type="radio" v-model="selectCategory.id"
+          :value="category"/>
+          <label :checked="selectCategory.name">{{category.name}}</label>
+        </div> -->
       <div class="text-centered">
         <button class="btn" @click="ApplyProductChanges(product.id)">
           Применить изменения
@@ -158,7 +163,7 @@ export default {
       item_measure: 'кг',
       priceChange: false,
       isActivePrice: true,
-      selectCategory: 'Выбрать категорию'
+      selectCategory: {name: 'Все категории', id:''}
     };
   },
   computed: {
@@ -167,8 +172,19 @@ export default {
   mounted() {
     this.form = this.product;
     this.isActivePrice = this.PRICES.active;
+    this.nameSelect()
   },
   methods: {
+    nameSelect(){
+      axios
+      .get(`http://172.16.0.179/api/categories/${this.product.category_id}`)
+      .then((res) => {
+        return this.selectCategory.name = res.data.name
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    },
     chagePriceChanges(price) {
       axios
       .patch(`http://172.16.0.179/api/prices/${price.id}`, price)
@@ -233,10 +249,13 @@ export default {
       return;
     },
     ApplyProductChanges(index) {
+      console.log(this.product);
+      this.product.category_id = this.selectCategory.id
       axios
         .patch(`http://172.16.0.179/api/products/${index}`, this.product)
         .then((res) => {
           location.reload(res);
+          this.product.category_id = this.selectCategory.id
         })
         .catch((error) => {
           alert('Ошибка в работе приложения. Обратитесь к администратору.');

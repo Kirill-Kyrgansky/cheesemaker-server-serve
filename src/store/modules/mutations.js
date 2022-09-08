@@ -8,10 +8,8 @@ export default {
       state.cart.map((item) => {
         if (item.price_id === product.price_id) {
           isProductExist = true;
-          item.amount++
-          // item.quantity++;
-          console.log(item);
-          console.log(state.cart);
+          // item.amount++
+          item.quantity++;
         }
       });
       if (!isProductExist) {
