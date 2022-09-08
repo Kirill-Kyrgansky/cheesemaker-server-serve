@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog-items-products">
+  <div class="catalog-items-products"  v-if="product.active == 1">
     <!--product quantity checked-->
     <div class="catalog-element products">
       <transition name="fade">
@@ -27,7 +27,7 @@
         <p class="input" @click="areOptionsVisible = !areOptionsVisible">
           {{ selected.name }}
         </p>
-        <div class="options" v-if="areOptionsVisible">
+        <div class="options-product" v-if="areOptionsVisible">
           <div v-for="price in PRICES" :key="price.id">
             <a
               class="input bold search"

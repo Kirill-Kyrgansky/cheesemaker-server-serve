@@ -21,13 +21,13 @@
         </p>
       </div>
       <div class="cart-element">
-        <p class="title-3">{{ cart_item_data.quantity }}</p>
+        <p class="title-3">{{ cart_item_data.amount }}</p>
       </div>
       <textarea
         type="text"
         class="input input-cart width-200"
         placeholder="Комментарии"
-        v-model="computedProperty.commentForProduct"
+        v-model="computedProperty.comment"
       ></textarea>
     </div>
   </div>
@@ -58,21 +58,21 @@ export default {
       get() {
         return this.CART[this.index];
       },
-      set(commentForProduct) {
-        this.CART.commentForProduct = commentForProduct;
+      set(comment) {
+        this.CART.comment = comment;
       },
     },
   },
   methods: {
     updateMessage(val) {
-      this.CART.commit('updateMessage', val.commentForProduct);
+      this.CART.commit('updateMessage', val.comment);
     },
     deliteFromCart() {
       this.$emit('deliteFromCart');
     },
   },
   mounted() {
-    this.$emit('commentForProduct', this.cart_item_data.commentForProduct);
+    this.$emit('comment', this.cart_item_data.comment);
   },
 };
 </script>

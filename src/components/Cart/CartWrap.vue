@@ -104,18 +104,18 @@ export default {
       if (yyyy < 10) yyyy = '0' + yyyy;
       return yyyy + '-' + mm + '-' + dd;
     },
-
     orderUsers() {
       // if (this.selected === 'Выберите адрес доставки') {
       //   alert('Выберите адрес доставки');
       // } else {
       let date = new Date();
       let order = {
-        delivery_date: 1,
-        payment_type: 1,
+        delivery_date: 1, //изменить
+        payment_type: 1, //изменить
         status: 'в обработке',
         comment: 'None',
-        author_id: 1,
+        author_id: 1, //изменить 
+        pickpoint_id: 1 //изменить
       };
       order.date = this.currentDate(date);
       axios
@@ -133,23 +133,26 @@ export default {
     contentAdd(order_id) {
       let date = new Date();
       const cart = this.cart_data;
+      console.log(cart);
       for (const i in cart) {
         cart[i].date = this.currentDate(date);
         cart[i].product_id = cart[i].id;
         cart[i].order_id = order_id;
-        cart[i].author_id = 1;
+        cart[i].author_id = 1; //изменить
         cart[i].status = 'в обработке';
-        cart[i].amount = 1;
+        cart[i].manufacturer_id = 1; //изменить
+        cart[i].amount = 1; //изменить
         delete cart[i].active;
         delete cart[i].description;
         delete cart[i].image;
         delete cart[i].inStockQuantity;
         delete cart[i].name;
-        cart[i].manufacturer_id = 1;
         delete cart[i].image_path;
         delete cart[i].id;
         this.sendForm(cart[i]);
+        console.log(cart[i]);
       }
+      this.sucsess = !this.sucsess;
     },
     sendForm(cartElement) {
       axios

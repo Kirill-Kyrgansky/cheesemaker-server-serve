@@ -30,6 +30,10 @@ textarea {
   flex-wrap: wrap;
 }
 
+.feedback__file {
+  display: none;
+}
+
 .title-1 {
   @include title-1;
 }
@@ -61,6 +65,19 @@ textarea {
   background-size: 100% 140px;
 }
 
+.options-product {
+  background: #faf3d6;
+  background-color: #FDD99E;
+  border: 2.5px solid #6E492A;
+  border-radius: 10px;
+  position: absolute;
+  top: 65px;
+  right: 0px;
+  width: 195px;
+  z-index: 999;
+  background-image: url(http://172.16.2.174:8080/img/fone.d4f0726a.png);
+}
+
 .error-mesage{
   width: 91%;
     height: 70px;
@@ -86,6 +103,7 @@ textarea {
 }
 
 .wrap {
+  // background-size: auto 100%;
   background-image: url(/public/allImage/fone.png);
   background-color:$main-collor;
   background-repeat: no-repeat;
@@ -170,6 +188,7 @@ textarea {
 }
 
 .img-question {
+  margin-top: 15px;
   width: 25px;
 }
 

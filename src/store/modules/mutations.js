@@ -1,5 +1,4 @@
 export default {
-
   SET_SEARCH_VALUE_TO_VUEX: (state, value) => {
     state.searchValue = value;
   },
@@ -7,9 +6,12 @@ export default {
     if (state.cart.length) {
       let isProductExist = false;
       state.cart.map((item) => {
-        if (item.id === product.id) {
+        if (item.price_id === product.price_id) {
           isProductExist = true;
-          item.quantity++;
+          item.amount++
+          // item.quantity++;
+          console.log(item);
+          console.log(state.cart);
         }
       });
       if (!isProductExist) {
@@ -17,6 +19,9 @@ export default {
       }
     } else {
       state.cart.push(product);
+      // console.log('product');
+      // console.log(product);
+      // console.log('product');
     }
   },
   SET_PRICES_TO_STATE: (state, prices) => {
@@ -38,6 +43,9 @@ export default {
     state.orders = orders;
   },
   SET_STORAGES_TO_STATE: (state, storages) => {
-    state.storages = storages
-  }
+    state.storages = storages;
+  },
+  SET_CONTENTS_TO_STATE: (state, contents) => {
+    state.contents = contents;
+  },
 };

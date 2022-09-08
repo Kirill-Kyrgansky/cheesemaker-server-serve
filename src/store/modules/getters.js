@@ -29,5 +29,8 @@ export default {
   },
   STORAGES(state) {
     return state.storages
+  },
+  CONTENTS(state) {
+    return state.contents
   }
 };

@@ -7,46 +7,46 @@
       </p>
       <p class="paragraph-small">
         <span class="title-3 bold"> Название: </span>
-        {{ product.name }}
+        {{ name }}
       </p>
-      <div v-if="product.commentForProduct">
+      <div >
         <p class="paragraph">
           <span class="title-3 bold"> Комментарий: </span>
         </p>
-        <p class="paragraph-small">{{ product.commentForProduct }}</p>
+        <p class="paragraph-small">{{ contents.comment }}</p>
       </div>
       <p class="paragraph-small">
         <span class="title-3 bold"> Кол-во: </span>
-        {{ product.quantity }}
-        {{ product.unit }}
+        {{  }}
+        {{  }}
       </p>
       <p class="paragraph-small">
         <span class="title-3 bold"> Цена: </span>
-        {{ product.price }} ₽
+        {{  }} ₽
       </p>
-      <div class="order-title" v-if="product.unit == 'кг'">
+      <div class="order-title" >
         <div class="order-element margin-10-0"></div>
         <p class="paragraph">
           <span class="title-3 bold"> Фактический вес: </span>
-          {{ factWeight }}
+          {{  }}
           кг
         </p>
         <p class="paragraph-small">
           <span class="title-3 bold"> Фактическая цена: </span>
-          {{ computedFactPrice }} ₽
+          {{  }} ₽
         </p>
         <input
           type="number"
           class="input"
           step="0.01"
           placeholder="Фактический вес"
-          v-model="factWeight"
         />
       </div>
     </div>
   </div>
 </template>
 <script>
+import axios from 'axios';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -55,9 +55,10 @@ export default {
     return {
       factWeight: 0.01,
       factPrice: 0,
+      name: '1'
     };
   },
-  props: ['product', 'index'],
+  props: ['contents', 'index'],
   // props: {
   //   product: {
   //     type: Object,
@@ -69,14 +70,30 @@ export default {
   //     type: Number
   //   }
   // },
-  computed: {
+  mounted() {
+    this.getProductName()
+  },
+  methods: {
+    getProductName() {
+      axios
+        .get (`http://172.16.0.179/api/products/${this.contents.product_id}`)
+        .then((product) => {
+          return this.name = product.data.name
+        })
+        .catch((error) => {
+          alert(error)
+        })
+    }
+  },
+    computed: {
     ...mapGetters(['ORDERS']),
-    computedFactPrice() {
-      if (NaN) {
-        return '0';
-      }
-      return (this.product.price * this.factWeight).toFixed(2);
-    },
+    
+    // computedFactPrice() {
+    //   if (NaN) {
+    //     return '0';
+    //   }
+    //   return (this.product.price * this.factWeight).toFixed(2);
+    // },
   },
 };
 </script>

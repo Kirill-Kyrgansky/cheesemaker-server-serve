@@ -52,20 +52,17 @@
             required
           />
         </label> -->
-        <div >
-        <select
-          class="input"
-          name="list"
-          v-model="productCreate.category"
-          >
-          <option
+        <div>
+          <select class="input" v-model="selectCategory">
+        <option disabled>Выбрать категорию</option>
+        <option
           v-for="category in CATEGORY"
-          :value="category.name"
           :key="category.id"
-          >
-            {{ category.name }}
-          </option>
-        </select>
+          :value="category.id"
+        >
+          {{ category.name }}
+        </option>
+      </select>
         </div>
         <div class="text-centered">
           <button class="btn" @click="createProduct(productCreate)">Создать</button>
@@ -86,15 +83,15 @@ export default {
       productCreate:
       {
         name: '',
-        active: '',
+        active: '0',
         image: '',
-        category_id: '5',
-        comment: 'None',
+        comment: 'Комментарий',
         description: '',
         author_id: '1',
         image: '',
         ext: ''
       },
+      selectCategory: 'Выбрать категорию',
       units: [
         { id: 1, name: 'шт' },
         { id: 2, name: 'л' },
@@ -132,7 +129,9 @@ export default {
       reader.readAsDataURL(fileObject);
     },
     createProduct() {
+      // console.log(this.productCreate);
         let createNewProduct = this.productCreate
+        createNewProduct.category_id = this.selectCategory
         axios 
         .post ('http://172.16.0.179/api/products', createNewProduct)
         .then((res) => {
@@ -140,6 +139,7 @@ export default {
           })
           .catch((error) => {
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            console.log(createNewProduct);
             console.log(error);
           });
       },

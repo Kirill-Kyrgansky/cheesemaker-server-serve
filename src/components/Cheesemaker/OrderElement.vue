@@ -1,27 +1,30 @@
 <template>
   <div class="order-element">
     <div class="order-title">
-      <p class="title-2">Дата заказа: {{ order[index].data.order }}</p>
-      <p class="title-2">Номер заказа: {{ order[index].id }}</p>
+      <p class="title-2">Дата заказа: {{date}}</p>
+      <p class="title-2">Номер заказа: {{ order.id }}</p>
       <p class="cancellation bold centered-horizontally">
         Заказ отменен пользователем!
       </p>
       <div class="border-line"></div>
     </div>
     <ProductOrderElement
-      v-for="(item, index) in order[index].cart"
-      :key="item.id"
-      :product="item"
+      v-for="contents, index in CONTENTS"
+      :key="contents.id"
+      :contents="contents"
       :index="index"
+      :products="products"
     />
+    <!-- :product="item"
+      :index="index" -->
     <p class="title-3">
-      <span class="bold">Адрес доставки:</span> {{ order[index].data.adress }}
+      <span class="bold">Адрес доставки:</span> {{ order.pickpoint_id + ' pickpoint' }}
     </p>
     <p class="title-3">
-      <span class="bold">Ф.И.О.</span> {{ order[index].data.fullName }}
+      <span class="bold">Ф.И.О.</span> {{ order.author_id + ' имя' }}
     </p>
     <p class="title-3">
-      <span class="bold">Телефон:</span> {{ order[index].data.phoneNumber }}
+      <span class="bold">Телефон:</span> {{ 'взять из API' }}
     </p>
     <div class="button-right">
       <button type="button" class="btn centered">
@@ -76,6 +79,12 @@ export default {
       default() {
         return {};
       },
+    },    
+    products: {
+      type: Object,
+      default() {
+        return {};
+      },
     },
     index: {
       type: Number,
@@ -84,8 +93,14 @@ export default {
   components: {
     ProductOrderElement,
   },
+  mounted() {
+  },
   computed: {
-    ...mapGetters(['NEWORDERS']),
+    ...mapGetters(['NEWORDERS','CONTENTS']),
+    date () {
+      let date = this.order.order_date.split('T')[0].split('-')
+      return date[2] + '-' + date[1] + '-' + date[0]
+    },
   },
   metods: {
     isPositive(data) {

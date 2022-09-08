@@ -115,7 +115,7 @@ export default {
         active: '',
         image: '',
         category_id: "5",
-        comment: 'None',
+        comment: 'Введите описание',
         description: '',
         author_id: "1",
         image: '',

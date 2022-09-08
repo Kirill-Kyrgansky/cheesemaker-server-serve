@@ -81,7 +81,7 @@ export default {
   GET_ORDERS_FROM_API({
     commit,
   }) {
-    return axios(`${URL}/orders`, {
+    return axios(`${testURL}/orders`, {
       method: 'GET',
     })
       .then((orders) => {
@@ -102,6 +102,21 @@ export default {
       .then((storages) => {
         commit('SET_STORAGES_TO_STATE', storages.data);
         return storages;
+      })
+      .catch((error) => {
+        console.log(error);
+        return error;
+      });
+  },
+  GET_CONTENTS_FROM_API({
+    commit,
+  }) {
+    return axios(`${testURL}/contents`, {
+      method: 'GET',
+    })
+      .then((contents) => {
+        commit('SET_CONTENTS_TO_STATE', contents.data);
+        return contents;
       })
       .catch((error) => {
         console.log(error);

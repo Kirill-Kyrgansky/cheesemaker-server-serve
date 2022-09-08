@@ -81,7 +81,7 @@ export default {
       }, 2000);
       data.price_id = selected.id
       this.ADD_TO_CART(data);
-      console.log(data);
+      // console.log(data);
     },
     optionSelect(CATEGORY) {
       this.selected = CATEGORY.name;

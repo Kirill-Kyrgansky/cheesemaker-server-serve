@@ -24,17 +24,17 @@
         ></textarea>
       </div>
 
-      <!-- <p class="paragraph">Кол-во произведенного продука:</p> -->
-      <!-- <label for="production-quantity">
-          <input
-            type="number"
-            id="production-quantity"
-            v-model="form.inStockQuantity"
-            class="input"
-            placeholder="Кол-во"
-            required
-          />
-        </label> -->
+      <select class="input" v-model="selectCategory">
+        <option disabled>{{product.category_id}}</option>
+        <option
+          v-for="category in CATEGORY"
+          :key="category.id"
+          :value="category.id"
+        >
+          {{ category.name }}
+        </option>
+      </select>
+
       <div class="text-centered">
         <button class="btn" @click="ApplyProductChanges(product.id)">
           Применить изменения
@@ -158,10 +158,11 @@ export default {
       item_measure: 'кг',
       priceChange: false,
       isActivePrice: true,
+      selectCategory: 'Выбрать категорию'
     };
   },
   computed: {
-    ...mapGetters(['PRICES']),
+    ...mapGetters(['PRICES','CATEGORY']),
   },
   mounted() {
     this.form = this.product;
@@ -213,7 +214,7 @@ export default {
     },
     isVisibleProduct(index) {
       let proof = confirm(
-        'Подтвердите удаление товара. Удаляйте товар, только в том случае если именно его не будет больше НИКОГДА, а не если когда он закончился!'
+        'Отключить видимость товара'
       );
       if (proof == true) {
         this.product.active = !this.product.active;
