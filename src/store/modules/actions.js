@@ -1,5 +1,5 @@
 import axios from 'axios';
-let testURL = 'http://172.16.0.179/api'
+let testURL = 'http://shop-dev.zdmail.ru/api'
 let URL = 'http://localhost:3000'
 export default {
   GET_SEARCH_VALUE_TO_VUEX({
@@ -55,7 +55,6 @@ export default {
     })
       .then((category) => {
         commit('SET_CATEGORY_TO_STATE', category.data);
-        console.log(category);
         return category;
       })
       .catch((error) => {

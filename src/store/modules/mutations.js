@@ -6,20 +6,19 @@ export default {
     if (state.cart.length) {
       let isProductExist = false;
       state.cart.map((item) => {
-        if (item.price_id === product.price_id) {
+        if (item.id === product.id) {
           isProductExist = true;
-          // item.amount++
-          item.quantity++;
+          item.amount++;
+          console.log(product);
         }
       });
       if (!isProductExist) {
+        product.amount = 1;
         state.cart.push(product);
       }
     } else {
+      product.amount = 1;
       state.cart.push(product);
-      // console.log('product');
-      // console.log(product);
-      // console.log('product');
     }
   },
   SET_PRICES_TO_STATE: (state, prices) => {
@@ -42,7 +41,7 @@ export default {
   },
   SET_STORAGES_TO_STATE: (state, storages) => {
     state.storages = storages;
-  },
+  },  
   SET_CONTENTS_TO_STATE: (state, contents) => {
     state.contents = contents;
   },

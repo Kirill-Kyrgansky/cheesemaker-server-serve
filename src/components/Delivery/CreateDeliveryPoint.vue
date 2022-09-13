@@ -82,7 +82,7 @@ export default {
     createPickpoint(pickpoint) {
       axios
         .post(
-          `http://172.16.0.179/api/pickpoints`,
+          `http://shop-dev.zdmail.ru/api/pickpoints`,
           pickpoint
         )
         .then((res) => {

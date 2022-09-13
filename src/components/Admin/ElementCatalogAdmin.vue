@@ -3,7 +3,7 @@
     <div class="catalog-element" >
       <p class="title-2 cancellation " v-if="!product.active">Отключен</p>
       <img
-        :src="'http://172.16.0.179' + product.image_path.slice('2')"
+        :src="'http://shop-dev.zdmail.ru' + product.image_path.slice('2')"
         :alt="product.name"
         class="catalog-element-img"
       />
@@ -53,7 +53,7 @@ export default {
         active: !isActive,
       };
       axios
-        .patch(`http://172.16.0.179/api/pickpoint/${index}`, active)
+        .patch(`http://shop-dev.zdmail.ru/api/pickpoint/${index}`, active)
         .then((res) => {
           location.reload(res);
           if (res == 404) {

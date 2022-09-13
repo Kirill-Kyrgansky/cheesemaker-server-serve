@@ -11,7 +11,7 @@
       </transition>
       <div class="catalog-items-products-img">
         <img
-          :src="'http://172.16.0.179' + product.image_path.slice('2')"
+          :src="'http://shop-dev.zdmail.ru' + product.image_path.slice('2')"
           :alt="product.name"
           class="catalog-element-img"
         />
@@ -129,7 +129,7 @@ export default {
     },
     addToCart() {
       // console.log(this.selected);
-      if (this.selected == 'Выбрать вес') {
+      if (this.selected.name == 'Выбрать вес') {
         setTimeout(() => {
           this.isVisible = !this.isVisible;
         }, 2000);

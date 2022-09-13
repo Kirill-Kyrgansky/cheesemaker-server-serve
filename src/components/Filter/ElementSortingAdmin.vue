@@ -119,7 +119,7 @@ export default {
                 author_id: 1,
             };
             axios
-                .patch(`http://172.16.0.179/api/categories/${index}`, sendForm)
+                .patch(`http://shop-dev.zdmail.ru/api/categories/${index}`, sendForm)
                 .then((res) => {
                 location.reload(res);
                 if (res == 404) {
@@ -139,7 +139,7 @@ export default {
                     author_id: 1,
                 };
                 axios
-                    .patch(`http://172.16.0.179/api/categories/${index}`, sendForm)
+                    .patch(`http://shop-dev.zdmail.ru/api/categories/${index}`, sendForm)
                     .then((res) => {
                     location.reload(res);
                     if (res == 404) {
@@ -159,7 +159,7 @@ export default {
             }
             else {
                 axios
-                    .post("http://172.16.0.179/api/categories", this.formCategories)
+                    .post("http://shop-dev.zdmail.ru/api/categories", this.formCategories)
                     .then((res) => {
                     location.reload(res);
                 })

@@ -133,7 +133,7 @@ export default {
         let createNewProduct = this.productCreate
         createNewProduct.category_id = this.selectCategory
         axios 
-        .post ('http://172.16.0.179/api/products', createNewProduct)
+        .post ('http://shop-dev.zdmail.ru/api/products', createNewProduct)
         .then((res) => {
             location.reload(res);
           })

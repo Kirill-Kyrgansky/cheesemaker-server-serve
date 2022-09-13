@@ -1,22 +1,22 @@
 <template>
-  <div class="order-element">
+  <div class="order-element" v-if="order.status == 'в обработке'">
     <div class="order-title">
       <p class="title-2">Дата заказа: {{date}}</p>
       <p class="title-2">Номер заказа: {{ order.id }}</p>
-      <p class="cancellation bold centered-horizontally">
+      <p class="cancellation bold centered-horizontally" v-if="order.status == 'отменен'">
         Заказ отменен пользователем!
       </p>
       <div class="border-line"></div>
     </div>
+    <div v-for="content, index in CONTENTS" :key="content.id">
     <ProductOrderElement
-      v-for="contents, index in CONTENTS"
-      :key="contents.id"
-      :contents="contents"
+      :content="content"
+      v-if="(content.order_id == order.id) && content.status != 'проблемы' "
       :index="index"
-      :products="products"
-    />
-    <!-- :product="item"
-      :index="index" -->
+      :orderRun="orderRun"
+
+      />
+    </div>
     <p class="title-3">
       <span class="bold">Адрес доставки:</span> {{ order.pickpoint_id + ' pickpoint' }}
     </p>
@@ -27,7 +27,7 @@
       <span class="bold">Телефон:</span> {{ 'взять из API' }}
     </p>
     <div class="button-right">
-      <button type="button" class="btn centered">
+      <button @click="orderSentToThePoint" type="button" class="btn centered" >
         Заказ отправлен
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,7 @@
           />
         </svg>
       </button>
-      <button type="button" class="cancellation centered-horizontally btn-text">
+      <button v-if="order.status == 'отменен'" type="button" class="cancellation centered-horizontally btn-text" >
         Заказ отменен
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +63,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 import { mapGetters } from 'vuex';
 import ProductOrderElement from './ProductOrderElement.vue';
 
@@ -71,6 +72,7 @@ export default {
   data() {
     return {
       newOrder: {},
+      orderRun: false,
     };
   },
   props: {
@@ -80,12 +82,12 @@ export default {
         return {};
       },
     },    
-    products: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
+    // products: {
+    //   type: Object,
+    //   default() {
+    //     return {};
+    //   },
+    // },
     index: {
       type: Number,
     },
@@ -93,16 +95,45 @@ export default {
   components: {
     ProductOrderElement,
   },
-  mounted() {
-  },
   computed: {
-    ...mapGetters(['NEWORDERS','CONTENTS']),
+    ...mapGetters(['CONTENTS']),
     date () {
       let date = this.order.order_date.split('T')[0].split('-')
       return date[2] + '-' + date[1] + '-' + date[0]
     },
+    cont() {
+      this.content.order_id == this.order.id
+      return test = this.content.order_id
+    },
   },
-  metods: {
+  methods: {    
+    currentDate(date) {
+      var dd = date.getDate();
+      if (dd < 10) dd = '0' + dd;
+      var mm = date.getMonth() + 1;
+      if (mm < 10) mm = '0' + mm;
+      var yyyy = date.getFullYear();
+      if (yyyy < 10) yyyy = '0' + yyyy;
+      return yyyy + '-' + mm + '-' + dd;
+    },
+    orderSentToThePoint() {
+      let date = new Date();
+      this.orderRun = true
+      this.order.status = 'отправлен'
+      this.order.date = this.currentDate(date)
+      this.order.delivery_date = this.currentDate(date)
+      console.log(this.order);
+      axios
+      .patch(`http://shop-dev.zdmail.ru/api/orders/${this.order.id}`, this.order)
+      .then((order) => {
+        console.log('good');
+        console.log(order);
+      })
+      .catch((error) => {
+        alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            console.log(error);
+      })
+    },
     isPositive(data) {
       console.log(data);
     },

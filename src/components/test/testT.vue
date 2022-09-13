@@ -2,17 +2,15 @@
   <div class="catalog-items">
     <div class="catalog-element">
       <img
-        :src="'http://172.16.0.179' + product.image_path.slice('2')"
-        :alt="product.name"
         class="catalog-element-img"
       />
       <div class="text-align-right">
-        <h3 class="title-3 text-centered">{{ product.name }}</h3>
+        <h3 class="title-3 text-centered"></h3>
       </div>
       <p class="paragraph-small margin-10-0 text-centered">
         Введите кол-во приготовленного продукта:
       </p>
-      <input class="input" type="number" v-model="form.amount" step="0.01" />
+      <input class="input" type="number"  />
       <select class="input" v-model="form.item_measure">
         <option>кг</option>
         <option>л</option>
@@ -39,7 +37,7 @@ import { mapGetters } from 'vuex';
 import axios from 'axios';
 
 export default {
-  name: 'ElementCatalogCheesemaker',
+  name: 'testT',
   data() {
     return {
       units: [
@@ -72,7 +70,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['PRODUCTS', 'CATEGORY', 'STORAGES']),
+    ...mapGetters(['STORAGES']),
   },
   methods: {
     addProductProduced() {
@@ -80,16 +78,18 @@ export default {
         alert('Выберете склад!')
       }
         this.form.product_id = this.product.id;
-        this.form.storage_id = this.selectStore        
-        axios
-          .post('http://shop-dev.zdmail.ru/api/productions', this.form)
-          .then((res) => {
-            alert('Продукт добавлен');
-          })
-          .catch((error) => {
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-            console.log(error);
-          });
+        this.form.store = this.selectStore
+        console.log(this.form);
+        
+        // axios
+        //   .post('http://172.16.0.179/api/productions', this.form)
+        //   .then((res) => {
+        //     alert('Продукт добавлен');
+        //   })
+        //   .catch((error) => {
+        //     alert('Ошибка в работе приложения. Обратитесь к администратору.');
+        //     console.log(error);
+        //   });
     },
     isEmpty() {
       if (this.product.inStock == 0) {

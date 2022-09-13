@@ -105,7 +105,7 @@ export default {
     сhangeVisibility(storage) {
             storage.active = !storage.active
             axios
-                .patch(`http://172.16.0.179/api/storages/${storage.id}`, storage)
+                .patch(`http://shop-dev.zdmail.ru/api/storages/${storage.id}`, storage)
                 .then((res) => {
                 location.reload(res);
                 if (res == 404) {
@@ -125,7 +125,7 @@ export default {
               storage.comment = newComment
               storage.name = newName
                 axios
-                    .patch(`http://172.16.0.179/api/storages/${storage.id}`, storage)
+                    .patch(`http://shop-dev.zdmail.ru/api/storages/${storage.id}`, storage)
                     .then((res) => {
                     location.reload(res);
                     if (res == 404) {
@@ -142,7 +142,7 @@ export default {
             let newComment = prompt("Введите новый комментарий.", storage.comment);
               storage.comment = newComment
                 axios
-                    .patch(`http://172.16.0.179/api/storages/${storage.id}`, storage)
+                    .patch(`http://shop-dev.zdmail.ru/api/storages/${storage.id}`, storage)
                     .then((res) => {
                       console.log(storage);
                 })
@@ -155,7 +155,7 @@ export default {
       this.createStorage.author_id = 1
       console.log(this.createStorage);
       axios
-      .post('http://172.16.0.179/api/storages/', this.createStorage)
+      .post('http://shop-dev.zdmail.ru/api/storages/', this.createStorage)
       .then((res) => {
         console.log('good');
       })

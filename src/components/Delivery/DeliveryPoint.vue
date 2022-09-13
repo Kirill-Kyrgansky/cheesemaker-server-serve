@@ -146,7 +146,7 @@ export default {
   methods: {
     changePickpoint(pickpoint) {
       axios
-        .patch(`http://172.16.0.179/api/pickpoints/${pickpoint.id}`, pickpoint)
+        .patch(`http://shop-dev.zdmail.ru/api/pickpoints/${pickpoint.id}`, pickpoint)
         .then((res) => {
           location.reload(res);
           console.log(res);
@@ -160,7 +160,7 @@ export default {
     сhangeVisibilityPickpoint(isActive, pickpoint) {
       pickpoint.active = Number(!isActive),
       axios
-        .patch(`http://172.16.0.179/api/pickpoints/${pickpoint.id}`, pickpoint)
+        .patch(`http://shop-dev.zdmail.ru/api/pickpoints/${pickpoint.id}`, pickpoint)
         .then((res) => {
           location.reload(res);
           if (res == 404) {

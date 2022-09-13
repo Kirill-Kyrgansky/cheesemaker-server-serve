@@ -17,7 +17,8 @@
       </div>
       <div class="cart-element">
         <p class="title-3" >
-          {{ cart_item_data.price }}&nbsp;₽&nbsp;1 {{ cart_item_data.unit }}.
+          {{price}}
+          <!-- {{ cart_item_data.price }}&nbsp;₽&nbsp;1 {{ cart_item_data.unit }}. -->
         </p>
       </div>
       <div class="cart-element">
@@ -33,10 +34,16 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'CartElement',
+  data() {
+    return {
+      price: {}
+    }
+  },
   props: {
     cart_item_data: {
       type: Object,
@@ -62,8 +69,24 @@ export default {
         this.CART.comment = comment;
       },
     },
+    
   },
   methods: {
+    getPrice() {
+      console.log(this.cart_item_data.price_id);
+      axios
+        .get(
+          `http://shop-dev.zdmail.ru/api/prices/${this.cart_item_data.price_id}`)
+        .then((res) => {
+          this.price = res.data.item_price + " ₽ 1" + res.data.item_measure 
+          console.log(res);
+          
+        })
+        .catch((error) => {
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          console.log(error);
+        });
+    },
     updateMessage(val) {
       this.CART.commit('updateMessage', val.comment);
     },
@@ -72,6 +95,7 @@ export default {
     },
   },
   mounted() {
+    this.getPrice()
     this.$emit('comment', this.cart_item_data.comment);
   },
 };

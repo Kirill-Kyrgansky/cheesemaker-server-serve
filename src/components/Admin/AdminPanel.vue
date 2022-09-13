@@ -177,7 +177,7 @@ export default {
   methods: {
     nameSelect(){
       axios
-      .get(`http://172.16.0.179/api/categories/${this.product.category_id}`)
+      .get(`http://shop-dev.zdmail.ru/api/categories/${this.product.category_id}`)
       .then((res) => {
         return this.selectCategory.name = res.data.name
       })
@@ -187,7 +187,7 @@ export default {
     },
     chagePriceChanges(price) {
       axios
-      .patch(`http://172.16.0.179/api/prices/${price.id}`, price)
+      .patch(`http://shop-dev.zdmail.ru/api/prices/${price.id}`, price)
       .then((res) => {
         alert('Цена успешно изменена')
         price.visible = !price.visible
@@ -204,7 +204,7 @@ export default {
       formAddPrice.active = 0;
       formAddPrice.author_id = 1;
       axios
-        .post('http://172.16.0.179/api/prices/', formAddPrice)
+        .post('http://shop-dev.zdmail.ru/api/prices/', formAddPrice)
         .then((res) => {
           location.reload(res);
         })
@@ -237,7 +237,7 @@ export default {
         console.log(this.product);
         console.log(index);
         axios
-          .patch(`http://172.16.0.179/api/products/${index}`, this.product)
+          .patch(`http://shop-dev.zdmail.ru/api/products/${index}`, this.product)
           .then((res) => {
             location.reload(res);
           })
@@ -252,7 +252,7 @@ export default {
       console.log(this.product);
       this.product.category_id = this.selectCategory.id
       axios
-        .patch(`http://172.16.0.179/api/products/${index}`, this.product)
+        .patch(`http://shop-dev.zdmail.ru/api/products/${index}`, this.product)
         .then((res) => {
           location.reload(res);
           this.product.category_id = this.selectCategory.id
@@ -266,7 +266,7 @@ export default {
       price.active = Number(!isActive);
       console.log(price);
       axios
-        .patch(`http://172.16.0.179/api/prices/${index}`, price)
+        .patch(`http://shop-dev.zdmail.ru/api/prices/${index}`, price)
         .then((res) => {
           alert('Изменения применены');
         })

@@ -119,7 +119,7 @@ export default {
       };
       order.date = this.currentDate(date);
       axios
-        .post('http://172.16.0.179/api/orders', order)
+        .post('http://shop-dev.zdmail.ru/api/orders', order)
         .then((order) => {
           let order_id = parseInt(order.data.detail.match(/\d+/));
           this.contentAdd(order_id);
@@ -141,7 +141,6 @@ export default {
         cart[i].author_id = 1; //изменить
         cart[i].status = 'в обработке';
         cart[i].manufacturer_id = 1; //изменить
-        cart[i].amount = 1; //изменить
         delete cart[i].active;
         delete cart[i].description;
         delete cart[i].image;
@@ -156,7 +155,7 @@ export default {
     },
     sendForm(cartElement) {
       axios
-        .post('http://172.16.0.179/api/contents/', cartElement)
+        .post('http://shop-dev.zdmail.ru/api/contents/', cartElement)
         .then((order) => {
           console.log('good');
         })
