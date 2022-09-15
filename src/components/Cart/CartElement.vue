@@ -1,13 +1,16 @@
 <template>
   <div>
     <div class="cart-element-wrap catalog-element-wrap">
-        <img @click="deliteFromCart"
-              src="/allImage/Icons/cross.svg"
-              class="header-link-icon pointer"
-            />
+      <img
+        @click="deliteFromCart"
+        src="/allImage/Icons/cross.svg"
+        class="header-link-icon pointer"
+      />
       <div class="cart-element">
         <img
-          :src="'http://172.16.0.179' + cart_item_data.image_path.slice('2')"
+          :src="
+            'http://shop-dev.zdmail.ru' + cart_item_data.image_path.slice('2')
+          "
           class="cart-img"
           :alt="cart_item_data.name"
         />
@@ -16,8 +19,8 @@
         <p class="title-3">{{ cart_item_data.name }}</p>
       </div>
       <div class="cart-element">
-        <p class="title-3" >
-          {{price}}
+        <p class="title-3">
+          {{ price }}
           <!-- {{ cart_item_data.price }}&nbsp;₽&nbsp;1 {{ cart_item_data.unit }}. -->
         </p>
       </div>
@@ -41,8 +44,8 @@ export default {
   name: 'CartElement',
   data() {
     return {
-      price: {}
-    }
+      price: {},
+    };
   },
   props: {
     cart_item_data: {
@@ -69,18 +72,22 @@ export default {
         this.CART.comment = comment;
       },
     },
-    
   },
   methods: {
     getPrice() {
       console.log(this.cart_item_data.price_id);
       axios
         .get(
-          `http://shop-dev.zdmail.ru/api/prices/${this.cart_item_data.price_id}`)
+          `http://shop-dev.zdmail.ru/api/prices/${this.cart_item_data.price_id}`,
+          {
+            headers: {
+              authorization: this.$cookies.get('authorization'),
+            },
+          }
+        )
         .then((res) => {
-          this.price = res.data.item_price + " ₽ 1" + res.data.item_measure 
+          this.price = res.data.item_price + ' ₽ 1' + res.data.item_measure;
           console.log(res);
-          
         })
         .catch((error) => {
           alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -95,7 +102,7 @@ export default {
     },
   },
   mounted() {
-    this.getPrice()
+    this.getPrice();
     this.$emit('comment', this.cart_item_data.comment);
   },
 };

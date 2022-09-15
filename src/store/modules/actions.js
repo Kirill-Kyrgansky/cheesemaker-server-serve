@@ -21,6 +21,9 @@ export default {
     commit,
   }) {
     return axios(`${testURL}/products`, {
+      headers: {
+        "authorization": $cookies.get('authorization')
+      },
       method: 'GET',
     })
       .then((products) => {
@@ -37,6 +40,9 @@ export default {
   }) {
     return axios(`${testURL}/prices`, {
       method: 'GET',
+      headers: {
+        "authorization": $cookies.get('authorization')
+      },
     })
       .then((prices) => {
         commit('SET_PRICES_TO_STATE', prices.data);
@@ -51,6 +57,9 @@ export default {
     commit,
   }) {
     return axios(`${testURL}/categories`, {
+      headers: {
+        "authorization": $cookies.get('authorization')
+      },
       method: 'GET',
     })
       .then((category) => {
@@ -67,6 +76,9 @@ export default {
   }) {
     return axios(`${testURL}/pickpoints`, {
       method: 'GET',
+      headers: {
+        "authorization": $cookies.get('authorization')
+      },
     })
       .then((pickpoints) => {
         commit('SET_DELIVERY_POINTS_FROM_API', pickpoints.data);
@@ -82,6 +94,9 @@ export default {
   }) {
     return axios(`${testURL}/orders`, {
       method: 'GET',
+      headers: {
+        "authorization": $cookies.get('authorization')
+      },
     })
       .then((orders) => {
         commit('SET_ORDERS_FROM_API', orders.data);
@@ -97,6 +112,9 @@ export default {
   }) {
     return axios(`${testURL}/storages`, {
       method: 'GET',
+      headers: {
+        "authorization": $cookies.get('authorization')
+      },
     })
       .then((storages) => {
         commit('SET_STORAGES_TO_STATE', storages.data);
@@ -112,6 +130,9 @@ export default {
   }) {
     return axios(`${testURL}/contents`, {
       method: 'GET',
+      headers: {
+        "authorization": $cookies.get('authorization')
+      },
     })
       .then((contents) => {
         commit('SET_CONTENTS_TO_STATE', contents.data);

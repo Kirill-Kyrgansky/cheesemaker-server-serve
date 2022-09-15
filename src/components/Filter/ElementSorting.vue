@@ -1,34 +1,32 @@
 <template>
-  <div
-    style="
-      position: absolute;
-      z-index: 999;
-      left: -20px;
-      width: 300px;
-    "
-    v-if="false"
-  >
-    <div class="border-surround" style="border-top-right-radius: 0px">
-      <div class="filter">
-        <h3 class="title-3 text-centered">Найти</h3>
-        <div class="v-select">
-          <p class="input" @click="areOptionsVisible = !areOptionsVisible">
-            {{ selected }}
-          </p>
-          <div class="options" v-if="areOptionsVisible">
-            <div v-for="option in CATEGORY" :key="option.id">
-              <a
-                class="input bold search"
-                v-if="option.active"
-                @click="selectOption(option)"
-              >
-                {{ option.name }}
-              </a>
+  <div class="element-sorting">
+    <div class="element-sorting-wrap">
+      <img
+        src="/allImage/Icons/arrowquad.png"
+        @click="showSorting"
+        class="img-filter pointer"
+      />
+      <div style="border-top-right-radius: 0px" v-if="show">
+        <div class="filter" v-click-outside="onClickOutsideLogin">
+          <h3 class="title-3 text-centered">Найти</h3>
+          <div class="v-select">
+            <p class="input" @click="areOptionsVisible = !areOptionsVisible">
+              {{ selected }}
+            </p>
+            <div class="options" v-if="areOptionsVisible">
+              <div v-for="option in CATEGORY" :key="option.id">
+                <a
+                  class="input bold search"
+                  v-if="option.active"
+                  @click="selectOption(option)"
+                >
+                  {{ option.name }}
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <img src="/allImage/Icons/arrowquad.png" class="img-filter" />
     </div>
   </div>
 </template>
@@ -41,6 +39,8 @@ export default {
     return {
       areOptionsVisible: false,
       searchValue: '',
+      show: false,
+      show1: false,
     };
   },
   props: {
@@ -71,6 +71,14 @@ export default {
     ...mapGetters(['CATEGORY', 'SEARCH_VALUE']),
   },
   methods: {
+    onClickOutsideLogin() {
+      if (this.show == true) {
+        this.show = !this.show;
+      }
+    },
+    showSorting() {
+      this.show = !this.show;
+    },
     ...mapActions(['GET_SEARCH_VALUE_TO_VUEX', 'GET_CATEGORY_FROM_API']),
     search(value) {
       this.GET_SEARCH_VALUE_TO_VUEX(value);
@@ -86,6 +94,7 @@ export default {
       window.scrollTo(top, 0);
       this.$emit('select', option);
       this.areOptionsVisible = false;
+      this.show = !this.show;
     },
     hideSelect() {
       this.areOptionsVisible = false;

@@ -14,10 +14,10 @@
           <nav class="header-nav">
             <transition name="fade">
               <div class="header-list-mobile" v-show="menuMobile">
-                <a href="#/products" class="header-link"> Продукция </a>
-                <a href="#/admin" class="header-link"> Админка </a>
-                <a href="#/cheesemaker" class="header-link"> Сыровар </a>
-                <a href="#/cheesemaker-orders" class="header-link">
+								<a href="#/products" class="header-link"> Продукция </a>
+              <a href="#/admin" class="header-link" v-if="isAdminAuth"> Админка </a>
+              <a href="#/cheesemaker" class="header-link" v-if="isCheesemakerAuth"> Сыровар </a>
+              <a href="#/cheesemaker-orders" class="header-link" v-if="isCheesemakerAuth || isAdminAuth">
                   Заказы
                 </a>
                 <a href="#/delivery" class="header-link"> Адреса </a>
@@ -25,9 +25,9 @@
             </transition>
             <div class="header-list desctop">
               <a href="#/products" class="header-link"> Продукция </a>
-              <a  href="#/admin" class="header-link"> Админка </a>
-              <a href="#/cheesemaker" class="header-link"> Сыровар </a>
-              <a href="#/cheesemaker-orders" class="header-link">
+              <a href="#/admin" class="header-link" v-if="isAdminAuth"> Админка </a>
+              <a href="#/cheesemaker" class="header-link" v-if="isCheesemakerAuth"> Сыровар </a>
+              <a href="#/cheesemaker-orders" class="header-link" v-if="isCheesemakerAuth || isAdminAuth">
                 Заказы
               </a>
               <a href="#/delivery" class="header-link"> Адреса </a>
@@ -133,6 +133,7 @@
                 </a>
               </div>
               <a href="#/cart" class="header-link-icon">
+								<p>{{CART}}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -391,46 +392,53 @@
 </svg>
               </a>
             </div>
-            <transition name="fade">
-              <div
-                class="cart cart-sucsess login"
+            <transition name="fade"  v-click-outside="onClickOutsideLogin">
+              <div 
+                class="cart login-pop-up login"
                 id="login-form" 
 								v-if="loginBar"
               >
-                <div v-click-outside="onClickOutsideLogin" >
+                <div >
+									<div  v-if="logIn">
                   <div class="text-centered margin-10-0">
                     <p class="title-3 text-centered">Логин</p>
                     <input
                       type="text"
+											required 
                       id="name"
                       class="input"
                       placeholder="Название"
+											v-model="auth.name"
                     />
                   </div>
                   <div class="text-centered">
                     <p class="title-3 text-centered">Пароль</p>
                     <input
                       type="password"
+											required 
                       id="name"
                       class="input"
                       placeholder="Название"
+											v-model="auth.password"
                     />
                     <input
                       class="btn"
                       type="submit"
                       form="login"
                       value="Принять"
+											@click="sendAuth"
                     />
                   </div>
+								</div>
                 </div>
                 <div>
                   <div class="margin-10-0">
-                    <h3 class="title-3">Добрый день userName!</h3>
+                    <h3 class="title-3">{{fio}}</h3>
                     <p class="title-3">Изменить статус заказа:</p>
                   </div>
                   <p class="paragraph">В обработке</p>
                   <button class="btn">Отменить заказ</button>
-                  <button class="btn">Выйти</button>
+                  <button @click="logOut" class="btn">Выйти</button>
                 </div>
               </div>
             </transition>
@@ -444,6 +452,7 @@
 <script>
 import vClickOutside from 'click-outside-vue3';
 import { mapGetters } from 'vuex';
+import axios from 'axios';
 
 export default {
   name: 'ElementHeader',
@@ -452,15 +461,79 @@ export default {
       isAdmin: '',
       loginBar: false,
       menuMobile: false,
+			auth: {},
+			fio: 'none',
+			logIn: true,
+			isAdminAuth: false,
+			isCheesemakerAuth: false
     };
   },
   computed: {
-    ...mapGetters['ISADMIN'],
+    ...mapGetters['ISADMIN', 'CART'],
   },
   mounted() {
     this.isAdmin = this.$store.state.isAdmin;
-  },
+		this.fio = this.$cookies.get('fio')
+		this.hideLogin()
+		this.adminVisible()
+	},
   methods: {
+		hideLogin() {
+			if (this.$cookies.get('fio')) {
+				this.logIn = false
+			} else {
+				this.logIn = true
+			}
+		},
+		adminVisible() {
+			if (this.$cookies.get('role_id') == 3) {
+				this.isAdminAuth = false
+			} else if (this.$cookies.get('role_id') == 2) {
+				this.isCheesemakerAuth = true 
+			} else if (this.$cookies.get('role_id') == 1) {
+				this.isAdminAuth = true
+			}
+		},
+		logOut() {
+			this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie))
+			location.reload()
+		},
+		sendAuth() {
+			axios
+			.post('http://shop-dev.zdmail.ru/api/users/login', this.auth)
+			.then((authRes) => {
+				this.$cookies.set('authorization', ( authRes.data.token_type + ' ' + authRes.data.access_token), 60 * 60 * 23)
+				this.sendInfo()
+			})
+			.catch((error) => {
+				console.log(error);
+				console.log('Ошибка авторизации');
+			})
+		},
+		sendInfo() {
+			axios
+			.get('http://shop-dev.zdmail.ru/api/users/info',{
+				headers: {
+					"authorization":  this.$cookies.get('authorization')
+				}
+			})
+			.then((authRes) => {
+				this.$cookies.set('email', authRes.data.email, 60 * 60 * 23)
+				this.$cookies.set('fio', authRes.data.fio, 60 * 60 * 23)
+				this.$cookies.set('id', authRes.data.id, 60 * 60 * 23)
+				this.$cookies.set('phone', authRes.data.phone, 60 * 60 * 23)
+				this.$cookies.set('role_id', authRes.data.role_id, 60 * 60 * 23)
+				location.reload()
+				// getOrder()
+			})
+			.catch((error) => {
+				console.log(error);				
+			})
+		},
+		// getOrder() {
+		// 	axios
+		// 	.get(`http://shop-dev.zdmail.ru/api/orders/`)
+		// },
     toggleMenu() {
       this.menuMobile = !this.menuMobile;
     },

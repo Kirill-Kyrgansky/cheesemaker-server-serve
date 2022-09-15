@@ -18,35 +18,40 @@ const router = createRouter({
   routes: [{
     path: '/',
     component: HomePageWrap,
-    meta: {
-      user: true,
-    },
   }, {
     path: '/products',
     component: ElementWrap,
     name: 'product',
     meta: {
-      user: true,
+      user: true,      
+      cheesemaker: true,
+      adminLogin: true,
     },
   },
   {
     path: '/cart',
-    name: 'cart',
     component: CartWrap,
+    name: 'cart',
     meta: {
       user: true,
+      cheesemaker: true,
+      adminLogin: true,
     },
   },
   {
     path: '/delivery',
     component: DeliveryPoint,
+    name: 'delivery',
     meta: {
       user: true,
+      cheesemaker: true,
+      adminLogin: true,
     },
   },
   {
     path: '/admin',
     component: ElementWrapAdmin,
+    name: 'admin',
     meta: {
       adminLogin: true,
     },
@@ -54,6 +59,7 @@ const router = createRouter({
   {
     path: '/cheesemaker',
     component: ElementWrapCheesemaker,
+    name: 'cheesemaker',
     meta: {
       cheesemaker: true,
     },
@@ -61,8 +67,10 @@ const router = createRouter({
   {
     path: '/cheesemaker-orders',
     component: OrderWrap,
+    name: 'cheesemaker-orders',
     meta: {
       cheesemaker: true,
+      adminLogin: true,
     },
   },
   ],
@@ -70,11 +78,40 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (!store.state.isAuth && to.name === 'product' ) {
+  if (($cookies.get('role_id') == '3') | ($cookies.get('role_id') == '2') && to.name === ('admin')) {
+    alert('Пожалуйста, авторизуйтесь!')
   }
   else {
     next()
   }
 })
+
+router.beforeEach((to, from, next) => {
+  if (!($cookies.get('role_id') == '2') && to.name === ('cheesemaker')) {
+    alert('Пожалуйста, авторизуйтесь!')
+  }
+  else {
+    next()
+  }
+})
+
+router.beforeEach((to, from, next) => {
+  if (($cookies.get('role_id') == '3') && to.name === ('cheesemaker-orders')) {
+    alert('Пожалуйста, авторизуйтесь!')
+  }
+  else {
+    next()
+  }
+})
+
+router.beforeEach((to, from, next) => {
+  if (!$cookies.get('role_id') && to.name === ('cart')) {
+    alert('Пожалуйста, авторизуйтесь!')
+  }
+  else {
+    next()
+  }
+})
+
 
 export default router

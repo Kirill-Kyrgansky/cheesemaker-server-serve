@@ -31,7 +31,7 @@
           <div v-for="price in PRICES" :key="price.id">
             <a
               class="input bold search"
-              v-if="price.product_id == product.id && (price.active = 1)"
+              v-if="(price.product_id == product.id) && (price.active == 1)"
               @click="selectOption(price)"
             >
               {{ price.item_price }}&nbsp;₽ | 1 &nbsp;{{ price.item_measure }}

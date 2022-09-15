@@ -19,17 +19,26 @@
         </p>
         <p class="paragraph-small">
           <span class="title-3 bold"> Сумма: </span>
-          {{ price * content.amount }} ₽
+          {{ (price * content.amount).toFixed(2) }} ₽
         </p>
-        <input type="button" class="btn" value="Товар отправлен" @click="orderRun">
+        <div v-if="content.status == 'в обработке'">
+        <input type="button" class="btn" value="Товар укомплектован" @click="orderRun">
         <input type="button" class="btn" value="С товаром возникли проблемы" @click="orderStop"><input
             type="text"
             class="input"
             placeholder="Введите описание проблемы"
             v-model="comment"
             />
-
-        <div class="order-title" v-if="measure == 'кг'">
+          </div>
+          <div  v-if="content.status == 'проблемы'">
+            <p class="cancellation bold centered-horizontally">
+        Товар отменен сыроваром! Причина отмены: {{content.comment}}
+      </p>
+          </div>
+          <div v-if="content.status == 'отправлен'">            <p class="btn bold centered-horizontally">
+        Товар подготовлен к отправке на точку выдачи!
+      </p></div>
+        <div class="order-title" v-if="measure == 'кг' && content.status == 'в обработке' ">
           <div class="order-element margin-10-0"></div>
           <p class="paragraph">
             <span class="title-3 bold" > Фактический вес: </span>

@@ -30,6 +30,10 @@ textarea {
   flex-wrap: wrap;
 }
 
+.login-pop-up {
+  padding: 10px;
+}
+
 .feedback__file {
   display: none;
 }
@@ -49,6 +53,24 @@ textarea {
 
 .create-storage {
   margin-top: 20px;
+}
+
+.element-sorting {
+  position: absolute;
+  height: 100%;
+  z-index: 999;
+  left: 0px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row-reverse;
+}
+
+.element-sorting-wrap {
+  position: sticky;
+    display: flex;
+    top: 40px;
+    flex-direction: row-reverse;
+    align-items: flex-start;
 }
 
 .sction-footer-bg {
@@ -91,6 +113,14 @@ textarea {
     display: flex;
     align-items: center;
     background-image: url(http://172.16.2.181:8080/img/fonebox2.32716d15.svg);
+}
+
+.display {
+  display: none
+}
+
+.right {
+  right: 0px;
 }
 
 .section {
@@ -525,9 +555,9 @@ p {
 }
 
 .img-filter {
-  position: absolute;
+  // position: absolute;
   top: 0;
-  right: -18px;
+  // right: -18px;
   max-width: 50px;
   z-index: -1;
 }
@@ -683,7 +713,7 @@ input::placeholder {
 }
 
 .filter {
-  margin-right: 10px;
+  // margin-right: 10px;
   width: -webkit-fill-available;
   width: -moz-available;
   padding: 0px 20px;

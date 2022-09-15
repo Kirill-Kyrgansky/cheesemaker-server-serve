@@ -2,7 +2,7 @@
   <div class="catalog-items">
     <div class="catalog-element">
       <img
-        :src="'http://172.16.0.179' + product.image_path.slice('2')"
+        :src="'http://shop-dev.zdmail.ru' + product.image_path.slice('2')"
         :alt="product.name"
         class="catalog-element-img"
       />
@@ -54,7 +54,7 @@ export default {
         operation: 'приход',
         author_id: 1,
       },
-      selectStore: 'Выбрать склад'
+      selectStore: 'Выбрать склад',
     };
   },
   props: {
@@ -77,10 +77,12 @@ export default {
   methods: {
     addProductProduced() {
       if (this.selectStore == 'Выбрать склад') {
-        alert('Выберете склад!')
-      }
+        alert('Выберете склад!');
+      } else if (this.form.date == null){
+        alert('Введите дату!');
+      } else {
         this.form.product_id = this.product.id;
-        this.form.storage_id = this.selectStore        
+        this.form.storage_id = this.selectStore;
         axios
           .post('http://shop-dev.zdmail.ru/api/productions', this.form)
           .then((res) => {
@@ -90,6 +92,7 @@ export default {
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
             console.log(error);
           });
+        }
     },
     isEmpty() {
       if (this.product.inStock == 0) {

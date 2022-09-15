@@ -252,7 +252,11 @@ export default {
       console.log(this.product);
       this.product.category_id = this.selectCategory.id
       axios
-        .patch(`http://shop-dev.zdmail.ru/api/products/${index}`, this.product)
+        .patch(`http://shop-dev.zdmail.ru/api/products/${index}`,this.product, {
+				headers: {
+					"authorization":  this.$cookies.get('authorization')
+				}
+			} )
         .then((res) => {
           location.reload(res);
           this.product.category_id = this.selectCategory.id

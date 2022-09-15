@@ -1,17 +1,20 @@
 <template>
-  <div class="order-element" v-if="order.status == 'в обработке'">
+  <div class="order-element" >
     <div class="order-title">
       <p class="title-2">Дата заказа: {{date}}</p>
       <p class="title-2">Номер заказа: {{ order.id }}</p>
       <p class="cancellation bold centered-horizontally" v-if="order.status == 'отменен'">
         Заказ отменен пользователем!
       </p>
+      <p class="cancellation bold centered-horizontally" v-if="order.status == 'проблемы'">
+        Заказ отменен сыроваром! Причина: {{order.comment}}
+      </p>
       <div class="border-line"></div>
     </div>
     <div v-for="content, index in CONTENTS" :key="content.id">
     <ProductOrderElement
       :content="content"
-      v-if="(content.order_id == order.id) && content.status != 'проблемы' "
+      v-if="(content.order_id == order.id)  "
       :index="index"
       :orderRun="orderRun"
 
@@ -27,7 +30,7 @@
       <span class="bold">Телефон:</span> {{ 'взять из API' }}
     </p>
     <div class="button-right">
-      <button @click="orderSentToThePoint" type="button" class="btn centered" >
+      <button v-if="order.status == 'в обработке'" @click="orderSentToThePoint" type="button" class="btn centered" >
         Заказ отправлен
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -43,8 +46,8 @@
           />
         </svg>
       </button>
-      <button v-if="order.status == 'отменен'" type="button" class="cancellation centered-horizontally btn-text" >
-        Заказ отменен
+      <button  @click="orderStopToThePoint" v-if="order.status == 'в обработке'" type="button" class="cancellation centered-horizontally btn-text" >
+        Отменить заказ
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -59,7 +62,11 @@
           />
         </svg>
       </button>
+      
     </div>
+    <p v-if="order.status == 'отправлен'" class="btn bold centered-horizontally">
+        Заказ успешно отправлен на точку!
+      </p>
   </div>
 </template>
 <script>
@@ -73,6 +80,8 @@ export default {
     return {
       newOrder: {},
       orderRun: false,
+      comment: '',
+      products: {}
     };
   },
   props: {
@@ -120,6 +129,24 @@ export default {
       let date = new Date();
       this.orderRun = true
       this.order.status = 'отправлен'
+      this.order.date = this.currentDate(date)
+      this.order.delivery_date = this.currentDate(date)
+      console.log(this.order);
+      axios
+      .patch(`http://shop-dev.zdmail.ru/api/orders/${this.order.id}`, this.order)
+      .then((order) => {
+        console.log('good');
+        console.log(order);
+      })
+      .catch((error) => {
+        alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            console.log(error);
+      })
+    },    orderStopToThePoint() {
+      let comment = prompt('Введите причину отмены')
+      let date = new Date();
+      this.order.status = 'проблемы'
+      this.order.comment = comment
       this.order.date = this.currentDate(date)
       this.order.delivery_date = this.currentDate(date)
       console.log(this.order);

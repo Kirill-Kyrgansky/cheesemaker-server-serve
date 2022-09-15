@@ -105,21 +105,27 @@ export default {
       return yyyy + '-' + mm + '-' + dd;
     },
     orderUsers() {
-      // if (this.selected === 'Выберите адрес доставки') {
-      //   alert('Выберите адрес доставки');
-      // } else {
+      if (this.selected === 'Выберите адрес доставки') {
+        alert('Выберите адрес доставки');
+      } else {
       let date = new Date();
       let order = {
         delivery_date: 1, //изменить
         payment_type: 1, //изменить
         status: 'в обработке',
         comment: 'None',
-        author_id: 1, //изменить 
+        author_id: this.$cookies.get('id'), 
+        user_id: this.$cookies.get('id'),
         pickpoint_id: 1 //изменить
       };
       order.date = this.currentDate(date);
+      console.log(order.author_id);
       axios
-        .post('http://shop-dev.zdmail.ru/api/orders', order)
+        .post('http://shop-dev.zdmail.ru/api/orders', order, {
+          headers: {
+					"authorization":  this.$cookies.get('authorization')
+				}
+        })
         .then((order) => {
           let order_id = parseInt(order.data.detail.match(/\d+/));
           this.contentAdd(order_id);
@@ -128,7 +134,7 @@ export default {
           alert('Ошибка в работе приложения. Обратитесь к администратору.');
           console.log(error);
         });
-      // }
+      }
     },
     contentAdd(order_id) {
       let date = new Date();
@@ -138,7 +144,7 @@ export default {
         cart[i].date = this.currentDate(date);
         cart[i].product_id = cart[i].id;
         cart[i].order_id = order_id;
-        cart[i].author_id = 1; //изменить
+        cart[i].author_id = this.$cookies.get('id')
         cart[i].status = 'в обработке';
         cart[i].manufacturer_id = 1; //изменить
         delete cart[i].active;
@@ -155,7 +161,11 @@ export default {
     },
     sendForm(cartElement) {
       axios
-        .post('http://shop-dev.zdmail.ru/api/contents/', cartElement)
+        .post('http://shop-dev.zdmail.ru/api/contents/', cartElement, {
+          headers: {
+					"authorization":  this.$cookies.get('authorization')
+				}
+        })
         .then((order) => {
           console.log('good');
         })
