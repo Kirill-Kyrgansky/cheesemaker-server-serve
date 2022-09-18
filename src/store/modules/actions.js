@@ -1,6 +1,6 @@
 import axios from 'axios';
-let testURL = 'http://shop-dev.zdmail.ru/api'
-let URL = 'http://localhost:3000'
+import config from '@/config.js'
+
 export default {
   GET_SEARCH_VALUE_TO_VUEX({
     commit,
@@ -20,7 +20,7 @@ export default {
   GET_PRODUCTS_FROM_API({
     commit,
   }) {
-    return axios(`${testURL}/products`, {
+    return axios(`${config.url}/products`, {
       headers: {
         "authorization": $cookies.get('authorization')
       },
@@ -32,13 +32,14 @@ export default {
       })
       .catch((error) => {
         console.log(error);
+        console.log(config.url);
         return error;
       });
   },
   GET_PRICES_FROM_API({
     commit,
   }) {
-    return axios(`${testURL}/prices`, {
+    return axios(`${config.url}/prices`, {
       method: 'GET',
       headers: {
         "authorization": $cookies.get('authorization')
@@ -56,7 +57,7 @@ export default {
   GET_CATEGORY_FROM_API({
     commit,
   }) {
-    return axios(`${testURL}/categories`, {
+    return axios(`${config.url}/categories`, {
       headers: {
         "authorization": $cookies.get('authorization')
       },
@@ -74,7 +75,7 @@ export default {
   GET_DELIVERY_POINTS_FROM_API({
     commit,
   }) {
-    return axios(`${testURL}/pickpoints`, {
+    return axios(`${config.url}/pickpoints`, {
       method: 'GET',
       headers: {
         "authorization": $cookies.get('authorization')
@@ -92,7 +93,7 @@ export default {
   GET_ORDERS_FROM_API({
     commit,
   }) {
-    return axios(`${testURL}/orders`, {
+    return axios(`${config.url}/orders`, {
       method: 'GET',
       headers: {
         "authorization": $cookies.get('authorization')
@@ -110,7 +111,7 @@ export default {
   GET_STORAGES_FROM_API({
     commit,
   }) {
-    return axios(`${testURL}/storages`, {
+    return axios(`${config.url}/storages`, {
       method: 'GET',
       headers: {
         "authorization": $cookies.get('authorization')
@@ -128,7 +129,7 @@ export default {
   GET_CONTENTS_FROM_API({
     commit,
   }) {
-    return axios(`${testURL}/contents`, {
+    return axios(`${config.url}/contents`, {
       method: 'GET',
       headers: {
         "authorization": $cookies.get('authorization')
@@ -142,5 +143,41 @@ export default {
         console.log(error);
         return error;
       });
+  }, 
+  GET_ORDERS_USERS_FROM_API({
+    commit,
+  }) {
+    return axios(`${config.url}/users/orders`, {
+      method: 'GET',
+      headers: {
+        "authorization": $cookies.get('authorization')
+      },
+    })
+      .then((ordersUsers) => {
+        commit('SET_ORDERS_USERS_TO_STATE', ordersUsers.data);
+        return ordersUsers;
+      })
+      .catch((error) => {
+        console.log(error);
+        return error;
+      });
   },
+  GET_USERS_FROM_API({
+    commit,
+  }) {
+    return axios(`${config.url}/users`, {
+      method: 'GET',
+      headers: {
+        "authorization": $cookies.get('authorization')
+      },
+    })
+      .then((users) => {
+        commit('SET_USERS_TO_STATE', users.data);
+        return users;
+      })
+      .catch((error) => {
+        console.log(error);
+        return error;
+      });
+    }
 };

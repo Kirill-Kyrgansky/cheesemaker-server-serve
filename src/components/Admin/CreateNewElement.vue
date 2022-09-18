@@ -1,82 +1,70 @@
 <template>
   <div class="catalog-items" id="admin">
     <div class="catalog-element-wrap text-centered">
-        <label class="text-reader">
-          <input type="file" @change="loadTextFromFile" />
-        </label>
-        <div class="catalog-element-text">
-          <label for="name">
-            <input
-              type="text"
-              id="name"
-              v-model="form.name"
-              class="input"
-              placeholder="Название"
-              required
-            />
-          </label>
-          <textarea
-            placeholder="Описание"
-            type="text"
-            class="input"
-            v-model="form.description"
-            required
-          ></textarea>
-        </div>
-        <div class="centered centered-vertical">
-          <label for="description">
-            <input
-              type="number"
-              id="description"
-              class="input small-index"
-              @click="productPrice = ''"
-              placeholder="Цена"
-              v-model="form.price"
-              required
-            />
-          </label>
-          <select
-          class="input"
-          name="list"
-          v-model="form.unit"
-          >
-            <option
-              v-for="unit in units"
-              :value="unit.name"
-              :key="unit.id"
-            >
-              {{ unit.name }}
-            </option>
-          </select>
-        </div>
-        <p class="paragraph">Кол-во произведенного продука:</p>
-        <label for="production-quantity">
+      <label class="text-reader">
+        <input type="file" @change="loadTextFromFile" />
+      </label>
+      <div class="catalog-element-text">
+        <label for="name">
           <input
-            type="number"
-            id="production-quantity"
-            v-model="form.inStockQuantity"
+            type="text"
+            id="name"
+            v-model="form.name"
             class="input"
-            placeholder="Кол-во"
+            placeholder="Название"
             required
           />
         </label>
-        <select
+        <textarea
+          placeholder="Описание"
+          type="text"
           class="input"
-          name="list"
-          v-model="form.category_id"
-        >
-          <option
-            v-for="category in CATEGORY"
-            :value="category.name"
-            :key="category.id"
-        >
-            {{ category.name }}
+          v-model="form.description"
+          required
+        ></textarea>
+      </div>
+      <div class="centered centered-vertical">
+        <label for="description">
+          <input
+            type="number"
+            id="description"
+            class="input small-index"
+            @click="productPrice = ''"
+            placeholder="Цена"
+            v-model="form.price"
+            required
+          />
+        </label>
+        <select class="input" name="list" v-model="form.unit">
+          <option v-for="unit in units" :value="unit.name" :key="unit.id">
+            {{ unit.name }}
           </option>
         </select>
-        <div class="text-centered">
-          <button class="btn" @click="submitForm(product.id)">Изменить</button>
-          <button class="btn" @click="deleteProduct(product.id)">Удалить</button>
-        </div>
+      </div>
+      <p class="paragraph">Кол-во произведенного продука:</p>
+      <label for="production-quantity">
+        <input
+          type="number"
+          id="production-quantity"
+          v-model="form.inStockQuantity"
+          class="input"
+          placeholder="Кол-во"
+          required
+        />
+      </label>
+      <select class="input" name="list" v-model="form.category_id">
+        <option
+          v-for="category in CATEGORY"
+          :value="category.name"
+          :key="category.id"
+        >
+          {{ category.name }}
+        </option>
+      </select>
+      <div class="text-centered">
+        <button class="btn" @click="submitForm(product.id)">Изменить</button>
+        <button class="btn" @click="deleteProduct(product.id)">Удалить</button>
+      </div>
     </div>
   </div>
 </template>
@@ -84,11 +72,13 @@
 <script>
 import { mapGetters } from 'vuex';
 import axios from 'axios';
+import config from '@/config.js'
 
 export default {
   name: 'CreateNewElement',
   props: {
-    adminLogin: { // opens access to the administrator
+    adminLogin: {
+      // opens access to the administrator
       type: Object,
       default() {
         return {};
@@ -109,17 +99,16 @@ export default {
         { id: 2, name: 'л' },
         { id: 3, name: 'кг' },
       ],
-      form:
-      {
+      form: {
         name: '',
         active: '',
         image: '',
-        category_id: "5",
+        category_id: '5',
         comment: 'Введите описание',
         description: '',
-        author_id: "1",
+        author_id: '1',
         image: '',
-        ext: ''
+        ext: '',
       },
       selectedUnit: 'шт',
     };
@@ -131,44 +120,33 @@ export default {
     this.form = this.product;
   },
   methods: {
-    deleteProduct(index) { // removes an item from the store
-      const isTrue = confirm('Вы уверены?');
-      if (isTrue === true) {
-        axios.delete(`http://localhost:3000/products/${index}`)
-          .then((res) => {
-            location.reload(res);
-          })
-          .catch((error) => {
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-            console.log(error);
-          });
-      }
-    },
     submitForm(index) {
       const formArray = Object.values(this.form);
-      if (formArray.includes('') === true) { // Checks that all fields are filled in
+      if (formArray.includes('') === true) {
+        // Checks that all fields are filled in
         alert('Заполните пожалуйста все поля.');
       } else {
-        if (this.form.category === 'Вся продукция') { // Сhecks for the selected category
+        if (this.form.category === 'Вся продукция') {
+          // Сhecks for the selected category
           return alert('Выберите категорию!');
         }
-        axios
-          .put(`http://localhost:3000/products/${index}`, this.form)
+        axios({
+          method: 'PUT',
+          url: `${config.url}/products/${index}`,
+          data: this.form,
+          headers: {
+            authorization: this.$cookies.get('authorization'),
+          },
+        })
           .then((res) => {
             location.reload(res);
           })
           .catch((error) => {
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
             console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
       }
     },
-    // loadTextFromFile(ev) { //Checks the file for size and appearance
-    //   const file = ev.target.files[0];
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => this.$emit('load', e.target.result);
-    //   reader.readAsText(file);
-    // },
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="element-sorting">
+  <div class="element-sorting" v-if="false">
     <div class="element-sorting-wrap">
       <img
         src="/allImage/Icons/arrowquad.png"

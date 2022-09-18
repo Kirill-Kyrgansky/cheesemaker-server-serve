@@ -1,7 +1,7 @@
-<template >
-  <div class="catalog-items-admin"  v-if="product.active || ISSUPERADMIN">
-    <div class="catalog-element" >
-      <p class="title-2 cancellation " v-if="!product.active">Отключен</p>
+<template>
+  <div class="catalog-items-admin" >
+    <div class="catalog-element">
+      <p class="title-2 cancellation" v-if="!product.active">Отключен</p>
       <img
         :src="'http://shop-dev.zdmail.ru' + product.image_path.slice('2')"
         :alt="product.name"
@@ -17,7 +17,6 @@
       <AdminPanel :product="product" />
     </div>
   </div>
-  
 </template>
 
 <script>
@@ -52,18 +51,23 @@ export default {
       let active = {
         active: !isActive,
       };
-      axios
-        .patch(`http://shop-dev.zdmail.ru/api/pickpoint/${index}`, active)
+      axios({
+        method: 'PATCH',
+        url: `${config.url}/pickpoint/${index}`,
+        data: active,
+        headers: {
+          authorization: this.$cookies.get('authorization'),
+        },
+      })
         .then((res) => {
           location.reload(res);
           if (res == 404) {
             alert('Ошибка в работе сервера. Перезагрузите страницу');
           }
-          console.log(res);
         })
         .catch((error) => {
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
           console.log(error);
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
         });
     },
   },

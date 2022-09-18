@@ -32,5 +32,11 @@ export default {
   },
   CONTENTS(state) {
     return state.contents
+  },
+  ORDERS_USERS(state) {
+    return state.ordersUsers
+  },
+  USERS(state) {
+    return state.users
   }
 };

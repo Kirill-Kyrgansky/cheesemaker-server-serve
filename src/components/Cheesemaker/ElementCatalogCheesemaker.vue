@@ -37,6 +37,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import axios from 'axios';
+import config from '@/config.js'
 
 export default {
   name: 'ElementCatalogCheesemaker',
@@ -83,14 +84,22 @@ export default {
       } else {
         this.form.product_id = this.product.id;
         this.form.storage_id = this.selectStore;
+        let content = this.form
         axios
-          .post('http://shop-dev.zdmail.ru/api/productions', this.form)
+          ({
+          method: 'POST',
+          url: `${config.url}/productions`,
+          data: content,
+				  headers: { 
+					    "authorization":  this.$cookies.get('authorization')
+          }
+			  })
           .then((res) => {
             alert('Продукт добавлен');
           })
           .catch((error) => {
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
             console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
         }
     },

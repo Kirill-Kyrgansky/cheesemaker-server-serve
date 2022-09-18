@@ -25,7 +25,6 @@
                   @click="
                     сhangeVisibility(option.id, option.active, option.name)
                   "
-                  v-if="option.id != 1"
                 />
               </div>
             </div>
@@ -78,6 +77,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import axios from 'axios';
 import CreateStorage from '../Admin/CreateStorage.vue';
+import config from '@/config.js'
 
 export default {
   NAME: 'ElementSortingAdmin',
@@ -112,18 +112,26 @@ export default {
       },
     },
   },
+  components: { CreateStorage },
   computed: {
     ...mapGetters(['CATEGORY', 'SEARCH_VALUE']),
   },
   methods: {
+    ...mapActions(['GET_SEARCH_VALUE_TO_VUEX']),
     сhangeVisibility(index, isActive, name) {
       let sendForm = {
         active: Number(!isActive),
         name: name,
         author_id: 1,
       };
-      axios
-        .patch(`http://shop-dev.zdmail.ru/api/categories/${index}`, sendForm)
+      axios({
+        method: 'PATCH',
+        url: `${config.url}/categories/${index}`,
+        data: sendForm,
+        headers: {
+          authorization: this.$cookies.get('authorization'),
+        },
+      })
         .then((res) => {
           location.reload(res);
           if (res == 404) {
@@ -131,8 +139,8 @@ export default {
           }
         })
         .catch((error) => {
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
           console.log(error);
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
         });
     },
     changeCategory(index, name) {
@@ -142,8 +150,14 @@ export default {
           name: newName,
           author_id: 1,
         };
-        axios
-          .patch(`http://shop-dev.zdmail.ru/api/categories/${index}`, sendForm)
+        axios({
+          method: 'PATCH',
+          url: `${config.url}/categories/${index}`,
+          data: sendForm,
+          headers: {
+            authorization: this.$cookies.get('authorization'),
+          },
+        })
           .then((res) => {
             location.reload(res);
             if (res == 404) {
@@ -151,29 +165,34 @@ export default {
             }
           })
           .catch((error) => {
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
             console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
       }
     },
     addCategories() {
       this.formCategories.author_id = 1;
+      let formCategories = this.formCategories;
       if (this.formCategories.name.length === 0) {
         alert('Ошибка, пустая строка. Введите название новой категории');
       } else {
-        axios
-          .post('http://shop-dev.zdmail.ru/api/categories', this.formCategories)
+        axios({
+          method: 'POST',
+          url: `${config.url}/categories`,
+          data: formCategories,
+          headers: {
+            authorization: this.$cookies.get('authorization'),
+          },
+        })
           .then((res) => {
             location.reload(res);
           })
           .catch((error) => {
             console.log(error);
-            console.log(this.formCategories);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
       }
     },
-    ...mapActions(['GET_SEARCH_VALUE_TO_VUEX']),
     search(value) {
       this.GET_SEARCH_VALUE_TO_VUEX(value);
     },
@@ -198,6 +217,5 @@ export default {
   beforeUnmount() {
     document.removeEventListener('click', this.hideSelect);
   },
-  components: { CreateStorage },
 };
 </script>

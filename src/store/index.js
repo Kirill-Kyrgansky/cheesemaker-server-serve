@@ -22,6 +22,8 @@ const store = new createStore({
     prices: [],
     storages: [],
     contents:[],
+    ordersUsers:[],
+    users: [],
   },
   getters,
 });

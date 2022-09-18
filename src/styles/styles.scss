@@ -20,6 +20,10 @@ textarea {
   height: 100px;
 }
 
+.text-red {
+  color:#ff0000;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -32,6 +36,14 @@ textarea {
 
 .login-pop-up {
   padding: 10px;
+  background-color: #FDD99E;
+  background-image: url(/public/allImage/fone2.svg);
+  background-repeat: repeat
+}
+
+.flex-reverse {
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .feedback__file {
@@ -123,6 +135,10 @@ textarea {
   right: 0px;
 }
 
+.padding-0-10 {
+  padding: 0px 10px;
+}
+
 .section {
   padding-left: 60px;
   padding-right: 60px;
@@ -149,6 +165,10 @@ textarea {
 .centered-start {
   display: flex;
   justify-content: flex-start;
+}
+
+.max-width-50 {
+  max-width: 50px;
 }
 
 .z-1 {
@@ -1192,6 +1212,7 @@ input::placeholder {
   .header-link-icon-svg {
     width: 35px;
     height: 35px;
+    color: #372311;
   }
 
   .pagination__link {
@@ -1255,12 +1276,12 @@ input::placeholder {
   //   position: relative;
   // }
 
-  .login {
-    bottom: 0%;
-    left: -10%;
-    width: 100%;
-    height: 280%;
-  }
+  // .login {
+  //   bottom: 0%;
+  //   left: -10%;
+  //   width: 100%;
+  //   height: 280%;
+  // }
 
   .top {
     display: flex;

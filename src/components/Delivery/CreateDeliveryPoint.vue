@@ -1,5 +1,5 @@
 <template>
-  <section class="section" >
+  <section class="section">
     <div class="container pickpoint-map-container">
       <div class="map">
         <div class="map-border">
@@ -44,10 +44,7 @@
               required
             />
           </div>
-          <button
-            class="btn"
-            @click="createPickpoint(pickpoint)"
-          >
+          <button class="btn" @click="createPickpoint(pickpoint)">
             Создать
           </button>
         </div>
@@ -57,8 +54,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import axios from 'axios';
+import config from '@/config.js'
 
 export default {
   name: 'DeliveryPoint',
@@ -80,20 +78,24 @@ export default {
   },
   methods: {
     createPickpoint(pickpoint) {
-      axios
-        .post(
-          `http://shop-dev.zdmail.ru/api/pickpoints`,
-          pickpoint
-        )
+      axios({
+        method: 'POST',
+        url: `${config.url}/pickpoints`,
+        data: pickpoint,
+        headers: {
+          authorization: this.$cookies.get('authorization'),
+        },
+      })
         .then((res) => {
           location.reload(res);
           if (res == 404) {
+            console.log(error);
             alert('Ошибка в работе сервера. Перезагрузите страницу');
           }
         })
         .catch((error) => {
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
           console.log(error);
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
         });
     },
   },

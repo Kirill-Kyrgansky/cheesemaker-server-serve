@@ -23,11 +23,11 @@
         class="img-question"
         @mouseover="description = !description"
       />
-      <div class="v-select width-200" v-click-outside="onClickOutside">
+      <div class="v-select width-200" v-click-outside="onClickOutside" >
         <p class="input" @click="areOptionsVisible = !areOptionsVisible">
           {{ selected.name }}
         </p>
-        <div class="options-product" v-if="areOptionsVisible">
+        <div class="options-product" v-if="areOptionsVisible" v-click-outside="onClickOutside">
           <div v-for="price in PRICES" :key="price.id">
             <a
               class="input bold search"
@@ -128,7 +128,6 @@ export default {
       return true;
     },
     addToCart() {
-      // console.log(this.selected);
       if (this.selected.name == 'Выбрать вес') {
         setTimeout(() => {
           this.isVisible = !this.isVisible;

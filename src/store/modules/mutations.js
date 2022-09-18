@@ -9,7 +9,6 @@ export default {
         if (item.id === product.id) {
           isProductExist = true;
           item.amount++;
-          console.log(product);
         }
       });
       if (!isProductExist) {
@@ -44,5 +43,11 @@ export default {
   },  
   SET_CONTENTS_TO_STATE: (state, contents) => {
     state.contents = contents;
+  },
+  SET_ORDERS_USERS_TO_STATE: (state, ordersUsers) => {
+    state.ordersUsers = ordersUsers;
+  },
+  SET_USERS_TO_STATE: (state, users) => {
+    state.users = users;
   },
 };

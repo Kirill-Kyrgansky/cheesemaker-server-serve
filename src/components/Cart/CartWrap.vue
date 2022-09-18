@@ -11,7 +11,6 @@
         </div>
         <h2 class="title-2">Заказ успешно сформирован!</h2>
         <p class="paragraph">Письмо с информацией отправлено вам на почту.</p>
-        <!-- <p class="paragraph">Отслеживать движение заказа вы можете в личном кабинете.</p> -->
         <p class="paragraph">Спасибо за заказ!</p>
       </div>
     </div>
@@ -27,6 +26,8 @@
         :index="index"
       />
       <div class="cart-footer" v-if="!(cart_data <= 1)">
+        <!-- <p class="margin-0-10">Всего: сумма</p>
+        <p class="margin-0-10">Всего: Кол-во</p> -->
         <div class="v-select">
           <p
             class="input delivery"
@@ -46,6 +47,7 @@
           </div>
         </div>
         <div class="cart-footer-element">
+
           <button class="header-link" @click="orderUsers()">Заказать</button>
         </div>
       </div>
@@ -54,9 +56,9 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-
 import axios from 'axios';
 import CartElement from './CartElement.vue';
+import config from '@/config.js'
 
 export default {
   name: 'CartWrap',
@@ -68,6 +70,7 @@ export default {
       cart: {},
       isVisible: true,
       sucsess: false,
+      pickpoint_id: ''
     };
   },
   props: {
@@ -116,30 +119,31 @@ export default {
         comment: 'None',
         author_id: this.$cookies.get('id'), 
         user_id: this.$cookies.get('id'),
-        pickpoint_id: 1 //изменить
+        pickpoint_id: this.pickpoint_id
       };
       order.date = this.currentDate(date);
-      console.log(order.author_id);
       axios
-        .post('http://shop-dev.zdmail.ru/api/orders', order, {
-          headers: {
-					"authorization":  this.$cookies.get('authorization')
-				}
-        })
+      ({
+          method: 'POST',
+          url: `${config.url}/orders`,
+				  data: order,
+          headers: { 
+					    "authorization":  this.$cookies.get('authorization')
+          }
+			  })
         .then((order) => {
           let order_id = parseInt(order.data.detail.match(/\d+/));
           this.contentAdd(order_id);
         })
         .catch((error) => {
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
           console.log(error);
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
         });
       }
     },
     contentAdd(order_id) {
       let date = new Date();
       const cart = this.cart_data;
-      console.log(cart);
       for (const i in cart) {
         cart[i].date = this.currentDate(date);
         cart[i].product_id = cart[i].id;
@@ -155,23 +159,24 @@ export default {
         delete cart[i].image_path;
         delete cart[i].id;
         this.sendForm(cart[i]);
-        console.log(cart[i]);
       }
       this.sucsess = !this.sucsess;
     },
     sendForm(cartElement) {
       axios
-        .post('http://shop-dev.zdmail.ru/api/contents/', cartElement, {
-          headers: {
-					"authorization":  this.$cookies.get('authorization')
-				}
-        })
+      ({
+          method: 'POST',
+          url: `${config.url}/contents/`,
+				  data: cartElement,
+          headers: { 
+					    "authorization":  this.$cookies.get('authorization')
+          }
+			  })
         .then((order) => {
-          console.log('good');
         })
         .catch((error) => {
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
           console.log(error);
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
         });
     },
     deliteFromCart(index) {
@@ -186,6 +191,7 @@ export default {
     },
     selectOption(pickpoint) {
       this.selected = pickpoint.name;
+      this.pickpoint_id = pickpoint.id
       this.areOptionsVisible = false;
     },
     hideSelect() {

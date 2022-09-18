@@ -1,72 +1,45 @@
 <template>
   <div class="catalog-element" id="admin">
     <div class="catalog-element-wrap text-centered">
-        <label class="text-reader">
-          <input type="file" @change="handleImage" accept="image/*"/>
-        </label>
-        <div class="catalog-element-text">
-          <label for="name">
-            <input
-              type="text"
-              id="name"
-              v-model="productCreate.name"
-              class="input"
-              placeholder="Название"
-              required
-            />
-          </label>
-          <textarea
-            placeholder="Описание"
-            type="text"
-            class="input"
-            v-model="productCreate.description"
-            required
-          ></textarea>
-        </div>
-        <!-- <div class="centered centered-vertical">
-            <input
-              type="number"
-              id="description"
-              class="input small-index"
-              @click="productPrice = ''"
-              v-model="productCreate.price"
-              placeholder="Цена"
-              required
-            />
-          <select  class="input" name="list"  v-model="productCreate.unit"> 
-          <option v-for="unit in units" :value="unit.name" :key="unit.id"
-          >
-            {{ unit.name }}
-          </option>
-        </select>
-        </div> -->
-        <!-- <p class="paragraph">Кол-во произведенного продука:</p>
-        <label for="production-quantity">
+      <label class="text-reader">
+        <input type="file" @change="handleImage" accept="image/*" />
+      </label>
+      <div class="catalog-element-text">
+        <label for="name">
           <input
-            type="number"
-            @click="productQuantity = ''"
-            id="production-quantity"
-            v-model="form.inStockQuantity"
+            type="text"
+            id="name"
+            v-model="productCreate.name"
             class="input"
-            placeholder="Кол-во"
+            placeholder="Название"
             required
           />
-        </label> -->
-        <div>
-          <select class="input" v-model="selectCategory">
-        <option disabled>Выбрать категорию</option>
-        <option
-          v-for="category in CATEGORY"
-          :key="category.id"
-          :value="category.id"
-        >
-          {{ category.name }}
-        </option>
-      </select>
-        </div>
-        <div class="text-centered">
-          <button class="btn" @click="createProduct(productCreate)">Создать</button>
-        </div>
+        </label>
+        <textarea
+          placeholder="Описание"
+          type="text"
+          class="input"
+          v-model="productCreate.description"
+          required
+        ></textarea>
+      </div>
+      <div>
+        <select class="input" v-model="selectCategory">
+          <option disabled>Выбрать категорию</option>
+          <option
+            v-for="category in CATEGORY"
+            :key="category.id"
+            :value="category.id"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      <div class="text-centered">
+        <button class="btn" @click="createProduct(productCreate)">
+          Создать
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -74,14 +47,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import axios from 'axios';
+import config from '@/config.js'
 
 export default {
   name: 'CreateElementCatalog',
   data() {
     return {
       avatar: '',
-      productCreate:
-      {
+      productCreate: {
         name: '',
         active: '0',
         image: '',
@@ -89,7 +62,7 @@ export default {
         description: '',
         author_id: '1',
         image: '',
-        ext: ''
+        ext: '',
       },
       selectCategory: 'Выбрать категорию',
       units: [
@@ -111,47 +84,41 @@ export default {
   computed: {
     ...mapGetters(['CATEGORY']),
   },
-    methods: {
+  methods: {
     handleImage(e) {
       const selectedImage = e.target.files[0]; // get first file
       this.createBase64Image(selectedImage);
-      let type = selectedImage.type.split('/')[1]
-      this.productCreate.ext = type
+      let type = selectedImage.type.split('/')[1];
+      this.productCreate.ext = type;
     },
     createBase64Image(fileObject) {
       const reader = new FileReader();
       reader.onload = (e) => {
-      this.image = e.target.result;
-      const { image } = this;
-      let base64 = image.split(',')[1]
-      this.productCreate.image = base64
+        this.image = e.target.result;
+        const { image } = this;
+        let base64 = image.split(',')[1];
+        this.productCreate.image = base64;
       };
       reader.readAsDataURL(fileObject);
     },
     createProduct() {
-      // console.log(this.productCreate);
-        let createNewProduct = this.productCreate
-        createNewProduct.category_id = this.selectCategory
-        axios 
-        .post ('http://shop-dev.zdmail.ru/api/products', createNewProduct)
+      let createNewProduct = this.productCreate;
+      createNewProduct.category_id = this.selectCategory;
+      axios({
+        method: 'POST',
+        url: `${config.url}/products`,
+        data: createNewProduct,
+        headers: {
+          authorization: this.$cookies.get('authorization'),
+        },
+      })
         .then((res) => {
-            location.reload(res);
-          })
-          .catch((error) => {
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-            console.log(createNewProduct);
-            console.log(error);
-          });
-      },
+          location.reload(res);
+        })
+        .catch((error) => {
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+        });
+    },
   },
 };
 </script>
-
-
-
-      // if (formArray.includes('') === true) {
-      //   alert('Заполните пожалуйста все поля.');
-      //   console.log(formArray);
-      // } else if (this.form.category === 'Вся продукция') {
-      //   alert('Выберите категорию.');
-      // } else {}
