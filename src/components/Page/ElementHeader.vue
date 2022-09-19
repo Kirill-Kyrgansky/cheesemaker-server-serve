@@ -3,7 +3,7 @@
     <section class="section header">
       <div class="container">
         <div class="centered">
-          <a href="" class="logo">
+          <a href="/" class="logo">
             <img
               class="logo"
               id="logo"
@@ -14,49 +14,21 @@
           <nav class="header-nav">
             <transition name="fade">
               <div class="header-list-mobile" v-show="menuMobile">
-                <a href="#/products" class="header-link"> Продукция </a>
-                <a href="#/seller-orders" class="header-link" v-if="isSeller"> Продавец </a>
-                <a href="#/admin" class="header-link" v-if="isAdminAuth">
-                  Админка
-                </a>
-                <a
-                  href="#/cheesemaker"
-                  class="header-link"
-                  v-if="isCheesemakerAuth"
-                >
-                  Сыровар
-                </a>
-                <a
-                  href="#/cheesemaker-orders"
-                  class="header-link"
-                  v-if="isCheesemakerAuth || isAdminAuth"
-                >
-                  Заказы
-                </a>
-                <a href="#/delivery" class="header-link"> Адреса </a>
+              <router-link class="header-link" to="/products">Продукция</router-link>
+              <router-link class="header-link" to="/seller-orders" v-if="isSeller">Продавец</router-link>
+              <router-link class="header-link" to="/admin" v-if="isAdminAuth">Администратор</router-link>
+              <router-link class="header-link" to="/cheesemaker" v-if="isCheesemakerAuth">Сыровар</router-link>
+              <router-link class="header-link" to="/cheesemaker-orders"  v-if="isCheesemakerAuth || isAdminAuth">Заказы</router-link>
+              <router-link class="header-link" to="/delivery" >Адреса</router-link>              
               </div>
             </transition>
             <div class="header-list desctop">
-              <a href="#/products" class="header-link"> Продукция </a>
-              <a href="#/seller-orders" class="header-link" v-if="isSeller"> Продавец </a>
-              <a href="#/admin" class="header-link" v-if="isAdminAuth">
-                Админка
-              </a>
-              <a
-                href="#/cheesemaker"
-                class="header-link"
-                v-if="isCheesemakerAuth"
-              >
-                Сыровар
-              </a>
-              <a
-                href="#/cheesemaker-orders"
-                class="header-link"
-                v-if="isCheesemakerAuth || isAdminAuth"
-              >
-                Заказы
-              </a>
-              <a href="#/delivery" class="header-link"> Адреса </a>
+              <router-link class="header-link" to="/products">Продукция</router-link>
+              <router-link class="header-link" to="/seller-orders" v-if="isSeller">Продавец</router-link>
+              <router-link class="header-link" to="/admin" v-if="isAdminAuth">Администратор</router-link>
+              <router-link class="header-link" to="/cheesemaker" v-if="isCheesemakerAuth">Сыровар</router-link>
+              <router-link class="header-link" to="/cheesemaker-orders"  v-if="isCheesemakerAuth || isAdminAuth">Заказы</router-link>
+              <router-link class="header-link" to="/delivery" >Адреса</router-link>              
             </div>
             <div class="header-list-item">
               <div class="header-list-item-item">

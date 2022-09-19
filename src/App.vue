@@ -58,8 +58,8 @@ export default {
         this.cookieSucsess()
         this.$cookies.set('cookies', '1', '3y')
       } else if (!this.$cookies.get('fio') ) {
-        this.cookie = true
-      } else {
+        this.cookie = false
+      } else if (this.$cookies.get('cookies') == 1) {
         this.cookie = false
       }
     },
