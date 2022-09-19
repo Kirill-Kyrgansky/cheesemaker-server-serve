@@ -1,5 +1,8 @@
 <template>
-  <div class="product-order-element">
+  <div
+    class="product-order-element"
+    v-if="content.status == 'отправлен' || 'принят на точке продаж'"
+  >
     <div>
       <div class="margin-10-0">
         <p class="paragraph-small">
@@ -21,50 +24,6 @@
           <span class="title-3 bold"> Сумма: </span>
           {{ (price * content.amount).toFixed(2) }} ₽
         </p>
-        <div class="footer" v-if="content.status == 'в обработке'">
-          <input
-            type="button"
-            class="btn"
-            value="Товар укомплектован"
-            @click="orderRun"
-          />
-          <input
-            type="button"
-            class="btn"
-            value="С товаром возникли проблемы"
-            @click="orderStop"
-          />
-          <div class="cart-footer">
-          <div class="v-select">
-          <p
-            class="input delivery"
-            @click="areOptionsVisible = !areOptionsVisible"
-          >
-            {{ selected }}
-          </p>
-          <div class="options cart-options" v-if="areOptionsVisible">
-            <p
-              class="paragraph input search-cart"
-              v-for="store in STORAGES"
-              :key="store.id"
-              @click="selectOption(store)"
-            >
-              {{ store.name }}
-            </p>
-          </div>
-          </div>
-        </div>
-        </div>
-        <div v-if="content.status == 'отменен'">
-          <p class="cancellation bold centered-horizontally">
-            Товар отменен сыроваром! Причина отмены: {{ content.comment }}
-          </p>
-        </div>
-        <div v-if="content.status == 'отправлен'">
-          <p class="btn bold centered-horizontally">
-            Товар подготовлен к отправке на точку выдачи!
-          </p>
-        </div>
         <div
           class="order-title"
           v-if="measure == 'кг' && content.status == 'в обработке'"
@@ -79,36 +38,63 @@
             <span class="title-3 bold"> Фактическая сумма: </span>
             {{ (price * factWeight).toFixed(2) }} ₽
           </p>
-          <input type="number" class="input" step="0.01" v-model="factWeight" />
-          <input
-            type="button"
-            class="btn"
-            value="Применить"
-            @click="addedChangeWeight"
-          />
-          
         </div>
       </div>
+      <input
+        type="button"
+        class="btn"
+        value="Товар принят в магазине"
+        @click="orderRun"
+        v-if="content.status == 'отправлен'"
+      />
+      <input
+        type="button"
+        class="cancellation text-centered"
+        value="Товар НЕ принят в магазине"
+        @click="orderError"
+        v-if="content.status == 'отправлен'"
+      />
+      <input
+        type="button "
+        class="cancellation text-centered"
+        value="Покупатель отказался"
+        @click="orderStop"
+        v-if="content.status == 'принят на точке продаж'"
+      />
+      <input
+        type="button"
+        class="btn"
+        value="Товар выдан"
+        @click="orderDone"
+        v-if="content.status == 'принят на точке продаж'"
+      />
     </div>
+    <p
+      class="cancellation text-centered"
+      v-if="content.status == 'отменен покупателем на точке'"
+    >
+      Товар отменен
+    </p>
+    <p class="btn text-centered" v-if="content.status == 'выдан покупателю'">
+      Товар выдан покупателю
+    </p>
   </div>
 </template>
 <script>
 import axios from 'axios';
 import { mapGetters, mapActions } from 'vuex';
-import config from '@/config.js'
+import config from '@/config.js';
 
 export default {
-  name: 'ProductOrderElement',
+  name: 'ProductOrderElementSeller',
   data() {
     return {
       factWeight: 0.01,
       factPrice: 0,
-      name: '',
+      name: '1',
       price: '',
       measure: '',
-      areOptionsVisible: false,
-      selected: 'Выберите склад',
-      storage_id: ''
+      comment: '',
     };
   },
   props: ['content', 'index', 'order', 'orderRun'],
@@ -116,7 +102,6 @@ export default {
     this.getProductName();
     this.GET_CONTENTS_FROM_API();
     this.getPriceId();
-    this.GET_STORAGES_FROM_API();
   },
   watch: {
     test() {
@@ -126,12 +111,7 @@ export default {
     },
   },
   methods: {
-    selectOption(store) {
-      this.selected = store.name;
-      this.storage_id = store.id
-      this.areOptionsVisible = false;
-    },
-    ...mapActions(['GET_CONTENTS_FROM_API', 'GET_STORAGES_FROM_API']),
+    ...mapActions(['GET_CONTENTS_FROM_API']),
     getProductName() {
       axios({
         method: 'GET',
@@ -173,35 +153,10 @@ export default {
       if (yyyy < 10) yyyy = '0' + yyyy;
       return yyyy + '-' + mm + '-' + dd;
     },
-    addedChangeWeight() {
-      let date = new Date();
-      this.CONTENTS[this.index].date = this.currentDate(date);
-      this.CONTENTS[this.index].amount = this.factWeight;
-      let contentsIndex = this.CONTENTS[this.index];
-      axios({
-        method: 'PATCH',
-        url: `${config.url}/contents/${this.CONTENTS[this.index].id}`,
-        data: contentsIndex,
-        headers: {
-          authorization: this.$cookies.get('authorization'),
-        },
-      })
-        .then((req) => {
-          alert('Вес товара успешно изменен');
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
-    },
     orderRun() {
-      if (this.storage_id == '') {
-        alert('Выберете склад')
-      } else {
       let date = new Date();
       this.content.date = this.currentDate(date);
-      this.content.status = 'отправлен';
-      this.content.storage_id = this.storage_id
+      this.content.status = 'принят на точке продаж';
       let content = this.content;
       axios({
         method: 'PATCH',
@@ -212,23 +167,22 @@ export default {
         },
       })
         .then((order) => {
+          alert('Товар принят.');
         })
         .catch((error) => {
           console.log(error);
           alert('Ошибка в работе приложения. Обратитесь к администратору.');
         });
-      }
     },
-    orderStop() {
-      let comment = prompt('Введите причину отмены')
+    orderError() {
+      let comment = prompt('Укажите причину отказа');
       if (comment == '') {
-        alert('Вы не ввели причину отмены. Пожалуйста, повторите попытку');
+        alert('Укажите причину!');
       } else if (comment == null) {
-        
-      }else {
+      } else {
         let date = new Date();
         this.content.date = this.currentDate(date);
-        this.content.status = 'отменен';
+        this.content.status = 'товар не принят на точке';
         this.content.comment = comment;
         let content = this.content;
         axios({
@@ -240,7 +194,7 @@ export default {
           },
         })
           .then((order) => {
-            alert('Товар убран из заказа');
+            alert('Вы успешно отказались от товара.');
           })
           .catch((error) => {
             console.log(error);
@@ -248,10 +202,50 @@ export default {
           });
       }
     },
+    orderDone() {
+      let date = new Date();
+      this.content.date = this.currentDate(date);
+      this.content.status = 'выдан покупателю';
+      let content = this.content;
+      axios({
+        method: 'PATCH',
+        url: `${config.url}/contents/${this.content.id}`,
+        data: content,
+        headers: {
+          authorization: this.$cookies.get('authorization'),
+        },
+      })
+        .then((order) => {})
+        .catch((error) => {
+          console.log(error);
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+        });
+    },
+    orderStop() {
+      let date = new Date();
+      this.content.date = this.currentDate(date);
+      this.content.status = 'отменен покупателем на точке';
+      this.content.comment = this.comment;
+      let content = this.content;
+      axios({
+        method: 'PATCH',
+        url: `${config.url}/contents/${this.content.id}`,
+        data: content,
+        headers: {
+          authorization: this.$cookies.get('authorization'),
+        },
+      })
+        .then((order) => {
+          alert('Товар убран из заказа');
+        })
+        .catch((error) => {
+          console.log(error);
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+        });
+    },
   },
   computed: {
-    ...mapGetters(['ORDERS', 'CONTENTS', 'DELIVERY_POINTS', 'STORAGES']),
+    ...mapGetters(['ORDERS', 'CONTENTS', 'DELIVERY_POINTS']),
   },
-
 };
 </script>

@@ -26,8 +26,6 @@
         :index="index"
       />
       <div class="cart-footer" v-if="!(cart_data <= 1)">
-        <!-- <p class="margin-0-10">Всего: сумма</p>
-        <p class="margin-0-10">Всего: Кол-во</p> -->
         <div class="v-select">
           <p
             class="input delivery"
@@ -107,13 +105,20 @@ export default {
       if (yyyy < 10) yyyy = '0' + yyyy;
       return yyyy + '-' + mm + '-' + dd;
     },
+    deliveryDay(date) {
+    let result = new Date(date);
+    result.setDate(result.getDate() + 3);
+    return result;
+},
     orderUsers() {
       if (this.selected === 'Выберите адрес доставки') {
         alert('Выберите адрес доставки');
       } else {
-      let date = new Date();
+        
+        let date = new Date();
+        let dateDelivery = this.deliveryDay(date).getFullYear() + '-' + this.deliveryDay(date).getMonth() + '-' + this.deliveryDay(date).getDate() 
       let order = {
-        delivery_date: 1, //изменить
+        delivery_date: dateDelivery,
         payment_type: 1, //изменить
         status: 'в обработке',
         comment: 'None',

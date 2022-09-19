@@ -18,30 +18,45 @@
       <div class="cart-element column-centered">
         <p class="title-3">{{ cart_item_data.name }}</p>
         {{ price.item_price + '&nbsp;₽&nbsp;1 ' + price.item_measure }}
-
       </div>
       <div class="cart-element">
-      <p class="paragraph padding-0-10">{{price.item_price * cart_item_data.amount}} ₽</p>
+        <p class="paragraph padding-0-10">{{ finalPrice() }} ₽</p>
 
         <p class="title-3">
-          
           <!-- {{ cart_item_data.price }}&nbsp;₽&nbsp;1 {{ cart_item_data.unit }}. -->
         </p>
       </div>
       <div class="cart-element" v-if="price.item_measure != 'кг'">
-        <input type="button" class="btn margin-0-10" @click="cart_item_data.amount++" value="+"/>
+        <input type="button" class="btn margin-0-10" @click="minus" value="-" />
         <p class="title-3">{{ cart_item_data.amount }}</p>
-        <input type="button" class="btn margin-0-10" @click="minus" value="-"/>
-    </div>
-      <div class="cart-element column-centered" v-if="price.item_measure == 'кг'">
-        <input type="nubmer" step="0.1" class="input max-width-50" v-model="cart_item_data.amount" />
+        <input
+          type="button"
+          class="btn margin-0-10"
+          @click="cart_item_data.amount++"
+          value="+"
+        />
       </div>
-      <div>
+      <div
+        class="cart-element column-centered"
+        v-if="price.item_measure == 'кг'"
+      >
+        <input
+          type="number"
+          v-model="cart_item_data.amount"
+          class="input max-width-50"
+          step="0.1"
+          min="0.1"
+          x-data="{}"
+          @keydown="
+            if (['+', '-', 'e'].includes($event.key)) $event.preventDefault();
+          "
+        />
       </div>
       <textarea
         type="text"
         class="input input-cart width-200"
         placeholder="Комментарии"
+        title="Введите особые пожелания к заказу"
         v-model="computedProperty.comment"
       ></textarea>
     </div>
@@ -50,7 +65,7 @@
 <script>
 import axios from 'axios';
 import { mapGetters } from 'vuex';
-import config from '@/config.js'
+import config from '@/config.js';
 
 export default {
   name: 'CartElement',
@@ -86,21 +101,28 @@ export default {
     },
   },
   methods: {
+    finalPrice() {
+      let price = this.price.item_price * this.cart_item_data.amount;
+      if (isNaN(price)) {
+        return 0;
+      } else {
+        return price.toFixed(2);
+      }
+    },
     amount() {
       if (this.cart_item_data.amount <= 0) {
-        this.cart_item_data.amount = 0
+        this.cart_item_data.amount = 0;
       }
     },
     minus() {
       if (this.cart_item_data.amount == 1) {
-        let isDelite = confirm('Удалить товар из корзины?')
+        let isDelite = confirm('Удалить товар из корзины?');
         if (isDelite == true) {
-          this.deliteFromCart()
+          this.deliteFromCart();
         }
-        this.cart_item_data.amount == 1
-      }
-      else {
-        this.cart_item_data.amount--
+        this.cart_item_data.amount == 1;
+      } else {
+        this.cart_item_data.amount--;
       }
     },
     getPrice() {
@@ -112,7 +134,7 @@ export default {
         },
       })
         .then((res) => {
-          this.price.item_price = res.data.item_price 
+          this.price.item_price = res.data.item_price;
           this.price.item_measure = res.data.item_measure;
         })
         .catch((error) => {
@@ -128,7 +150,7 @@ export default {
     },
   },
   mounted() {
-    this.amount()
+    this.amount();
     this.getPrice();
     this.$emit('comment', this.cart_item_data.comment);
   },

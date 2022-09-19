@@ -65,10 +65,10 @@
       </div>
     </div>
     <CreateStorage />
-    <button class="btn" @click="categories = !categories" v-if="categories">
+    <button class="btn" @click="openCategories" v-if="categories">
       Открыть редактирование категорий
     </button>
-    <button class="btn" @click="categories = !categories" v-if="!categories">
+    <button class="btn" @click="openCategories" v-if="!categories">
       Закрыть редактирование категорий
     </button>
   </div>
@@ -117,6 +117,10 @@ export default {
     ...mapGetters(['CATEGORY', 'SEARCH_VALUE']),
   },
   methods: {
+    openCategories() {
+      window.scrollTo(top, 140);
+      this.categories = !this.categories
+    },
     ...mapActions(['GET_SEARCH_VALUE_TO_VUEX']),
     сhangeVisibility(index, isActive, name) {
       let sendForm = {

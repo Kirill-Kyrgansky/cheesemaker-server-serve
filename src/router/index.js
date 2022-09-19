@@ -9,6 +9,7 @@ import ElementWrapAdmin from '../components/Admin/ElementWrapAdmin.vue';
 import ElementWrapCheesemaker from '../components/Cheesemaker/ElementWrapCheesemaker.vue';
 import HomePageWrap from '../components/HomePageWrap.vue';
 import OrderWrap from '../components/Cheesemaker/OrderWrap.vue';
+import OrderWrapSeller from '../components/Seller/OrderWrapSeller.vue'
 import store from '../store/index';
 
 
@@ -73,12 +74,22 @@ const router = createRouter({
       adminLogin: true,
     },
   },
+  {
+    path: '/seller-orders',
+    component: OrderWrapSeller,
+    name: 'seller-orders',
+    meta: {
+      cheesemaker: true,
+      adminLogin: true,
+      seller: true
+    },
+  },
   ],
 
 });
 
 router.beforeEach((to, from, next) => {
-  if (($cookies.get('role_id') == '3') | ($cookies.get('role_id') == '2') && to.name === ('admin')) {
+  if (($cookies.get('role') == 'Покупатель') | ($cookies.get('role') == 'Сыровар') && to.name === ('admin')) {
     alert('Пожалуйста, авторизуйтесь!')
   }
   else {
@@ -87,7 +98,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.beforeEach((to, from, next) => {
-  if (!($cookies.get('role_id') == '2') && to.name === ('cheesemaker')) {
+  if (!($cookies.get('role') == 'Сыровар') && to.name === ('cheesemaker')) {
     alert('Пожалуйста, авторизуйтесь!')
   }
   else {
@@ -96,7 +107,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.beforeEach((to, from, next) => {
-  if (($cookies.get('role_id') == '3') && to.name === ('cheesemaker-orders')) {
+  if (($cookies.get('role') == 'Покупатель') && to.name === ('cheesemaker-orders')) {
     alert('Пожалуйста, авторизуйтесь!')
   }
   else {
@@ -105,7 +116,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.beforeEach((to, from, next) => {
-  if (!$cookies.get('role_id') && to.name === ('cart')) {
+  if (!$cookies.get('role') && to.name === ('cart')) {
     alert('Пожалуйста, авторизуйтесь!')
   }
   else {

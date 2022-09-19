@@ -1,24 +1,12 @@
 <template>
-  <div class="order-element">
+  <div class="order-element" v-if="order.status == 'отправлен на точку' || order.status =='прибыл в магазин'">
     <div class="order-title">
       <p class="title-2">Дата заказа: {{ date }}</p>
       <p class="title-2">Номер заказа: {{ order.id }}</p>
-      <p
-        class="cancellation bold centered-horizontally"
-        v-if="order.status == 'отменен пользователем'"
-      >
-        Заказ отменен пользователем!
-      </p>
-      <p
-        class="cancellation bold centered-horizontally"
-        v-if="order.status == 'отменен'"
-      >
-        Заказ отменен сыроваром! Причина: {{ order.comment }}
-      </p>
       <div class="border-line"></div>
     </div>
     <div v-for="(content, index) in CONTENTS" :key="content.id">
-      <ProductOrderElement
+      <ProductOrderElementSeller
         :content="content"
         v-if="content.order_id == order.id"
         :index="index"
@@ -46,12 +34,12 @@
   </div>
     <div class="button-right">
       <button
-        v-if="order.status == 'в обработке'"
+      v-if="order.status == 'отправлен на точку'"
         @click="orderSentToThePoint"
         type="button"
         class="btn centered"
       >
-        Заказ отправлен
+        Заказ принят в магазине
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -67,12 +55,12 @@
         </svg>
       </button>
       <button
-        @click="orderStopToThePoint"
-        v-if="order.status == 'в обработке'"
+      v-if="order.status == 'прибыл в магазин'"
+        @click="orderIssued"
         type="button"
-        class="cancellation centered-horizontally btn-text"
+        class="btn centered"
       >
-        Отменить заказ
+        Заказ выдан
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -88,22 +76,16 @@
         </svg>
       </button>
     </div>
-    <p
-      v-if="order.status == 'отправлен на точку'"
-      class="btn bold centered-horizontally"
-    >
-      Заказ успешно отправлен на точку!
-    </p>
   </div>
 </template>
 <script>
 import axios from 'axios';
 import { mapGetters, mapActions } from 'vuex';
-import ProductOrderElement from './ProductOrderElement.vue';
+import ProductOrderElementSeller from './ProductOrderElementSeller.vue';
 import config from '@/config.js'
 
 export default {
-  name: 'OrderElement',
+  name: 'OrderElementSeller',
   data() {
     return {
       newOrder: {},
@@ -120,13 +102,18 @@ export default {
         return {};
       },
     },
-
+    // products: {
+    //   type: Object,
+    //   default() {
+    //     return {};
+    //   },
+    // },
     index: {
       type: Number,
     },
   },
   components: {
-    ProductOrderElement,
+    ProductOrderElementSeller,
   },
   computed: {
     ...mapGetters(['CONTENTS', 'USERS', 'DELIVERY_POINTS']),
@@ -167,7 +154,7 @@ export default {
     orderSentToThePoint() {
       let date = new Date();
       this.orderRun = true;
-      this.order.status = 'отправлен на точку';
+      this.order.status = 'прибыл в магазин';
       this.order.date = this.currentDate(date);
       this.order.delivery_date = this.currentDate(date);
       let order = this.order;
@@ -180,18 +167,16 @@ export default {
         },
       })
         .then((order) => {
-          // alert('Заказ отправлен на точку.')
+          alert('Заказ принят.')
         })
         .catch((error) => {
           console.log(error);
           alert('Ошибка в работе приложения. Обратитесь к администратору.');
         });
     },
-    orderStopToThePoint() {
-      let comment = prompt('Введите причину отмены');
+    orderIssued() {
       let date = new Date();
-      this.order.status = 'отменен';
-      this.order.comment = comment;
+      this.order.status = 'заказ выдан';
       this.order.date = this.currentDate(date);
       this.order.delivery_date = this.currentDate(date);
       axios({
@@ -203,7 +188,7 @@ export default {
         },
       })
         .then((order) => {
-          // alert('Заказ успешно отменен.');
+          alert('Заказ успешно отменен.');
         })
         .catch((error) => {
           console.log(error);

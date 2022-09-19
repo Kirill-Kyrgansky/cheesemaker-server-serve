@@ -309,13 +309,15 @@ textarea {
 .cancellation {
   opacity: 80%;
   background-color: #ff0000;
-  padding: 10px 20px;
   border: solid;
   border-radius: 10px;
   border-color: #3c2415;
-  margin: 10px 0px 10px 0px;
-  font-size: 15px;
+  margin: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 5px 10px;
   color: $main-collor;
+  
 }
 
 .catalog-element {
@@ -380,7 +382,10 @@ textarea {
   display: flex;
   align-items: center;
   background-image: url(/public/allImage/fonebox2.svg);
+}
 
+.width-60vw {
+  width: 60vw;
 }
 
 .header-nav {

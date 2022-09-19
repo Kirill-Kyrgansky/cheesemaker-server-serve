@@ -12,6 +12,16 @@
       </div>
       <router-view :cart_data="CART"/>
     </div>
+    <section class="sectio">
+      <div class="container">
+        <transition name="fade">
+          <div class="successfully width-60vw" v-if="cookie">
+            <p class="title-3 text-centered">Этот сайт использует файлы cookie для хранения данных. Продолжая использовать сайт, вы даете свое согласие на работу с этими файлами</p>
+            <img src="/allImage/Icons/cross.svg" class="header-link-icon pointer" @click="closeCookiePopUp">
+          </div>
+        </transition>
+      </div>
+    </section>
     <ElementFooter />
   </div>
 </template>
@@ -30,12 +40,32 @@ export default {
     return {
       sucsessMessage: true,
       adminLogin: false,
+      cookie: false
     };
   },
   computed: {
     ...mapGetters(['CART']),
   },
+  mounted() {
+    this.cookieMessage()
+  },
   methods: {
+    closeCookiePopUp() {
+      this.cookie = false
+    },
+    cookieMessage () {
+      if (this.$cookies.get('cookies') == null) {
+        this.cookieSucsess()
+        this.$cookies.set('cookies', '1', '3y')
+      } else if (!this.$cookies.get('fio') ) {
+        this.cookie = true
+      } else {
+        this.cookie = false
+      }
+    },
+    cookieSucsess() {
+      this.cookie = true
+    },
     adminMenu() {
       this.adminLogin = !this.adminLogin;
     },

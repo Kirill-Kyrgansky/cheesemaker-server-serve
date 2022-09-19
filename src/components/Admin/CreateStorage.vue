@@ -86,11 +86,11 @@
       <button class="btn" @click="createNewStorage()">
         Создать новый склад
       </button>
-      <button class="btn" @click="storage = !storage" v-if="!storage">
+      <button class="btn" @click="openStorages" v-if="!storage">
         Закрыть управление складами
       </button>
     </div>
-    <button class="btn" @click="storage = !storage" v-if="storage">
+    <button class="btn" @click="openStorages" v-if="storage">
       Открыть управление складами
     </button>
   </div>
@@ -115,6 +115,10 @@ export default {
     ...mapGetters(['STORAGES']),
   },
   methods: {
+    openStorages() {
+      window.scrollTo(top, 140);
+      this.storage = !this.storage
+    },
     сhangeVisibility(storage) {
       storage.active = !storage.active;
       axios      ({

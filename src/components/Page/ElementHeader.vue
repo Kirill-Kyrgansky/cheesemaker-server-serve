@@ -15,6 +15,7 @@
             <transition name="fade">
               <div class="header-list-mobile" v-show="menuMobile">
                 <a href="#/products" class="header-link"> Продукция </a>
+                <a href="#/seller-orders" class="header-link" v-if="isSeller"> Продавец </a>
                 <a href="#/admin" class="header-link" v-if="isAdminAuth">
                   Админка
                 </a>
@@ -37,6 +38,7 @@
             </transition>
             <div class="header-list desctop">
               <a href="#/products" class="header-link"> Продукция </a>
+              <a href="#/seller-orders" class="header-link" v-if="isSeller"> Продавец </a>
               <a href="#/admin" class="header-link" v-if="isAdminAuth">
                 Админка
               </a>
@@ -445,7 +447,24 @@
                         {{ 'Комментарии: ' + orders.comment }}
                       </p>
                       <p class="paragraph">
-                        Дата отправки: {{ orders.delivery_date.split('T')[0] }}
+                        Дата заказа:
+                        {{
+                          orders.order_date.split('T')[0].split('-')[2] +
+                          ':' +
+                          orders.order_date.split('T')[0].split('-')[1] +
+                          ':' +
+                          orders.order_date.split('T')[0].split('-')[0]
+                        }}
+                      </p>
+                      <p class="paragraph">
+                        Примерная дата доставки:
+                        {{
+                          orders.delivery_date.split('T')[0].split('-')[2] +
+                          ':' +
+                          orders.delivery_date.split('T')[0].split('-')[1] +
+                          ':' +
+                          orders.delivery_date.split('T')[0].split('-')[0]
+                        }}
                       </p>
                     </div>
                   </div>
@@ -500,6 +519,7 @@ export default {
       messagePhone: false,
       userPhone: '',
       errorPhone: false,
+      isSeller: false
     };
   },
   computed: {
@@ -523,21 +543,29 @@ export default {
       }
     },
     addPhoneForUser() {
+      let user = {
+      phone: '+' + this.userPhone,
+      role_id: Number(this.$cookies.get('role_id')),
+      active: 1,
+      }
       this.messagePhone = false;
-      // axios
-      //   .post(`${config.url}/users/login`, this.auth)
-      //   .then((authRes) => {
-      //     this.$cookies.set(
-      //       'authorization',
-      //       authRes.data.token_type + ' ' + authRes.data.access_token,
-      //       60 * 60 * 23
-      //     );
-      //     this.sendInfo();
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     console.log('Ошибка авторизации');
-      //   });
+      axios({
+        method: 'PATCH',
+        url: `${config.url}/users`,
+        data: user,
+        headers: {
+          authorization: this.$cookies.get('authorization'),
+        },
+      })
+      .then((req) => {
+        console.log(user);
+        console.log(req);
+        this.sendInfo()
+      })
+        .catch((error) => {
+          console.log(error);
+          console.log('Ошибка авторизации');
+        });
     },
     ...mapActions(['GET_ORDERS_USERS_FROM_API']),
     hideLogin() {
@@ -548,12 +576,16 @@ export default {
       }
     },
     adminVisible() {
-      if (this.$cookies.get('role_id') == 3) {
+      if (this.$cookies.get('role') == 'Покупатель') {
         this.isAdminAuth = false;
-      } else if (this.$cookies.get('role_id') == 2) {
+      } else if (this.$cookies.get('role') == 'Сыровар') {
         this.isCheesemakerAuth = true;
-      } else if (this.$cookies.get('role_id') == 1) {
+        this.isAdminAuth = false;
+      } else if (this.$cookies.get('role') == 'Администратор') {
         this.isAdminAuth = true;
+        this.isSeller = true
+      } else if (this.$cookies.get('role') == 'Продавец') {
+        this.isSeller = true
       }
     },
     logOut() {
@@ -586,14 +618,18 @@ export default {
       })
         .then((authRes) => {
           console.log(authRes);
-          if (authRes.data.phone == '') {
-            this.messagePhone = false; //ИЗМЕНИТЬ!
-          }
           this.$cookies.set('email', authRes.data.email, 60 * 60 * 23);
           this.$cookies.set('fio', authRes.data.fio, 60 * 60 * 23);
           this.$cookies.set('id', authRes.data.id, 60 * 60 * 23);
-          this.$cookies.set('phone', authRes.data.phone, 60 * 60 * 23);
           this.$cookies.set('role_id', authRes.data.role_id, 60 * 60 * 23);
+          this.$cookies.set('role', authRes.data.role, 60 * 60 * 23);
+          this.$cookies.set('phone', authRes.data.phone, 60 * 60 * 23)
+          if (this.$cookies.get('phone') == null) {
+            this.$cookies.set('phone', 'none')
+            this.messagePhone = true
+          } else {
+            location.reload()
+          }
         })
         .catch((error) => {
           console.log(error);
