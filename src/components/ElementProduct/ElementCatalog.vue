@@ -11,7 +11,7 @@
       </transition>
       <div class="catalog-items-products-img">
         <img
-          :src="product.image_path"
+          :src="'http://shop-dev.zdmail.ru' + product.image_path.slice('2')"
           :alt="product.name"
           class="catalog-element-img"
         />
