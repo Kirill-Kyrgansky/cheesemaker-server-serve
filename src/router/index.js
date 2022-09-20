@@ -1,6 +1,5 @@
 import {
   createRouter,
-  createWebHashHistory,
   createWebHistory,
 } from 'vue-router';
 import ElementWrap from '../components/ElementProduct/ElementWrap.vue';
@@ -14,7 +13,7 @@ import OrderWrapSeller from '../components/Seller/OrderWrapSeller.vue';
 import PageNotFound from '../components/Page/PageNotFound.vue'
 
 const router = createRouter({
-  history: createWebHistory('/'),
+  history: createWebHistory('/home'),
   routes: [
     { 
       path: '/:pathMatch(.*)*',

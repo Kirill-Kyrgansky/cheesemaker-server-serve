@@ -24,12 +24,6 @@
             </div>
             <img class="footer-image-center" src="/allImage/cow.png" />
             <div class="column-centered">
-              <div class="footer-list">
-                <a href="#/products" class="header-link"> Продукция </a>
-                <!-- <a href="#" class="header-link"> Оплата </a> -->
-                <!-- <a href="#" class="header-link"> Доставка </a> -->
-                <a href="#/delivery" class="header-link"> Адреса </a>
-              </div>
               <a
                 href="http://zelenaya-dolina.com/"
                 class="paragraph-small text-centered text-footer-info bold"
