@@ -11,7 +11,7 @@
       </transition>
       <div class="catalog-items-products-img">
         <img
-          :src="product.image_path"
+          :src="require(product.image_path)"
           :alt="product.name"
           class="catalog-element-img"
         />
