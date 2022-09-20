@@ -13,7 +13,7 @@ import OrderWrapSeller from '../components/Seller/OrderWrapSeller.vue';
 import PageNotFound from '../components/Page/PageNotFound.vue'
 
 const router = createRouter({
-  history: createWebHistory('/home'),
+  history: createWebHistory('/'),
   routes: [
     { 
       path: '/:pathMatch(.*)*',
