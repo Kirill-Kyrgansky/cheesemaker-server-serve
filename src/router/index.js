@@ -15,17 +15,13 @@ import PageNotFound from '../components/Page/PageNotFound.vue'
 const router = createRouter({
   history: createWebHistory('/'),
   routes: [
-    // { 
-    //   path: '/:pathMatch(.*)*',
-    //   component: PageNotFound 
-    // },
+    { 
+      path: '/:pathMatch(.*)*',
+      component: PageNotFound 
+    },
     {
       path: '/',
       component: HomePageWrap,
-    },
-    {
-      path: '/git/*',
-      beforeEnter() {location.href = 'http://github.com'}
     },
     {
       path: '/products',
