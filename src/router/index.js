@@ -15,10 +15,10 @@ import PageNotFound from '../components/Page/PageNotFound.vue'
 const router = createRouter({
   history: createWebHistory('/'),
   routes: [
-    { 
-      path: '/:pathMatch(.*)*',
-      component: PageNotFound 
-    },
+    // { 
+    //   path: '/:pathMatch(.*)*',
+    //   component: PageNotFound 
+    // },
     {
       path: '/',
       component: HomePageWrap,
