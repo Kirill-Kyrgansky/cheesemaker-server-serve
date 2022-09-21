@@ -567,14 +567,13 @@ export default {
     },
     logOut() {
       this.$cookies.keys().forEach((cookie) => this.$cookies.remove(cookie));
+      this.$cookies.set('cookies', '1', '3y')
       location.reload();
     },
     sendAuth() {
       if (this.auth.password == '') {
         this.isLoginEmpty = true
       } else {
-        
-      
       axios
         .post(`${config.url}/users/login`, this.auth)
         .then((authRes) => {

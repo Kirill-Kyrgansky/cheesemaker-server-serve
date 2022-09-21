@@ -12,7 +12,7 @@
       </div>
       <router-view :cart_data="CART"/>
     </div>
-    <section class="sectio">
+    <section class="section">
       <div class="container">
         <transition name="fade">
           <div class="successfully width-60vw" v-if="cookie">
@@ -51,12 +51,13 @@ export default {
   },
   methods: {
     closeCookiePopUp() {
+      this.$cookies.set('cookies', '1', '3y')
       this.cookie = false
     },
     cookieMessage () {
       if (this.$cookies.get('cookies') == null) {
-        this.cookieSucsess()
-        this.$cookies.set('cookies', '1', '3y')
+        // this.cookieSucsess()
+        this.cookie = true
       } else if (!this.$cookies.get('fio') ) {
         this.cookie = false
       } else if (this.$cookies.get('cookies') == 1) {
@@ -64,7 +65,9 @@ export default {
       }
     },
     cookieSucsess() {
-      this.cookie = true
+      if (this.$cookies.get('cookies') == '1') {
+        this.cookie = true
+      }
     },
     adminMenu() {
       this.adminLogin = !this.adminLogin;
