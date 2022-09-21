@@ -21,55 +21,10 @@
           <span class="title-3 bold"> Сумма: </span>
           {{ (price * content.amount).toFixed(2) }} ₽
         </p>
-        <div class="footer" v-if="content.status == 'в обработке'">
-          <input
-            type="button"
-            class="btn"
-            value="Товар укомплектован"
-            @click="orderRun"
-          />
-          <input
-            type="button"
-            class="btn"
-            value="С товаром возникли проблемы"
-            @click="orderStop"
-          />
-          <div class="cart-footer">
-          <div class="v-select">
-          <p
-            class="input delivery"
-            @click="areOptionsVisible = !areOptionsVisible"
-          >
-            {{ selected }}
-          </p>
-          <div class="options cart-options" v-if="areOptionsVisible">
-            <p
-              class="paragraph input search-cart"
-              v-for="store in STORAGES"
-              :key="store.id"
-              @click="selectOption(store)"
-            >
-              {{ store.name }}
-            </p>
-          </div>
-          </div>
-        </div>
-        </div>
-        <div v-if="content.status == 'отменен'">
-          <p class="cancellation bold centered-horizontally">
-            Товар отменен сыроваром! Причина отмены: {{ content.comment }}
-          </p>
-        </div>
-        <div v-if="content.status == 'отправлен'">
-          <p class="btn bold centered-horizontally">
-            Товар подготовлен к отправке на точку выдачи!
-          </p>
-        </div>
         <div
           class="order-title"
           v-if="measure == 'кг' && content.status == 'в обработке'"
         >
-          <div class="order-element margin-10-0"></div>
           <p class="paragraph">
             <span class="title-3 bold"> Фактический вес: </span>
             {{ factWeight }}
@@ -86,7 +41,50 @@
             value="Применить"
             @click="addedChangeWeight"
           />
-          
+          <div class="footer" v-if="content.status == 'в обработке'">
+            <input
+              type="button"
+              class="btn"
+              value="Товар укомплектован"
+              @click="orderRun"
+            />
+            <input
+              type="button"
+              class="btn"
+              value="С товаром возникли проблемы"
+              @click="orderStop"
+            />
+            <div class="cart-footer">
+              <div class="v-select">
+                <p
+                  class="input delivery"
+                  @click="areOptionsVisible = !areOptionsVisible"
+                >
+                  {{ selected }}
+                </p>
+                <div class="options cart-options" v-if="areOptionsVisible">
+                  <p
+                    class="paragraph input search-cart"
+                    v-for="store in STORAGES"
+                    :key="store.id"
+                    @click="selectOption(store)"
+                  >
+                    {{ store.name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-if="content.status == 'отменен'">
+            <p class="cancellation bold centered-horizontally">
+              Товар отменен сыроваром! Причина отмены: {{ content.comment }}
+            </p>
+          </div>
+          <div v-if="content.status == 'отправлен'">
+            <p class="btn bold centered-horizontally">
+              Товар подготовлен к отправке на точку выдачи!
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -95,7 +93,7 @@
 <script>
 import axios from 'axios';
 import { mapGetters, mapActions } from 'vuex';
-import config from '@/config.js'
+import config from '@/config.js';
 
 export default {
   name: 'ProductOrderElement',
@@ -108,7 +106,7 @@ export default {
       measure: '',
       areOptionsVisible: false,
       selected: 'Выберите склад',
-      storage_id: ''
+      storage_id: '',
     };
   },
   props: ['content', 'index', 'order', 'orderRun'],
@@ -128,7 +126,7 @@ export default {
   methods: {
     selectOption(store) {
       this.selected = store.name;
-      this.storage_id = store.id
+      this.storage_id = store.id;
       this.areOptionsVisible = false;
     },
     ...mapActions(['GET_CONTENTS_FROM_API', 'GET_STORAGES_FROM_API']),
@@ -196,36 +194,34 @@ export default {
     },
     orderRun() {
       if (this.storage_id == '') {
-        alert('Выберете склад')
+        alert('Выберете склад');
       } else {
-      let date = new Date();
-      this.content.date = this.currentDate(date);
-      this.content.status = 'отправлен';
-      this.content.storage_id = this.storage_id
-      let content = this.content;
-      axios({
-        method: 'PATCH',
-        url: `${config.url}/contents/${this.content.id}`,
-        data: content,
-        headers: {
-          authorization: this.$cookies.get('authorization'),
-        },
-      })
-        .then((order) => {
+        let date = new Date();
+        this.content.date = this.currentDate(date);
+        this.content.status = 'отправлен';
+        this.content.storage_id = this.storage_id;
+        let content = this.content;
+        axios({
+          method: 'PATCH',
+          url: `${config.url}/contents/${this.content.id}`,
+          data: content,
+          headers: {
+            authorization: this.$cookies.get('authorization'),
+          },
         })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .then((order) => {})
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
       }
     },
     orderStop() {
-      let comment = prompt('Введите причину отмены')
+      let comment = prompt('Введите причину отмены');
       if (comment == '') {
         alert('Вы не ввели причину отмены. Пожалуйста, повторите попытку');
       } else if (comment == null) {
-        
-      }else {
+      } else {
         let date = new Date();
         this.content.date = this.currentDate(date);
         this.content.status = 'отменен';
@@ -252,6 +248,5 @@ export default {
   computed: {
     ...mapGetters(['ORDERS', 'CONTENTS', 'DELIVERY_POINTS', 'STORAGES']),
   },
-
 };
 </script>

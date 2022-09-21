@@ -180,7 +180,7 @@ export default {
         },
       })
         .then((order) => {
-          // alert('Заказ отправлен на точку.')
+          console.log(order);
         })
         .catch((error) => {
           console.log(error);

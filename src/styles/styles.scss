@@ -37,6 +37,10 @@ textarea {
   flex-wrap: wrap;
 }
 
+input[type="file"]{
+  display: none;
+}
+
 .login-pop-up {
   padding: 10px;
   background-color: #FDD99E;

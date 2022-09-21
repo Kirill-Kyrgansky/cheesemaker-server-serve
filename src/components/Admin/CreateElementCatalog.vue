@@ -2,7 +2,19 @@
   <div class="catalog-element" id="admin">
     <div class="catalog-element-wrap text-centered">
       <label class="text-reader">
-        <input type="file" @change="handleImage" accept="image/*" />
+        <input
+          type="file"
+          ref="files"
+          id="files"
+          @change="handleImage"
+          accept="image/*"
+        />
+        <input
+          type="button"
+          class="btn"
+          value="Загрузить изображение"
+          @click="addFiles()"
+        />
       </label>
       <div class="catalog-element-text">
         <label for="name">
@@ -47,7 +59,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import axios from 'axios';
-import config from '@/config.js'
+import config from '@/config.js';
 
 export default {
   name: 'CreateElementCatalog',
@@ -85,6 +97,9 @@ export default {
     ...mapGetters(['CATEGORY']),
   },
   methods: {
+    addFiles() {
+      this.$refs.files.click()
+    },
     handleImage(e) {
       const selectedImage = e.target.files[0]; // get first file
       this.createBase64Image(selectedImage);

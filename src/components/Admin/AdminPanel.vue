@@ -2,7 +2,8 @@
   <div class="admin-panel">
     <div class="catalog-element-wrap text-centered">
       <label class="text-reader">
-        <input type="file" @change="handleImage" accept="image/*" />
+        <input type="file" ref="files" id="files" @change="handleImage" accept="image/*" />
+        <input type="button" class="btn" value="Загрузить изображение" @click="addFiles()"/>
       </label>
       <div class="catalog-element-text">
         <label for="name">
@@ -185,6 +186,9 @@ export default {
     this.nameSelect();
   },
   methods: {
+    addFiles() {
+      this.$refs.files.click()
+    },
     nameSelect() {
       axios({
         method: 'GET',
