@@ -22,8 +22,8 @@
           {{ (price * content.amount).toFixed(2) }} ₽
         </p>
         <div
+        v-if="measure == 'кг' && content.status == 'в обработке'"
           class="order-title"
-          v-if="measure == 'кг' && content.status == 'в обработке'"
         >
           <p class="paragraph">
             <span class="title-3 bold"> Фактический вес: </span>
@@ -41,6 +41,11 @@
             value="Применить"
             @click="addedChangeWeight"
           />
+          
+            
+          </div>
+        </div>
+        <div class="cart-footer">
           <div class="footer" v-if="content.status == 'в обработке'">
             <input
               type="button"
@@ -54,7 +59,6 @@
               value="С товаром возникли проблемы"
               @click="orderStop"
             />
-            <div class="cart-footer">
               <div class="v-select">
                 <p
                   class="input delivery"
@@ -74,8 +78,6 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
       </div>
       <div v-if="content.status == 'отправлен'">
             <p class="input bold centered-horizontally">
