@@ -15,6 +15,7 @@
           value="Загрузить изображение"
           @click="addFiles()"
         />
+        <p class="paragraph" v-if="fileUpload">Файл загружен</p>
       </label>
       <div class="catalog-element-text">
         <label for="name">
@@ -66,6 +67,7 @@ export default {
   data() {
     return {
       avatar: '',
+      fileUpload: false,
       productCreate: {
         name: '',
         active: '0',
@@ -113,6 +115,9 @@ export default {
         const { image } = this;
         let base64 = image.split(',')[1];
         this.productCreate.image = base64;
+        if (base64 != '') {
+          this.fileUpload = true
+        }
       };
       reader.readAsDataURL(fileObject);
     },
