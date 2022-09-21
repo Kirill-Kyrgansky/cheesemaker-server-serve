@@ -47,7 +47,7 @@
                   </svg>
                 </a>
               </div>
-              <a href="#/cart" class="header-link-icon">
+              <a href="/cart" class="header-link-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   xmlns:xlink="http://www.w3.org/1999/xlink"
