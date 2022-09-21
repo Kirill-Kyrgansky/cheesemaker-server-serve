@@ -167,7 +167,7 @@ export default {
         },
       })
         .then((order) => {
-          alert('Заказ принят.')
+          // alert('Заказ принят.')
         })
         .catch((error) => {
           console.log(error);
