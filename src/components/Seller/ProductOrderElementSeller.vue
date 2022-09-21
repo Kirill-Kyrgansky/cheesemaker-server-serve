@@ -158,6 +158,7 @@ export default {
       this.content.date = this.currentDate(date);
       this.content.status = 'принят на точке продаж';
       let content = this.content;
+      content.operation = 1
       axios({
         method: 'PATCH',
         url: `${config.url}/contents/${this.content.id}`,
@@ -185,6 +186,7 @@ export default {
         this.content.status = 'товар не принят на точке';
         this.content.comment = comment;
         let content = this.content;
+        content.operation = 3
         axios({
           method: 'PATCH',
           url: `${config.url}/contents/${this.content.id}`,
@@ -194,7 +196,7 @@ export default {
           },
         })
           .then((order) => {
-            alert('Вы успешно отказались от товара.');
+            alert('Вы отказались от товара.');
           })
           .catch((error) => {
             console.log(error);
@@ -207,6 +209,7 @@ export default {
       this.content.date = this.currentDate(date);
       this.content.status = 'выдан покупателю';
       let content = this.content;
+      content.operation = 2
       axios({
         method: 'PATCH',
         url: `${config.url}/contents/${this.content.id}`,
@@ -227,6 +230,7 @@ export default {
       this.content.status = 'отменен покупателем на точке';
       this.content.comment = this.comment;
       let content = this.content;
+      content.operation = 3
       axios({
         method: 'PATCH',
         url: `${config.url}/contents/${this.content.id}`,

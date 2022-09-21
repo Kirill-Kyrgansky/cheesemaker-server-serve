@@ -188,7 +188,7 @@ export default {
         },
       })
         .then((order) => {
-          alert('Заказ успешно отменен.');
+          alert('Заказ выдан.');
         })
         .catch((error) => {
           console.log(error);

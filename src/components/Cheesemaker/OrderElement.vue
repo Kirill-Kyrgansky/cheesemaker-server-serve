@@ -90,9 +90,15 @@
     </div>
     <p
       v-if="order.status == 'отправлен на точку'"
-      class="btn bold centered-horizontally"
+      class="input bold centered-horizontally"
     >
       Заказ успешно отправлен на точку!
+    </p>
+    <p
+      v-if="order.status == 'прибыл в магазин'"
+      class="btn bold centered-horizontally"
+    >
+      Заказ прибыл на точку!
     </p>
   </div>
 </template>

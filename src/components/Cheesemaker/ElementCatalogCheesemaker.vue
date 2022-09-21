@@ -53,7 +53,6 @@ export default {
         manufacturer_id: 1,
         item_measure: 'кг',
         operation: 'приход',
-        author_id: 1,
       },
       selectStore: 'Выбрать склад',
     };
@@ -84,6 +83,7 @@ export default {
       } else {
         this.form.product_id = this.product.id;
         this.form.storage_id = this.selectStore;
+        this.form.author_id = this.$cookies.get('id')
         let content = this.form
         axios
           ({
