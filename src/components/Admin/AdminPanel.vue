@@ -50,7 +50,7 @@
           @click="isVisibleProduct(product.id)"
           v-if="product.active"
         >
-          Удалить
+          Скрыть
         </button>
         <button
           class="btn"
