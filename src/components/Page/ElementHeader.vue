@@ -374,15 +374,18 @@
                       />
                     </div>
                     <div class="text-centered">
-                      <p class="title-3 text-centered">Пароль</p>
+                      <p class="title-3 text-centered" >Пароль</p>
                       <input
                         required
                         type="password"
                         id="name"
                         class="input"
                         placeholder="Название"
+                        v-on:keyup.enter="sendAuth"
                         v-model="auth.password"
                       />
+                    <p class="paragraph-tiny text-centered text-red" v-if="loginError">Неверный логин или пароль</p>
+                    <p class="paragraph-tiny text-centered text-red" v-if="isLoginEmpty">Введите логин и пароль</p>
                       <input
                         required
                         class="btn"
@@ -491,7 +494,9 @@ export default {
       messagePhone: false,
       userPhone: '',
       errorPhone: false,
-      isSeller: false
+      isSeller: false,
+      loginError: false,
+      isLoginEmpty: false
     };
   },
   computed: {
@@ -565,6 +570,11 @@ export default {
       location.reload();
     },
     sendAuth() {
+      if (this.auth.password == '') {
+        this.isLoginEmpty = true
+      } else {
+        
+      
       axios
         .post(`${config.url}/users/login`, this.auth)
         .then((authRes) => {
@@ -576,9 +586,15 @@ export default {
           this.sendInfo();
         })
         .catch((error) => {
-          console.log(error);
-          console.log('Ошибка авторизации');
+          if(error.response.status == 401) {
+            this.loginError = true
+            this.isLoginEmpty = false
+          } else if (error.response.status == 422) {
+            this.isLoginEmpty = true
+            this.loginError = false
+          }
         });
+      }
     },
     sendInfo() {
       axios({
