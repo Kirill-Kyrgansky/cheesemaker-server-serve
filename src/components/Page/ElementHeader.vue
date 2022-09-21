@@ -47,7 +47,7 @@
                   </svg>
                 </a>
               </div>
-              <router-link to="/cart" class="header-link-icon">
+              <router-link v-if="this.$cookies.get('fio') != null"  to="/cart" class="header-link-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -568,8 +568,8 @@ export default {
     logOut() {
       this.$cookies.keys().forEach((cookie) => this.$cookies.remove(cookie));
       this.$cookies.set('cookies', '1', '3y')
-      location.reload();
-    },
+      window.location.href = `${config.urlHome}`
+      },
     sendAuth() {
       if (this.auth.password == '') {
         this.isLoginEmpty = true
