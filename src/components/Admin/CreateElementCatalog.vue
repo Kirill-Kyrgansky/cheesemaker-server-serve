@@ -72,7 +72,7 @@ export default {
         name: '',
         active: '0',
         image: '',
-        comment: 'Комментарий',
+        comment: '',
         description: '',
         author_id: '1',
         image: '',

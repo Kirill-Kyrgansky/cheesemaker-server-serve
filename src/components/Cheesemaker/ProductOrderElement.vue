@@ -35,17 +35,16 @@
             {{ (price * factWeight).toFixed(2) }} ₽
           </p>
           <input type="number" class="input" step="0.01" v-model="factWeight" />
+          
           <input
             type="button"
             class="btn"
             value="Применить"
             @click="addedChangeWeight"
           />
-          
-            
           </div>
         </div>
-        <div class="cart-footer">
+        <div class="header-nav">
           <div class="footer" v-if="content.status == 'в обработке'">
             <input
               type="button"
@@ -118,15 +117,13 @@ export default {
   },
   props: ['content', 'index', 'order', 'orderRun'],
   mounted() {
+    this.factWeight = this.content.amount
     this.getProductName();
     this.GET_CONTENTS_FROM_API();
     this.getPriceId();
     this.GET_STORAGES_FROM_API();
   },
   watch: {
-    weight() {
-      this.factWeight = this.content.amount
-    },
     test() {
       if (this.orderRun == true) {
         orderRun();
@@ -205,7 +202,11 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          if (error.response.status == 500) {
+            alert('На складе недостаточно продукта')
+          } else {
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          }
         });
       }
     },
@@ -219,6 +220,7 @@ export default {
         this.content.storage_id = this.storage_id;
         let content = this.content;
         content.operation = 1
+        console.log(content);
         axios({
           method: 'PATCH',
           url: `${config.url}/contents/${this.content.id}`,
@@ -227,7 +229,9 @@ export default {
             authorization: this.$cookies.get('authorization'),
           },
         })
-          .then((order) => {})
+          .then((order) => {
+            console.log(order);
+          })
           .catch((error) => {
             console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');

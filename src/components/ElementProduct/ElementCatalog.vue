@@ -39,6 +39,26 @@
           </div>
         </div>
       </div>
+        <div class="cart-element">
+        <input type="button" class="btn margin-0-10" @click="minusAmount" value="-" />
+        <input
+          type="number"
+          v-model="amount"
+          class="input max-width-50"
+          step="1"
+          min="1"
+          x-data="{}"
+          @keydown="
+            if (['+', '-', 'e'].includes($event.key)) $event.preventDefault();
+          "
+        />
+        <input
+          type="button"
+          class="btn margin-0-10"
+          @click="summAmount"
+          value="+"
+        />
+      </div>
       <button type="submit" @click="addToCart" class="btn centered">
         В корзину
         <img
@@ -47,7 +67,6 @@
         />
       </button>
     </div>
-
     <transition name="description">
       <div
         class="products description pointer"
@@ -88,6 +107,7 @@ export default {
       areOptionsVisible: false,
       selected: {name: 'Выбрать вес'},
       isVisible: false,
+      amount: 1
     };
   },
   props: {
@@ -108,6 +128,18 @@ export default {
     ...mapGetters(['PRODUCTS', 'CATEGORIES', 'PRICES']),
   },
   methods: {
+    summAmount() {
+      this.amount++
+      this.product.amount = this.amount 
+    },
+    minusAmount() {
+      this.amount--
+      if (this.amount == 0) {
+        this.amount = 1
+      this.product.amount = this.amount 
+      } 
+      this.product.amount = this.amount 
+    },
     onClickOutside() {
       this.areOptionsVisible = false;
     },
@@ -134,6 +166,7 @@ export default {
         }, 2000);
         return (this.isVisible = !this.isVisible);
       }
+      this.product.amount = this.amount 
       this.$emit('addToCart', this.product, this.selected);
     },
   },

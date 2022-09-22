@@ -10,9 +10,9 @@
       <div class="text-align-right">
         <h3 class="title-3 text-centered">{{ product.name }}</h3>
         <p class="paragraph text-centered">{{ product.description }}</p>
-        <p class="paragraph-tiny bold margin-10-0 text-centered">
+        <!-- <p class="paragraph-tiny bold margin-10-0 text-centered">
           {{ product.price }}&nbsp;₽&nbsp;/&nbsp;1 {{ product.unit }}.
-        </p>
+        </p> -->
       </div>
       <AdminPanel :product="product" />
     </div>

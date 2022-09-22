@@ -8,9 +8,7 @@
       />
       <div class="cart-element">
         <img
-          :src="
-            'http://shop-dev.zdmail.ru' + cart_item_data.image_path.slice('2')
-          "
+          :src="'http://shop-dev.zdmail.ru' + cart_item_data.image_path.slice('2')"
           class="cart-img"
           :alt="cart_item_data.name"
         />
@@ -37,9 +35,10 @@
         />
       </div>
       <div
-        class="cart-element column-centered"
+        class="cart-element "
         v-if="price.item_measure == 'кг'"
       >
+        <input type="button" class="btn margin-0-10" @click="minus" value="-" />
         <input
           type="number"
           v-model="cart_item_data.amount"
@@ -51,11 +50,17 @@
             if (['+', '-', 'e'].includes($event.key)) $event.preventDefault();
           "
         />
+        <input
+          type="button"
+          class="btn margin-0-10"
+          @click="cart_item_data.amount++"
+          value="+"
+        />
       </div>
       <textarea
         type="text"
         class="input input-cart width-200"
-        placeholder="Комментарии"
+        placeholder="Комментарий"
         title="Введите особые пожелания к заказу"
         v-model="computedProperty.comment"
       ></textarea>

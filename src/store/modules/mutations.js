@@ -8,15 +8,15 @@ export default {
       state.cart.map((item) => {
         if (item.id === product.id) {
           isProductExist = true;
-          item.amount++;
+          // item.amount++;
         }
       });
       if (!isProductExist) {
-        product.amount = 1;
+        // product.amount = 1;
         state.cart.push(product);
       }
     } else {
-      product.amount = 1;
+      // product.amount = 1;
       state.cart.push(product);
     }
   },

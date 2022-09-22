@@ -77,7 +77,8 @@ export default {
       }
     },
     showSorting() {
-      this.show = !this.show;
+      this.show = !this.show;      
+      window.scrollTo(top, 140);
     },
     ...mapActions(['GET_SEARCH_VALUE_TO_VUEX', 'GET_CATEGORY_FROM_API']),
     search(value) {

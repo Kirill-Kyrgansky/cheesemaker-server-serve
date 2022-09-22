@@ -108,6 +108,7 @@ export default {
     deliveryDay(date) {
     let result = new Date(date);
     result.setDate(result.getDate() + 3);
+    result.setMonth(result.getMonth() + 1)
     return result;
 },
     orderUsers() {

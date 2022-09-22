@@ -116,7 +116,6 @@ input[type="file"]{
   right: 0px;
   width: 195px;
   z-index: 999;
-  background-image: url(http://172.16.2.174:8080/img/fone.d4f0726a.png);
 }
 
 .error-mesage{
@@ -700,6 +699,9 @@ input::placeholder {
 }
 
 .admin-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   position: relative;
   top: 0px;
 }
@@ -724,8 +726,8 @@ input::placeholder {
   background-color: $main-collor;
   @include btn-text;
   @include paragraph;
-  margin: 20px 0px;
-  padding: 10px 10px;
+  margin: 10px 0px;
+  padding: 5px 10px;
   border-radius: 10px;
   border: 3px solid $text-collor-opacity;
 }
@@ -823,6 +825,7 @@ input::placeholder {
 }
 
 .v-select {
+  width: 200px;
   position: relative;
   cursor: pointer;
 }
@@ -980,7 +983,7 @@ input::placeholder {
   align-items: center;
   justify-content: center;
   width: 120px;
-  padding: 20px;
+  // padding: 20px;
   text-align: center;
 }
 

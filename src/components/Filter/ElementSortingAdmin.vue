@@ -2,8 +2,7 @@
   <div class="border-surround filter admin-panel">
     <div class="categories" v-if="!categories">
       <h3 class="title-3 text-centered">Категории</h3>
-      <div class="v-select">
-        <p class="input">{{ selected }}</p>
+      <div >
         <div class="options-admin">
           <h3 class="title-3 text-centered">Активные категории</h3>
           <div v-for="option in CATEGORY" :key="option.id">

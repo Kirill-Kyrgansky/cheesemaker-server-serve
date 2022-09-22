@@ -1,6 +1,6 @@
 <template>
   <div class="create-storage">
-    <div v-if="!storage">
+    <div class="admin-panel" v-if="!storage">
       <div class="options-admin">
         <h3 class="title-3 text-centered">Активные склады</h3>
         <div v-for="storage in STORAGES" :key="storage.id">
@@ -86,14 +86,16 @@
       <button class="btn" @click="createNewStorage()">
         Создать новый склад
       </button>
-      <button class="btn" @click="openStorages" v-if="!storage">
-        Закрыть управление складами
-      </button>
+
     </div>
-    <button class="btn" @click="openStorages" v-if="storage">
+    
+  </div>
+  <button class="btn" @click="openStorages" v-if="storage">
       Открыть управление складами
     </button>
-  </div>
+    <button class="btn" @click="openStorages" v-if="!storage">
+        Закрыть управление складами
+      </button>
 </template>
 
 <script>

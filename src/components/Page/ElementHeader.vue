@@ -425,9 +425,9 @@
                         Дата заказа:
                         {{
                           orders.order_date.split('T')[0].split('-')[2] +
-                          ':' +
+                          '.' +
                           orders.order_date.split('T')[0].split('-')[1] +
-                          ':' +
+                          '.' +
                           orders.order_date.split('T')[0].split('-')[0]
                         }}
                       </p>
@@ -435,9 +435,9 @@
                         Примерная дата доставки:
                         {{
                           orders.delivery_date.split('T')[0].split('-')[2] +
-                          ':' +
+                          '.' +
                           orders.delivery_date.split('T')[0].split('-')[1] +
-                          ':' +
+                          '.' +
                           orders.delivery_date.split('T')[0].split('-')[0]
                         }}
                       </p>
