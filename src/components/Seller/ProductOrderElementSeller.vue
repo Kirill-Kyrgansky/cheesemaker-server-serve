@@ -1,7 +1,7 @@
 <template>
   <div
     class="product-order-element"
-    v-if="content.status == 'отправлен' || 'принят на точке продаж'"
+    v-if="content.status !== 'отменен'"
   >
     <div>
       <div class="margin-10-0">
@@ -40,33 +40,33 @@
           </p>
         </div>
       </div>
+      <div v-if="content.status === 'подготовлен к отправке' && order.status !== 'отправлен на точку' ">
       <input
         type="button"
         class="btn"
         value="Товар принят в магазине"
         @click="orderRun"
-        v-if="content.status == 'отправлен'"
       />
       <input
         type="button"
         class="cancellation text-centered"
         value="Товар НЕ принят в магазине"
         @click="orderError"
-        v-if="content.status == 'отправлен'"
       />
+    </div>
+    <input
+      type="button"
+      class="btn"
+      value="Товар выдан"
+      @click="orderDone"
+      v-if="content.status == 'прибыл в магазин'"
+    />
       <input
-        type="button "
+        type="button"
         class="cancellation text-centered"
         value="Покупатель отказался"
         @click="orderStop"
-        v-if="content.status == 'принят на точке продаж'"
-      />
-      <input
-        type="button"
-        class="btn"
-        value="Товар выдан"
-        @click="orderDone"
-        v-if="content.status == 'принят на точке продаж'"
+        v-if="content.status == 'прибыл в магазин'"
       />
     </div>
     <p
@@ -75,7 +75,7 @@
     >
       Товар отменен
     </p>
-    <p class="btn text-centered" v-if="content.status == 'выдан покупателю'">
+    <p class="btn text-centered" v-if="content.status == 'товар выдан'">
       Товар выдан покупателю
     </p>
   </div>
@@ -97,19 +97,19 @@ export default {
       comment: '',
     };
   },
-  props: ['content', 'index', 'order', 'orderRun'],
+  props: ['content', 'index', 'order'],
   mounted() {
     this.getProductName();
     this.GET_CONTENTS_FROM_API();
     this.getPriceId();
   },
-  watch: {
-    test() {
-      if (this.orderRun == true) {
-        orderRun();
-      }
-    },
-  },
+  // watch: {
+  //   test() {
+  //     if (this.orderRun == true) {
+  //       orderRun();
+  //     }
+  //   },
+  // },
   methods: {
     ...mapActions(['GET_CONTENTS_FROM_API']),
     getProductName() {
@@ -156,7 +156,7 @@ export default {
     orderRun() {
       let date = new Date();
       this.content.date = this.currentDate(date);
-      this.content.status = 'принят на точке продаж';
+      this.content.status = 'прибыл в магазин';
       let content = this.content;
       content.operation = 1
       axios({
@@ -225,27 +225,32 @@ export default {
         });
     },
     orderStop() {
-      let date = new Date();
-      this.content.date = this.currentDate(date);
-      this.content.status = 'отменен покупателем на точке';
-      this.content.comment = this.comment;
-      let content = this.content;
-      content.operation = 3
-      axios({
-        method: 'PATCH',
-        url: `${config.url}/contents/${this.content.id}`,
-        data: content,
-        headers: {
-          authorization: this.$cookies.get('authorization'),
-        },
-      })
-        .then((order) => {
-          alert('Товар убран из заказа');
+      let comment = prompt('Укажите причину отказа');
+      if (comment !== '' && comment !== null){
+        let date = new Date();
+        this.content.date = this.currentDate(date);
+        this.content.status = 'отменен покупателем на точке';
+        this.content.comment = comment;
+        let content = this.content;
+        content.operation = 3
+        axios({
+          method: 'PATCH',
+          url: `${config.url}/contents/${this.content.id}`,
+          data: content,
+          headers: {
+            authorization: this.$cookies.get('authorization'),
+          },
         })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .then((order) => {
+            alert('Товар убран из заказа');
+          })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
+      } else {
+        alert('Введите причину отмены')
+      }
     },
   },
   computed: {

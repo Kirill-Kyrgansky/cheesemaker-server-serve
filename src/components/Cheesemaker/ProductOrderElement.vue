@@ -50,7 +50,7 @@
               type="button"
               class="btn"
               value="Товар укомплектован"
-              @click="orderRun"
+              @click="productDone"
             />
             <input
               type="button"
@@ -78,7 +78,7 @@
               </div>
             </div>
       </div>
-      <div v-if="content.status == 'отправлен'">
+      <div v-if="content.status == 'подготовлен к отправке'">
             <p class="input bold centered-horizontally">
               Товар подготовлен к отправке на точку выдачи!
             </p>
@@ -88,11 +88,17 @@
               Товар отменен сыроваром! Причина отмены: {{ content.comment }}
             </p>
           </div>
-          <div v-if="content.status == 'выдан покупателю' || content.status == 'принят на точке продаж'">
+          <div v-if="content.status == 'отменен покупателем на точке'">
+            <p class="cancellation bold centered-horizontally">
+              Покупатель отказался от товара! Причина отказа: {{content.comment}}
+            </p>
+          </div>
+          <div v-if="content.status == 'товар выдан' || content.status == 'прибыл в магазин'">
             <p class="btn bold centered-horizontally">
               Товар принят на точку!
             </p>
           </div>
+          
     </div>
   </div>
 </template>
@@ -113,6 +119,7 @@ export default {
       areOptionsVisible: false,
       selected: 'Выберите склад',
       storage_id: '',
+      productRun: false
     };
   },
   props: ['content', 'index', 'order', 'orderRun'],
@@ -124,13 +131,62 @@ export default {
     this.GET_STORAGES_FROM_API();
   },
   watch: {
-    test() {
-      if (this.orderRun == true) {
-        orderRun();
-      }
-    },
+    // test() {
+    //   if (this.orderRun == true) {
+    //     orderRun();
+    //   }
+    // },
   },
   methods: {
+    currentDate(date) {
+      var dd = date.getDate();
+      if (dd < 10) dd = '0' + dd;
+      var mm = date.getMonth() + 1;
+      if (mm < 10) mm = '0' + mm;
+      var yyyy = date.getFullYear();
+      if (yyyy < 10) yyyy = '0' + yyyy;
+      return yyyy + '-' + mm + '-' + dd;
+    },
+    productCheck() {
+      let name = this.name
+      let storage = this.storage_id
+      let storageName = this.selected
+      let date = new Date();
+      if (this.content.status !== 'подготовлен к отправке') {
+        if (storage == 0) {
+            alert(`Выберете склад для товара ${name}`);
+      } else if (this.content.status === 'отменен') {
+        return
+      }
+      else {
+        this.content.date = this.currentDate(date);
+        this.content.storage_id = storage;
+        this.content.operation = 1
+        let content = this.content;
+        content.status = 'подготовлен к отправке';
+        console.log(content);
+        axios({
+          method: 'PATCH',
+          url: `${config.url}/contents/${this.content.id}`,
+          data: content,
+          headers: {
+            authorization: this.$cookies.get('authorization'),
+          },
+        })
+          .then((order) => {
+          })
+          .catch((error) => {
+            if (error.response.status == 500) {
+              this.content.status = 'в обработке'
+              alert(`Товара ${name} недостаточно на складе ${storageName}`)
+            } else {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          }
+          });
+      }
+      }
+    },
     selectOption(store) {
       this.selected = store.name;
       this.storage_id = store.id;
@@ -169,19 +225,12 @@ export default {
           alert('Ошибка в работе приложения. Обратитесь к администратору.');
         });
     },
-    currentDate(date) {
-      var dd = date.getDate();
-      if (dd < 10) dd = '0' + dd;
-      var mm = date.getMonth() + 1;
-      if (mm < 10) mm = '0' + mm;
-      var yyyy = date.getFullYear();
-      if (yyyy < 10) yyyy = '0' + yyyy;
-      return yyyy + '-' + mm + '-' + dd;
-    },
     addedChangeWeight() {
       if (this.storage_id == '') {
         alert('Выберете склад');
       } else {
+      let name = this.name;
+      let storageName = this.selected;
       let date = new Date();
       this.CONTENTS[this.index].date = this.currentDate(date);
       this.CONTENTS[this.index].amount = this.factWeight;
@@ -201,19 +250,111 @@ export default {
           console.log(req);
         })
         .catch((error) => {
-          console.log(error);
           if (error.response.status == 500) {
-            alert('На складе недостаточно продукта')
+            alert(`На складе ${storageName} недостаточно продукта ${name}`)
           } else {
+            console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           }
         });
       }
     },
-    orderRun() {
+    // changeOrderForStart() {
+    //   let date = new Date();
+    //   // this.orderRun = true;
+    //   this.order.status = 'в работе';
+    //   this.order.date = this.currentDate(date);
+    //   this.order.delivery_date = this.currentDate(date);
+    //   let order = this.order;
+    //   axios({
+    //     method: 'PATCH',
+    //     url: `${config.url}/orders/${this.order.id}`,
+    //     data: order,
+    //     headers: {
+    //       authorization: this.$cookies.get('authorization'),
+    //     },
+    //   })
+    //     .then((order) => {
+    //       console.log(order);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //       alert('Ошибка в работе приложения. Обратитесь к администратору.');
+    //     });
+    // },
+    productRun() {
+      // let date = new Date();
+      //   this.content.date = this.currentDate(date);
+      //   this.content.status = 'отправлен';
+      //   this.content.storage_id = this.storage_id;
+      //   let content = this.content;
+      //   content.operation = 1
+      //   console.log(content);
+      //   axios({
+      //     method: 'PATCH',
+      //     url: `${config.url}/contents/${this.content.id}`,
+      //     data: content,
+      //     headers: {
+      //       authorization: this.$cookies.get('authorization'),
+      //     },
+      //   })
+      //     .then((order) => {
+      //       this.productRun == true      
+      //     })
+      //     .catch((error) => {
+      //       if (error.response.status == 500) {
+      //         alert(`Тована ${this.name} недостаточно на складе`)
+      //       }
+      //       console.log(error);
+      //       alert('Ошибка в работе приложения. Обратитесь к администратору.');
+      //     });
+    },
+    orderStop() {
       if (this.storage_id == '') {
-        alert('Выберете склад');
+        alert('Выберете склад.')
       } else {
+        let comment = prompt('Введите причину отмены.');
+      if (comment == '') {
+        alert('Вы не ввели причину отмены. Пожалуйста, повторите попытку.');
+      } else if (comment == null) {
+        return
+      } else {
+        let date = new Date();
+        this.content.date = this.currentDate(date);
+        this.content.status = 'отменен';
+        this.content.comment = comment;
+        let content = this.content;
+        content.operation = 3
+        console.log(content);
+        axios({
+          method: 'PATCH',
+          url: `${config.url}/contents/${this.content.id}`,
+          data: content,
+          headers: {
+            authorization: this.$cookies.get('authorization'),
+          },
+        })
+          .then((order) => {
+        console.log(order);
+        alert('Товар убран из заказа.');
+          })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
+      }
+    }
+  },
+  productStart() {
+    this.productDone()
+  },
+  productDone() {
+    let name = this.name
+    if (this.storage_id == 0) {
+      alert(`Выберете склад для продукта ${name}`);
+      return
+    } else {
+      if (this.order.status == 'подготовлен к отправке') {
         let date = new Date();
         this.content.date = this.currentDate(date);
         this.content.status = 'отправлен';
@@ -230,46 +371,23 @@ export default {
           },
         })
           .then((order) => {
-            console.log(order);
+            this.productRun == true      
           })
           .catch((error) => {
+            if (error.response.status == 500) {
+              alert(`Тована ${this.name} недостаточно на складе`)
+            }
             console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
-      }
-    },
-    orderStop() {
-      let comment = prompt('Введите причину отмены');
-      if (comment == '') {
-        alert('Вы не ввели причину отмены. Пожалуйста, повторите попытку');
-      } else if (comment == null) {
-      } else {
-        let date = new Date();
-        this.content.date = this.currentDate(date);
-        this.content.status = 'отменен';
-        this.content.comment = comment;
-        let content = this.content;
-        content.operation = 3
-        axios({
-          method: 'PATCH',
-          url: `${config.url}/contents/${this.content.id}`,
-          data: content,
-          headers: {
-            authorization: this.$cookies.get('authorization'),
-          },
-        })
-          .then((order) => {
-            alert('Товар убран из заказа');
-          })
-          .catch((error) => {
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          });
-      }
-    },
+    } else {
+      return
+    }
+  }
   },
-  computed: {
-    ...mapGetters(['ORDERS', 'CONTENTS', 'DELIVERY_POINTS', 'STORAGES']),
+},
+computed: {
+  ...mapGetters(['ORDERS', 'CONTENTS', 'DELIVERY_POINTS', 'STORAGES']),
   },
 };
 </script>
