@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="product-order-element"
-    v-if="content.status !== 'отменен'"
-  >
+  <div class="product-order-element" v-if="content.status !== 'отменен'">
     <div>
       <div class="margin-10-0">
         <p class="paragraph-small">
@@ -24,10 +21,7 @@
           <span class="title-3 bold"> Сумма: </span>
           {{ (price * content.amount).toFixed(2) }} ₽
         </p>
-        <div
-          class="order-title"
-          v-if="measure == 'кг' && content.status == 'в обработке'"
-        >
+        <div class="order-title" v-if="measure == 'кг' && content.status == 'в обработке'">
           <div class="order-element margin-10-0"></div>
           <p class="paragraph">
             <span class="title-3 bold"> Фактический вес: </span>
@@ -41,38 +35,16 @@
         </div>
       </div>
       <div v-if="content.status === 'подготовлен к отправке' && order.status !== 'отправлен на точку' ">
-      <input
-        type="button"
-        class="btn"
-        value="Товар принят в магазине"
-        @click="orderRun"
-      />
-      <input
-        type="button"
-        class="cancellation text-centered"
-        value="Товар НЕ принят в магазине"
-        @click="orderError"
-      />
+        <input type="button" class="btn" value="Товар принят в магазине" @click="orderRun" />
+        <input type="button" class="cancellation text-centered" value="Товар НЕ принят в магазине"
+          @click="orderError" />
+      </div>
+      <input type="button" class="btn" value="Товар выдан" @click="orderDone"
+        v-if="content.status == 'прибыл в магазин'" />
+      <input type="button" class="cancellation text-centered" value="Покупатель отказался" @click="orderStop"
+        v-if="content.status == 'прибыл в магазин'" />
     </div>
-    <input
-      type="button"
-      class="btn"
-      value="Товар выдан"
-      @click="orderDone"
-      v-if="content.status == 'прибыл в магазин'"
-    />
-      <input
-        type="button"
-        class="cancellation text-centered"
-        value="Покупатель отказался"
-        @click="orderStop"
-        v-if="content.status == 'прибыл в магазин'"
-      />
-    </div>
-    <p
-      class="cancellation text-centered"
-      v-if="content.status == 'отменен покупателем на точке'"
-    >
+    <p class="cancellation text-centered" v-if="content.status == 'отменен покупателем на точке'">
       Товар отменен
     </p>
     <p class="btn text-centered" v-if="content.status == 'товар выдан'">
@@ -218,7 +190,7 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-        .then((order) => {})
+        .then((order) => { })
         .catch((error) => {
           console.log(error);
           alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -226,7 +198,7 @@ export default {
     },
     orderStop() {
       let comment = prompt('Укажите причину отказа');
-      if (comment !== '' && comment !== null){
+      if (comment !== '' && comment !== null) {
         let date = new Date();
         this.content.date = this.currentDate(date);
         this.content.status = 'отменен покупателем на точке';

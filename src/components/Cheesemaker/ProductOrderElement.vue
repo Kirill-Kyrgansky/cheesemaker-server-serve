@@ -21,10 +21,7 @@
           <span class="title-3 bold"> Сумма: </span>
           {{ (price * content.amount).toFixed(2) }} ₽
         </p>
-        <div
-        v-if="measure == 'кг' && content.status == 'в обработке'"
-          class="order-title"
-        >
+        <div v-if="measure == 'кг' && content.status == 'в обработке'" class="order-title">
           <p class="paragraph">
             <span class="title-3 bold"> Фактический вес: </span>
             {{ factWeight }}
@@ -35,70 +32,48 @@
             {{ (price * factWeight).toFixed(2) }} ₽
           </p>
           <input type="number" class="input" step="0.01" v-model="factWeight" />
-          
-          <input
-            type="button"
-            class="btn"
-            value="Применить"
-            @click="addedChangeWeight"
-          />
+
+          <input type="button" class="btn" value="Применить" @click="addedChangeWeight" />
+        </div>
+      </div>
+      <div class="header-nav">
+        <div class="footer" v-if="content.status == 'в обработке'">
+          <input type="button" class="btn" value="Товар укомплектован" @click="productDone" />
+          <input type="button" class="btn" value="С товаром возникли проблемы" @click="orderStop" />
+          <div class="v-select">
+            <p class="input delivery" @click="areOptionsVisible = !areOptionsVisible">
+              {{ selected }}
+            </p>
+            <div class="options cart-options" v-if="areOptionsVisible">
+              <p class="paragraph input search-cart" v-for="store in STORAGES" :key="store.id"
+                @click="selectOption(store)">
+                {{ store.name }}
+              </p>
+            </div>
           </div>
         </div>
-        <div class="header-nav">
-          <div class="footer" v-if="content.status == 'в обработке'">
-            <input
-              type="button"
-              class="btn"
-              value="Товар укомплектован"
-              @click="productDone"
-            />
-            <input
-              type="button"
-              class="btn"
-              value="С товаром возникли проблемы"
-              @click="orderStop"
-            />
-              <div class="v-select">
-                <p
-                  class="input delivery"
-                  @click="areOptionsVisible = !areOptionsVisible"
-                >
-                  {{ selected }}
-                </p>
-                <div class="options cart-options" v-if="areOptionsVisible">
-                  <p
-                    class="paragraph input search-cart"
-                    v-for="store in STORAGES"
-                    :key="store.id"
-                    @click="selectOption(store)"
-                  >
-                    {{ store.name }}
-                  </p>
-                </div>
-              </div>
-            </div>
       </div>
       <div v-if="content.status == 'подготовлен к отправке'">
-            <p class="input bold centered-horizontally">
-              Товар подготовлен к отправке на точку выдачи!
-            </p>
-          </div>
-          <div v-if="content.status == 'отменен'">
-            <p class="cancellation bold centered-horizontally">
-              Товар отменен сыроваром! Причина отмены: {{ content.comment }}
-            </p>
-          </div>
-          <div v-if="content.status == 'отменен покупателем на точке'">
-            <p class="cancellation bold centered-horizontally">
-              Покупатель отказался от товара! Причина отказа: {{content.comment}}
-            </p>
-          </div>
-          <div v-if="content.status == 'товар выдан' || content.status == 'прибыл в магазин'">
-            <p class="btn bold centered-horizontally">
-              Товар принят на точку!
-            </p>
-          </div>
-          
+        <p class="input bold centered-horizontally">
+          Товар подготовлен к отправке на точку выдачи!
+        </p>
+      </div>
+      <div v-if="content.status == 'отменен'">
+        <p class="cancellation bold centered-horizontally">
+          Товар отменен сыроваром! Причина отмены: {{ content.comment }}
+        </p>
+      </div>
+      <div v-if="content.status == 'отменен покупателем на точке'">
+        <p class="cancellation bold centered-horizontally">
+          Покупатель отказался от товара! Причина отказа: {{content.comment}}
+        </p>
+      </div>
+      <div v-if="content.status == 'товар выдан' || content.status == 'прибыл в магазин'">
+        <p class="btn bold centered-horizontally">
+          Товар принят на точку!
+        </p>
+      </div>
+
     </div>
   </div>
 </template>
@@ -154,37 +129,37 @@ export default {
       let date = new Date();
       if (this.content.status !== 'подготовлен к отправке') {
         if (storage == 0) {
-            alert(`Выберете склад для товара ${name}`);
-      } else if (this.content.status === 'отменен') {
-        return
-      }
-      else {
-        this.content.date = this.currentDate(date);
-        this.content.storage_id = storage;
-        this.content.operation = 1
-        let content = this.content;
-        content.status = 'подготовлен к отправке';
-        console.log(content);
-        axios({
-          method: 'PATCH',
-          url: `${config.url}/contents/${this.content.id}`,
-          data: content,
-          headers: {
-            authorization: this.$cookies.get('authorization'),
-          },
-        })
-          .then((order) => {
+          alert(`Выберете склад для товара ${name}`);
+        } else if (this.content.status === 'отменен') {
+          return
+        }
+        else {
+          this.content.date = this.currentDate(date);
+          this.content.storage_id = storage;
+          this.content.operation = 1
+          let content = this.content;
+          content.status = 'подготовлен к отправке';
+          console.log(content);
+          axios({
+            method: 'PATCH',
+            url: `${config.url}/contents/${this.content.id}`,
+            data: content,
+            headers: {
+              authorization: this.$cookies.get('authorization'),
+            },
           })
-          .catch((error) => {
-            if (error.response.status == 500) {
-              this.content.status = 'в обработке'
-              alert(`Товара ${name} недостаточно на складе ${storageName}`)
-            } else {
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          }
-          });
-      }
+            .then((order) => {
+            })
+            .catch((error) => {
+              if (error.response.status == 500) {
+                this.content.status = 'в обработке'
+                alert(`Товара ${name} недостаточно на складе ${storageName}`)
+              } else {
+                console.log(error);
+                alert('Ошибка в работе приложения. Обратитесь к администратору.');
+              }
+            });
+        }
       }
     },
     selectOption(store) {
@@ -229,34 +204,34 @@ export default {
       if (this.storage_id == '') {
         alert('Выберете склад');
       } else {
-      let name = this.name;
-      let storageName = this.selected;
-      let date = new Date();
-      this.CONTENTS[this.index].date = this.currentDate(date);
-      this.CONTENTS[this.index].amount = this.factWeight;
-      let contentsIndex = this.CONTENTS[this.index];
-      contentsIndex.storage_id = this.storage_id
-      contentsIndex.operation = 1
-      axios({
-        method: 'PATCH',
-        url: `${config.url}/contents/${this.CONTENTS[this.index].id}`,
-        data: contentsIndex,
-        headers: {
-          authorization: this.$cookies.get('authorization'),
-        },
-      })
-        .then((req) => {
-          alert('Вес товара успешно изменен');
-          console.log(req);
+        let name = this.name;
+        let storageName = this.selected;
+        let date = new Date();
+        this.CONTENTS[this.index].date = this.currentDate(date);
+        this.CONTENTS[this.index].amount = this.factWeight;
+        let contentsIndex = this.CONTENTS[this.index];
+        contentsIndex.storage_id = this.storage_id
+        contentsIndex.operation = 1
+        axios({
+          method: 'PATCH',
+          url: `${config.url}/contents/${this.CONTENTS[this.index].id}`,
+          data: contentsIndex,
+          headers: {
+            authorization: this.$cookies.get('authorization'),
+          },
         })
-        .catch((error) => {
-          if (error.response.status == 500) {
-            alert(`На складе ${storageName} недостаточно продукта ${name}`)
-          } else {
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          }
-        });
+          .then((req) => {
+            alert('Вес товара успешно изменен');
+            console.log(req);
+          })
+          .catch((error) => {
+            if (error.response.status == 500) {
+              alert(`На складе ${storageName} недостаточно продукта ${name}`)
+            } else {
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            }
+          });
       }
     },
     // changeOrderForStart() {
@@ -314,80 +289,80 @@ export default {
         alert('Выберете склад.')
       } else {
         let comment = prompt('Введите причину отмены.');
-      if (comment == '') {
-        alert('Вы не ввели причину отмены. Пожалуйста, повторите попытку.');
-      } else if (comment == null) {
+        if (comment == '') {
+          alert('Вы не ввели причину отмены. Пожалуйста, повторите попытку.');
+        } else if (comment == null) {
+          return
+        } else {
+          let date = new Date();
+          this.content.date = this.currentDate(date);
+          this.content.status = 'отменен';
+          this.content.comment = comment;
+          let content = this.content;
+          content.operation = 3
+          console.log(content);
+          axios({
+            method: 'PATCH',
+            url: `${config.url}/contents/${this.content.id}`,
+            data: content,
+            headers: {
+              authorization: this.$cookies.get('authorization'),
+            },
+          })
+            .then((order) => {
+              console.log(order);
+              alert('Товар убран из заказа.');
+            })
+            .catch((error) => {
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
+        }
+      }
+    },
+    productStart() {
+      this.productDone()
+    },
+    productDone() {
+      let name = this.name
+      if (this.storage_id == 0) {
+        alert(`Выберете склад для продукта ${name}`);
         return
       } else {
-        let date = new Date();
-        this.content.date = this.currentDate(date);
-        this.content.status = 'отменен';
-        this.content.comment = comment;
-        let content = this.content;
-        content.operation = 3
-        console.log(content);
-        axios({
-          method: 'PATCH',
-          url: `${config.url}/contents/${this.content.id}`,
-          data: content,
-          headers: {
-            authorization: this.$cookies.get('authorization'),
-          },
-        })
-          .then((order) => {
-        console.log(order);
-        alert('Товар убран из заказа.');
+        if (this.order.status == 'подготовлен к отправке') {
+          let date = new Date();
+          this.content.date = this.currentDate(date);
+          this.content.status = 'отправлен';
+          this.content.storage_id = this.storage_id;
+          let content = this.content;
+          content.operation = 1
+          console.log(content);
+          axios({
+            method: 'PATCH',
+            url: `${config.url}/contents/${this.content.id}`,
+            data: content,
+            headers: {
+              authorization: this.$cookies.get('authorization'),
+            },
           })
-          .catch((error) => {
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          });
+            .then((order) => {
+              this.productRun == true
+            })
+            .catch((error) => {
+              if (error.response.status == 500) {
+                alert(`Тована ${this.name} недостаточно на складе`)
+              }
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
+        } else {
+          return
+        }
       }
-    }
+    },
   },
-  productStart() {
-    this.productDone()
-  },
-  productDone() {
-    let name = this.name
-    if (this.storage_id == 0) {
-      alert(`Выберете склад для продукта ${name}`);
-      return
-    } else {
-      if (this.order.status == 'подготовлен к отправке') {
-        let date = new Date();
-        this.content.date = this.currentDate(date);
-        this.content.status = 'отправлен';
-        this.content.storage_id = this.storage_id;
-        let content = this.content;
-        content.operation = 1
-        console.log(content);
-        axios({
-          method: 'PATCH',
-          url: `${config.url}/contents/${this.content.id}`,
-          data: content,
-          headers: {
-            authorization: this.$cookies.get('authorization'),
-          },
-        })
-          .then((order) => {
-            this.productRun == true      
-          })
-          .catch((error) => {
-            if (error.response.status == 500) {
-              alert(`Тована ${this.name} недостаточно на складе`)
-            }
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          });
-    } else {
-      return
-    }
-  }
-  },
-},
-computed: {
-  ...mapGetters(['ORDERS', 'CONTENTS', 'DELIVERY_POINTS', 'STORAGES']),
+  computed: {
+    ...mapGetters(['ORDERS', 'CONTENTS', 'DELIVERY_POINTS', 'STORAGES']),
   },
 };
 </script>
