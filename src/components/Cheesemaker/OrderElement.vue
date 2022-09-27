@@ -11,18 +11,25 @@
       </p>
       <div class="border-line"></div>
     </div>
-    <div v-for="(content, index) in CONTENTS" :key="content.id">
-      <ProductOrderElement ref="ProductOrderElement" :content="content" v-if="content.order_id == order.id"
-        :index="index" :orderRun="orderRun" :order="order" />
+    <div
+        v-for="(content, index) in CONTENTS"
+        :key="content.id"
+    >
+      <ProductOrderElement
+          ref="ProductOrderElement"
+          :content="content"
+          v-if="content.order_id == order.id"
+          :index="index" :order="order"
+      />
     </div>
     <div v-for="pickpoint in DELIVERY_POINTS" :key="pickpoint.id">
-      <p class="title-3" v-if="pickpoint.id == order.pickpoint_id">
+      <p class="title-3" v-if="pickpoint.id === order.pickpoint_id">
         <span class="bold">Адрес доставки:</span>
         {{ pickpoint.name }}
       </p>
     </div>
     <div v-for="user in USERS" :key="user.id">
-      <div v-if="user.id == order.user_id">
+      <div v-if="user.id === order.user_id">
         <p class="title-3"><span class="bold">Ф.И.О.</span> {{ user.fio }}</p>
         <p class="title-3">
           <span class="bold">E-mail:</span> {{ user.email }}
@@ -33,43 +40,43 @@
       </div>
     </div>
     <div class="button-right">
-      <button @click="orderSentToThePoint" type="button" class="btn centered" v-if="order.status == 'в обработке'">
+      <button @click="orderSentToThePoint" type="button" class="btn centered" v-if="order.status === 'в обработке'">
         Отправить заказ на точку
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
-          viewBox="0 0 16 16">
+             viewBox="0 0 16 16">
           <path fill-rule="evenodd"
-            d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z" />
+                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
-      <button @click="orderCheckToThePoint" type="button" class="btn centered" v-if="order.status == 'в обработке'">
+      <button @click="orderCheckToThePoint" type="button" class="btn centered" v-if="order.status === 'в обработке'">
         Подготовить заказ для отправки
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
-          viewBox="0 0 16 16">
+             viewBox="0 0 16 16">
           <path fill-rule="evenodd"
-            d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z" />
+                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
-      <button @click="orderStopToThePoint" v-if="order.status == 'в обработке'" type="button"
-        class="cancellation centered-horizontally btn-text">
+      <button @click="orderStopToThePoint" v-if="order.status === 'в обработке'" type="button"
+              class="cancellation centered-horizontally btn-text">
         Отменить заказ
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
-          viewBox="0 0 16 16">
+             viewBox="0 0 16 16">
           <path fill-rule="evenodd"
-            d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z" />
+                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
     </div>
-    <p v-if="order.status == 'отправлен на точку'" class="input bold centered-horizontally">
+    <p v-if="order.status === 'отправлен на точку'" class="input bold centered-horizontally">
       Заказ успешно отправлен на точку!
     </p>
-    <p v-if="order.status == 'прибыл в магазин'" class="btn bold centered-horizontally">
+    <p v-if="order.status === 'прибыл в магазин'" class="btn bold centered-horizontally">
       Заказ прибыл на точку!
     </p>
   </div>
 </template>
 <script>
 import axios from 'axios';
-import { mapGetters, mapActions } from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import ProductOrderElement from './ProductOrderElement.vue';
 import config from '@/config.js';
 
@@ -119,11 +126,12 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-        .then((order) => { })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .then((order) => {
+          })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
     currentDate(date) {
       var dd = date.getDate();
@@ -135,14 +143,12 @@ export default {
       return yyyy + '-' + mm + '-' + dd;
     },
     orderCheckToThePoint() {
-      let contentsLenght = Object.keys(this.CONTENTS).length;
-      for (let i = 0; i < contentsLenght; i++) {
+      let contentsLength = Object.keys(this.CONTENTS).length;
+      for (let i = 0; i < contentsLength; i++) {
         this.$refs.ProductOrderElement[i].productCheck();
       }
-      return
     },
     orderSentToThePoint() {
-      // this.orderCheckToThePoint()
       let date = new Date();
       this.orderRun = true;
       this.order.date = this.currentDate(date);
@@ -153,7 +159,7 @@ export default {
       let notStaffed = []
       let cancelled = []
       for (let value of Object.values(contents)) {
-        if ((value.order_id == this.order.id)) {
+        if ((value.order_id === this.order.id)) {
           if (value.status === 'подготовлен к отправке') {
             staffed.push(value)
           } else if (value.status === 'отменен') {
@@ -164,7 +170,7 @@ export default {
           }
         }
       }
-      if (notStaffed.length == 0) {
+      if (notStaffed.length === 0) {
         this.order.status = 'отправлен на точку'
         axios({
           method: 'PATCH',
@@ -174,14 +180,14 @@ export default {
             authorization: this.$cookies.get('authorization'),
           },
         })
-          .then((order) => {
-            console.log(order);
-          })
-          .catch((error) => {
-            this.order.status = 'в обработке'
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          });
+            .then((order) => {
+              console.log(order);
+            })
+            .catch((error) => {
+              this.order.status = 'в обработке'
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
       }
     },
     orderStopToThePoint() {
@@ -209,15 +215,16 @@ export default {
                 authorization: this.$cookies.get('authorization'),
               },
             })
-              .then((order) => {
-                console.log(order);
-                alert('Товар убран из заказа.');
-              })
-              .catch((error) => {
-                console.log(error);
-                alert('Ошибка в работе приложения. Обратитесь к администратору.');
-              });
-          } else { }
+                .then((order) => {
+                  console.log(order);
+                  alert('Товар убран из заказа.');
+                })
+                .catch((error) => {
+                  console.log(error);
+                  alert('Ошибка в работе приложения. Обратитесь к администратору.');
+                });
+          } else {
+          }
         }
       }
       let date = new Date();
@@ -233,13 +240,13 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-        .then((order) => {
-          // alert('Заказ успешно отменен.');
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .then((order) => {
+            // alert('Заказ успешно отменен.');
+          })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
   },
 };

@@ -6,7 +6,7 @@
           <span class="title-3 bold"> Название: </span>
           {{ name }}
         </p>
-        <div v-if="content.comment != 'Комментарий'">
+        <div v-if="content.comment != ''">
           <p class="paragraph">
             <span class="title-3 bold"> Комментарий: </span>
           </p>
@@ -68,7 +68,7 @@
           Покупатель отказался от товара! Причина отказа: {{content.comment}}
         </p>
       </div>
-      <div v-if="content.status == 'товар выдан' || content.status == 'прибыл в магазин'">
+      <div v-if="content.status == 'заказ выдан' || content.status == 'прибыл в магазин'">
         <p class="btn bold centered-horizontally">
           Товар принят на точку!
         </p>
@@ -211,7 +211,7 @@ export default {
         this.CONTENTS[this.index].amount = this.factWeight;
         let contentsIndex = this.CONTENTS[this.index];
         contentsIndex.storage_id = this.storage_id
-        contentsIndex.operation = 1
+        contentsIndex.operation = 0
         axios({
           method: 'PATCH',
           url: `${config.url}/contents/${this.CONTENTS[this.index].id}`,

@@ -105,7 +105,7 @@ export default {
       description: false,
       choice: false,
       areOptionsVisible: false,
-      selected: {name: 'Выбрать вес'},
+      selected: {name: 'Выбрать упаковку'},
       isVisible: false,
       amount: 1
     };
@@ -160,7 +160,7 @@ export default {
       return true;
     },
     addToCart() {
-      if (this.selected.name == 'Выбрать вес') {
+      if (this.selected.name == 'Выбрать упаковку') {
         setTimeout(() => {
           this.isVisible = !this.isVisible;
         }, 2000);

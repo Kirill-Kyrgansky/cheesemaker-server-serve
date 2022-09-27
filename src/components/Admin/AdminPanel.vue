@@ -2,35 +2,35 @@
   <div class="admin-panel">
     <div class="catalog-element-wrap text-centered">
       <label class="text-reader">
-        <input type="file" ref="files" id="files" @change="handleImage" accept="image/*" />
+        <input type="file" ref="files" id="files" @change="handleImage" accept="image/*"/>
         <input type="button" class="btn" value="Загрузить изображение" @click="addFiles()"/>
       </label>
       <div class="catalog-element-text">
         <label for="name">
           <input
-            type="text"
-            id="name"
-            v-model="product.name"
-            class="input"
-            placeholder="Название"
-            required
+              type="text"
+              id="name"
+              v-model="product.name"
+              class="input"
+              placeholder="Название"
+              required
           />
         </label>
         <textarea
-          placeholder="Описание"
-          type="text"
-          class="input"
-          v-model="product.description"
-          required
+            placeholder="Описание"
+            type="text"
+            class="input"
+            v-model="product.description"
+            required
         ></textarea>
       </div>
       <p>Категория: {{ selectCategory.name }}</p>
       <select class="input" v-model="selectCategory.id">
         <option
-          v-for="category in CATEGORY"
-          :key="category.id"
-          :value="category.id"
-          :selected="selectCategory.name"
+            v-for="category in CATEGORY"
+            :key="category.id"
+            :value="category.id"
+            :selected="selectCategory.name"
         >
           {{ category.name }}
         </option>
@@ -46,16 +46,16 @@
           Применить изменения
         </button>
         <button
-          class="btn"
-          @click="isVisibleProduct(product.id)"
-          v-if="product.active"
+            class="btn"
+            @click="isVisibleProduct(product.id)"
+            v-if="product.active"
         >
           Скрыть
         </button>
         <button
-          class="btn"
-          @click="isVisibleProduct(product.id)"
-          v-if="!product.active"
+            class="btn"
+            @click="isVisibleProduct(product.id)"
+            v-if="!product.active"
         >
           Показать
         </button>
@@ -68,28 +68,28 @@
           <div v-if="price.product_id == product.id">
             <div class="cart-element-wrap">
               <input
-                type="number"
-                id="description"
-                class="input small-index"
-                placeholder="price.item_price"
-                v-model="price.item_price"
-                v-if="price.visible"
-                required
+                  type="number"
+                  id="description"
+                  class="input small-index"
+                  placeholder="price.item_price"
+                  v-model="price.item_price"
+                  v-if="price.visible"
+                  required
               />
               <p class="paragraph" v-if="price.visible">&nbsp;₽ | 1 &nbsp;</p>
               <select
-                v-model="price.item_measure"
-                class="input"
-                v-if="price.visible"
+                  v-model="price.item_measure"
+                  class="input"
+                  v-if="price.visible"
               >
                 <option>кг</option>
                 <option>л</option>
                 <option>шт</option>
               </select>
               <button
-                class="btn"
-                @click="chagePriceChanges(price)"
-                v-if="price.visible"
+                  class="btn"
+                  @click="chagePriceChanges(price)"
+                  v-if="price.visible"
               >
                 Применить
               </button>
@@ -97,20 +97,20 @@
           </div>
           <div v-if="price.product_id == product.id" class="cart-element-wrap">
             <input
-              type="checkbox"
-              true-value="1"
-              false-value="0"
-              v-model="price.active"
-              @click="ApplyPriceChanges(price.active, price, price.id)"
-              v-if="!price.visible"
+                type="checkbox"
+                true-value="1"
+                false-value="0"
+                v-model="price.active"
+                @click="ApplyPriceChanges(price.active, price, price.id)"
+                v-if="!price.visible"
             />
             <p class="paragraph" v-if="!price.visible">
               {{ price.item_price }}&nbsp;₽ | 1 &nbsp; {{ price.item_measure }}
             </p>
             <button
-              class="btn"
-              @click="price.visible = !price.visible"
-              v-if="!price.visible"
+                class="btn"
+                @click="price.visible = !price.visible"
+                v-if="!price.visible"
             >
               Изменить
             </button>
@@ -119,12 +119,12 @@
         <div class="centered pickpoint-map-container">
           <label for="description">
             <input
-              type="number"
-              id="description"
-              class="input small-index"
-              placeholder="Цена"
-              v-model="item_price"
-              required
+                type="number"
+                id="description"
+                class="input small-index"
+                placeholder="Цена"
+                v-model="item_price"
+                required
             />
           </label>
           <p class="paragraph margin-0-10">| 1</p>
@@ -134,8 +134,8 @@
             <option>шт</option>
           </select>
           <button
-            class="btn"
-            @click="addPriceProduct(item_measure, item_price)"
+              class="btn"
+              @click="addPriceProduct(item_measure, item_price)"
           >
             Добавить
           </button>
@@ -146,12 +146,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import {mapGetters} from 'vuex';
 import axios from 'axios';
 import config from '@/config.js'
 
 export default {
   name: 'AdminPanel',
+  components: {},
+
   props: {
     adminLogin: {
       type: Object,
@@ -174,7 +176,7 @@ export default {
       item_measure: 'кг',
       priceChange: false,
       isActivePrice: true,
-      selectCategory: { name: 'Все категории', id: '' },
+      selectCategory: {name: 'Все категории', id: ''},
     };
   },
   computed: {
@@ -197,13 +199,13 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-        .then((res) => {
-          return (this.selectCategory.name = res.data.name);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .then((res) => {
+            return (this.selectCategory.name = res.data.name);
+          })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
     chagePriceChanges(price) {
       axios({
@@ -213,14 +215,14 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-        .then((res) => {
-          alert('Цена успешно изменена');
-          price.visible = !price.visible;
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .then((res) => {
+            alert('Цена успешно изменена');
+            price.visible = !price.visible;
+          })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
     addPriceProduct(item_measure, item_price) {
       let formAddPrice = {};
@@ -237,13 +239,13 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-        .then((res) => {
-          location.reload(res);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .then((res) => {
+            location.reload(res);
+          })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
     handleImage(e) {
       const selectedImage = e.target.files[0]; // get first file
@@ -255,7 +257,7 @@ export default {
       const reader = new FileReader();
       reader.onload = (e) => {
         this.image = e.target.result;
-        const { image } = this;
+        const {image} = this;
         let base64 = image.split(',')[1];
         this.product.image = base64;
       };
@@ -273,13 +275,13 @@ export default {
             authorization: this.$cookies.get('authorization'),
           },
         })
-          .then((res) => {
-            location.reload(res);
-          })
-          .catch((error) => {
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          });
+            .then((res) => {
+              location.reload(res);
+            })
+            .catch((error) => {
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
       }
       return;
     },
@@ -294,14 +296,14 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-        .then((res) => {
-          location.reload(res);
-          this.product.category_id = this.selectCategory.id;
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .then((res) => {
+            location.reload(res);
+            this.product.category_id = this.selectCategory.id;
+          })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
     ApplyPriceChanges(isActive, price, index) {
       price.active = Number(!isActive);
@@ -313,13 +315,13 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-        .then((res) => {
-          alert('Изменения применены');
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .then((res) => {
+            alert('Изменения применены');
+          })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
     loadTextFromFile(ev) {
       const file = ev.target.files[0];
