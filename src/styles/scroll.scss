@@ -3,13 +3,13 @@
 ::-webkit-scrollbar {
   width: 20px; /* ширина для вертикального скролла */
   height: 8px; /* высота для горизонтального скролла */
-  background-color: $main-collor;
+  //background-color: $main-collor;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: $text-collor;
-  border-radius: 9em;
-  box-shadow: inset 1px 1px 10px #f3faf7;
+  border-radius: 10px;
+  //box-shadow: inset 1px 1px 5px $main-collor;
 }
 
 html, body {

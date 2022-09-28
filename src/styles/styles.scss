@@ -2,7 +2,7 @@
 @import 'mixins.scss';
 @import 'fonts.scss';
 @import 'animation.scss';
-
+@import "scroll.scss";
 
 html {
   scroll-behavior: smooth;
@@ -43,15 +43,16 @@ input[type="file"] {
 }
 
 .login-pop-up {
-  padding: 10px;
   background-color: #FDD99E;
   background-image: url(/public/allImage/fone2.svg);
   background-repeat: repeat;
   max-height: 400px;
+  padding: 20px 10px 20px 25px;
 }
 
 .personal-cabinet_wrap {
   overflow: auto ;
+  padding: 5px;
 }
 
 .flex-reverse {
