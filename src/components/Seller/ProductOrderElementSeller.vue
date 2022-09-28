@@ -140,7 +140,6 @@ export default {
         },
       })
         .then((order) => {
-          alert('Товар принят.');
         })
         .catch((error) => {
           console.log(error);
@@ -149,7 +148,7 @@ export default {
     },
     orderError() {
       let comment = prompt('Укажите причину отказа');
-      if (comment == '') {
+      if (comment === '') {
         alert('Укажите причину!');
       } else if (comment == null) {
       } else {
@@ -214,7 +213,6 @@ export default {
           },
         })
           .then((order) => {
-            alert('Товар убран из заказа');
           })
           .catch((error) => {
             console.log(error);

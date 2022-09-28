@@ -3,6 +3,7 @@
     <div class="order-title">
       <p class="title-2">Дата заказа: {{ date }}</p>
       <p class="title-2">Номер заказа: {{ order.id }}</p>
+      <p class="title-2">Статус: {{order.status}}</p>
       <p class="cancellation bold centered-horizontally" v-if="order.status == 'отменен пользователем'">
         Заказ отменен пользователем!
       </p>
@@ -18,7 +19,7 @@
       <ProductOrderElement
           ref="ProductOrderElement"
           :content="content"
-          v-if="content.order_id == order.id"
+          v-if="content.order_id === order.id"
           :index="index" :order="order"
       />
     </div>
@@ -66,12 +67,12 @@
         </svg>
       </button>
     </div>
-    <p v-if="order.status === 'отправлен на точку'" class="input bold centered-horizontally">
-      Заказ успешно отправлен на точку!
-    </p>
-    <p v-if="order.status === 'прибыл в магазин'" class="btn bold centered-horizontally">
-      Заказ прибыл на точку!
-    </p>
+<!--    <p v-if="order.status === 'отправлен на точку'" class="input bold centered-horizontally">-->
+<!--      Заказ успешно отправлен на точку!-->
+<!--    </p>-->
+<!--    <p v-if="order.status === 'прибыл в магазин'" class="btn bold centered-horizontally">-->
+<!--      Заказ прибыл на точку!-->
+<!--    </p>-->
   </div>
 </template>
 <script>

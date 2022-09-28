@@ -6,7 +6,7 @@
           <span class="title-3 bold"> Название: </span>
           {{ name }}
         </p>
-        <div v-if="content.comment != ''">
+        <div v-if="content.comment !== ''">
           <p class="paragraph">
             <span class="title-3 bold"> Комментарий: </span>
           </p>
@@ -21,7 +21,7 @@
           <span class="title-3 bold"> Сумма: </span>
           {{ (price * content.amount).toFixed(2) }} ₽
         </p>
-        <div v-if="measure == 'кг' && content.status == 'в обработке'" class="order-title">
+        <div v-if="measure === 'кг' && content.status === 'в обработке'" class="order-title">
           <p class="paragraph">
             <span class="title-3 bold"> Фактический вес: </span>
             {{ factWeight }}
@@ -32,12 +32,10 @@
             {{ (price * factWeight).toFixed(2) }} ₽
           </p>
           <input type="number" class="input" step="0.01" v-model="factWeight" />
-
-          <input type="button" class="btn" value="Применить" @click="addedChangeWeight" />
         </div>
       </div>
       <div class="header-nav">
-        <div class="footer" v-if="content.status == 'в обработке'">
+        <div class="footer" v-if="content.status === 'в обработке'">
           <input type="button" class="btn" value="Товар укомплектован" @click="productDone" />
           <input type="button" class="btn" value="С товаром возникли проблемы" @click="orderStop" />
           <div class="v-select">
@@ -53,22 +51,22 @@
           </div>
         </div>
       </div>
-      <div v-if="content.status == 'подготовлен к отправке'">
+      <div v-if="content.status === 'подготовлен к отправке'">
         <p class="input bold centered-horizontally">
           Товар подготовлен к отправке на точку выдачи!
         </p>
       </div>
-      <div v-if="content.status == 'отменен'">
+      <div v-if="content.status === 'отменен'">
         <p class="cancellation bold centered-horizontally">
           Товар отменен сыроваром! Причина отмены: {{ content.comment }}
         </p>
       </div>
-      <div v-if="content.status == 'отменен покупателем на точке'">
+      <div v-if="content.status === 'отменен покупателем на точке'">
         <p class="cancellation bold centered-horizontally">
           Покупатель отказался от товара! Причина отказа: {{content.comment}}
         </p>
       </div>
-      <div v-if="content.status == 'заказ выдан' || content.status == 'прибыл в магазин'">
+      <div v-if="content.status === 'заказ выдан' || content.status === 'прибыл в магазин'">
         <p class="btn bold centered-horizontally">
           Товар принят на точку!
         </p>
@@ -114,11 +112,11 @@ export default {
   },
   methods: {
     currentDate(date) {
-      var dd = date.getDate();
+      let dd = date.getDate();
       if (dd < 10) dd = '0' + dd;
-      var mm = date.getMonth() + 1;
+      let mm = date.getMonth() + 1;
       if (mm < 10) mm = '0' + mm;
-      var yyyy = date.getFullYear();
+      let yyyy = date.getFullYear();
       if (yyyy < 10) yyyy = '0' + yyyy;
       return yyyy + '-' + mm + '-' + dd;
     },
@@ -128,12 +126,12 @@ export default {
       let storageName = this.selected
       let date = new Date();
       if (this.content.status !== 'подготовлен к отправке') {
-        if (storage == 0) {
+        if (storage === 0) {
           alert(`Выберете склад для товара ${name}`);
         } else if (this.content.status === 'отменен') {
-          return
         }
         else {
+          this.addedChangeWeight()
           this.content.date = this.currentDate(date);
           this.content.storage_id = storage;
           this.content.operation = 1
@@ -148,10 +146,8 @@ export default {
               authorization: this.$cookies.get('authorization'),
             },
           })
-            .then((order) => {
-            })
             .catch((error) => {
-              if (error.response.status == 500) {
+              if (error.response.status === 500) {
                 this.content.status = 'в обработке'
                 alert(`Товара ${name} недостаточно на складе ${storageName}`)
               } else {
@@ -179,7 +175,7 @@ export default {
         .then((product) => {
           return (this.name = product.data.name);
         })
-        .catch((error) => {
+        .catch(() => {
           alert('Ошибка в работе приложения. Обратитесь к администратору.');
         });
     },
@@ -201,11 +197,6 @@ export default {
         });
     },
     addedChangeWeight() {
-      if (this.storage_id == '') {
-        alert('Выберете склад');
-      } else {
-        let name = this.name;
-        let storageName = this.selected;
         let date = new Date();
         this.CONTENTS[this.index].date = this.currentDate(date);
         this.CONTENTS[this.index].amount = this.factWeight;
@@ -220,19 +211,13 @@ export default {
             authorization: this.$cookies.get('authorization'),
           },
         })
-          .then((req) => {
-            alert('Вес товара успешно изменен');
-            console.log(req);
-          })
           .catch((error) => {
-            if (error.response.status == 500) {
-              alert(`На складе ${storageName} недостаточно продукта ${name}`)
+            if (error.response.status === 500) {
             } else {
               console.log(error);
               alert('Ошибка в работе приложения. Обратитесь к администратору.');
             }
           });
-      }
     },
     // changeOrderForStart() {
     //   let date = new Date();
@@ -285,14 +270,13 @@ export default {
       //     });
     },
     orderStop() {
-      if (this.storage_id == '') {
+      if (this.storage_id === '') {
         alert('Выберете склад.')
       } else {
         let comment = prompt('Введите причину отмены.');
-        if (comment == '') {
+        if (comment === '') {
           alert('Вы не ввели причину отмены. Пожалуйста, повторите попытку.');
         } else if (comment == null) {
-          return
         } else {
           let date = new Date();
           this.content.date = this.currentDate(date);
@@ -325,11 +309,10 @@ export default {
     },
     productDone() {
       let name = this.name
-      if (this.storage_id == 0) {
+      if (this.storage_id === 0) {
         alert(`Выберете склад для продукта ${name}`);
-        return
       } else {
-        if (this.order.status == 'подготовлен к отправке') {
+        if (this.order.status === 'подготовлен к отправке') {
           let date = new Date();
           this.content.date = this.currentDate(date);
           this.content.status = 'отправлен';
@@ -345,18 +328,14 @@ export default {
               authorization: this.$cookies.get('authorization'),
             },
           })
-            .then((order) => {
-              this.productRun == true
-            })
             .catch((error) => {
-              if (error.response.status == 500) {
+              if (error.response.status === 500) {
                 alert(`Тована ${this.name} недостаточно на складе`)
               }
               console.log(error);
               alert('Ошибка в работе приложения. Обратитесь к администратору.');
             });
         } else {
-          return
         }
       }
     },
