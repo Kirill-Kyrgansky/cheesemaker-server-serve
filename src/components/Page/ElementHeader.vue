@@ -287,7 +287,7 @@
                     </div>
                   </div>
                 </div>
-                <div v-if="!logIn">
+                <div v-if="!logIn" class="personal-cabinet_wrap">
                   <div class="margin-10-0">
                     <h3 class="title-3">Добрый день</h3>
                     <h3 class="title-3">{{ fio }}</h3>
@@ -298,101 +298,14 @@
                   </button>
                   <p class="title-3">Информация о заказах:</p>
                   <div class="flex-reverse">
-                    <div v-for="orders in ORDERS_USERS" :key="orders.id">
-                      <div v-if="activeOrders">
-                        <div class="cart margin-10-0"
-                             v-if="(orders.status !== 'заказ выдан' && orders.status !== 'отменен')">
-                          <p class="paragraph">Заказ №: {{ orders.id }}</p>
-                          <p class="paragraph" v-if="orders.status == 'отменен'">
-                            Статус:
-                            <span class="text-red">{{ orders.status }}</span>
-                          </p>
-                          <p class="paragraph" v-if="orders.status != 'отменен'">
-                            Статус: {{ orders.status }}
-                          </p>
-                          <p v-if="orders.comment != 'None'">
-                            {{ 'Комментарии: ' + orders.comment }}
-
-                          </p>
-                          <p class="paragraph">
-                            Дата заказа:
-                            {{
-                              orders.order_date.split('T')[0].split('-')[2] +
-                              '.' +
-                              orders.order_date.split('T')[0].split('-')[1] +
-                              '.' +
-                              orders.order_date.split('T')[0].split('-')[0]
-                            }}
-                          </p>
-                          <p class="paragraph">
-                            Примерная дата доставки:
-                            {{
-                              orders.delivery_date.split('T')[0].split('-')[2] +
-                              '.' +
-                              orders.delivery_date.split('T')[0].split('-')[1] +
-                              '.' +
-                              orders.delivery_date.split('T')[0].split('-')[0]
-                            }}
-                          </p>
-                          <button class="btn">Просмотр заказа</button>
-                          <div>
-                            <p class="paragraph-small">
-                              <span class="title-3 bold"> № </span>
-                              1
-                            </p><p class="paragraph-small">
-                            <span class="title-3 bold"> Название: </span>
-                            "СЫР"
-                          </p>
-                            <p class="paragraph-small">
-                              <span class="title-3 bold"> Кол-во: </span>
-                              1000
-                            </p>
-                            <p class="paragraph-small">
-                              <span class="title-3 bold"> Цена: </span>
-                              1000
-                            </p>
-                          </div>
-                          <!--                        <button @click="logOut" class="btn">Отменить заказ</button>-->
-                        </div>
-                      </div>
-                      <div v-if="historyOrders">
-                        <div class="cart margin-10-0"
-                             v-if="(orders.status === 'заказ выдан' || orders.status === 'отменен')">
-                          <p class="paragraph">Заказ №: {{ orders.id }}</p>
-                          <p class="paragraph" v-if="orders.status == 'отменен'">
-                            Статус:
-                            <span class="text-red">{{ orders.status }}</span>
-                          </p>
-                          <p class="paragraph" v-if="orders.status != 'отменен'">
-                            Статус: {{ orders.status }}
-                          </p>
-                          <p v-if="orders.comment != 'None'">
-                            {{ 'Комментарии: ' + orders.comment }}
-                          </p>
-                          <p class="paragraph">
-                            Дата заказа:
-                            {{
-                              orders.order_date.split('T')[0].split('-')[2] +
-                              '.' +
-                              orders.order_date.split('T')[0].split('-')[1] +
-                              '.' +
-                              orders.order_date.split('T')[0].split('-')[0]
-                            }}
-                          </p>
-                          <p class="paragraph">
-                            Примерная дата доставки:
-                            {{
-                              orders.delivery_date.split('T')[0].split('-')[2] +
-                              '.' +
-                              orders.delivery_date.split('T')[0].split('-')[1] +
-                              '.' +
-                              orders.delivery_date.split('T')[0].split('-')[0]
-                            }}
-                          </p>
-                          <button class="btn">Просмотр заказа</button>
-                        </div>
-                      </div>
-                    </div>
+                    <PersonalСabinet v-for="orders in ORDERS_USERS"
+                                     :key="orders.id"
+                                     :orders ='orders'
+                                     ref="PersonalСabinet"
+                                     :historyOrders='historyOrders'
+                                     :activeOrders='activeOrders'
+                    >
+                    </PersonalСabinet>
                   </div>
                 </div>
               </div>
@@ -423,9 +336,11 @@ import vClickOutside from 'click-outside-vue3';
 import {mapGetters, mapActions} from 'vuex';
 import axios from 'axios';
 import config from '@/config.js';
+import PersonalСabinet from "@/components/Page/PersonalСabinet";
 
 export default {
   name: 'ElementHeader',
+  components: {PersonalСabinet},
   data() {
     return {
       isAdmin: '',
@@ -458,6 +373,7 @@ export default {
     this.GET_ORDERS_USERS_FROM_API();
   },
   methods: {
+
     isHistoryOrdersVisible() {
       this.historyOrders = !this.historyOrders
       this.activeOrders = !this.activeOrders

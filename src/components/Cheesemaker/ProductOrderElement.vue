@@ -148,6 +148,7 @@ export default {
           })
             .catch((error) => {
               if (error.response.status === 500) {
+                console.log(error)
                 this.content.status = 'в обработке'
                 alert(`Товара ${name} недостаточно на складе ${storageName}`)
               } else {
@@ -173,10 +174,12 @@ export default {
         },
       })
         .then((product) => {
+          console.log(product)
           return (this.name = product.data.name);
         })
-        .catch(() => {
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+        .catch((error) => {
+          console.log(error)
+          // alert('Ошибка в работе приложения. Обратитесь к администратору.');
         });
     },
     getPriceId() {
@@ -188,12 +191,13 @@ export default {
         },
       })
         .then((price) => {
+          console.log(price)
           this.measure = price.data.item_measure;
           this.price = price.data.item_price;
         })
         .catch((error) => {
           console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          // alert(error);
         });
     },
     addedChangeWeight() {
@@ -213,6 +217,7 @@ export default {
         })
           .catch((error) => {
             if (error.response.status === 500) {
+              console.log(error)
             } else {
               console.log(error);
               alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -330,6 +335,7 @@ export default {
           })
             .catch((error) => {
               if (error.response.status === 500) {
+                console.log(error)
                 alert(`Тована ${this.name} недостаточно на складе`)
               }
               console.log(error);
