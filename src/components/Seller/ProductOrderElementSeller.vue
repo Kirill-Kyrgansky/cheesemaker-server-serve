@@ -117,13 +117,19 @@ export default {
         });
     },
     currentDate(date) {
-      var dd = date.getDate();
+      let dd = date.getDate();
       if (dd < 10) dd = '0' + dd;
-      var mm = date.getMonth() + 1;
+      let mm = date.getMonth() + 1;
       if (mm < 10) mm = '0' + mm;
-      var yyyy = date.getFullYear();
+      let yyyy = date.getFullYear();
       if (yyyy < 10) yyyy = '0' + yyyy;
-      return yyyy + '-' + mm + '-' + dd;
+      let hour = date.getHours()
+      if (hour < 10) hour = '0' + hour
+      let minutes = date.getMinutes()
+      if (minutes < 10) minutes = '0' + minutes
+      let sec = date.getSeconds()
+      if (sec < 10) sec = '0' + sec
+      return yyyy + '-' + mm + '-' + dd + 'T' + hour + ':' + minutes + ':' + sec;
     },
     orderRun() {
       let date = new Date();

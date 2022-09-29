@@ -15,6 +15,7 @@
       </div>
     </div>
     <div class="container cart cart-container" v-if="isVisible">
+      <button class="header-link" @click="test1()">тест</button>
       <p class="title-2 text-centered margin-10-0" v-if="cart_data <= 1">
         Корзина пуста
       </p>
@@ -45,7 +46,6 @@
           </div>
         </div>
         <div class="cart-footer-element">
-
           <button class="header-link" @click="orderUsers()">Заказать</button>
         </div>
       </div>
@@ -96,14 +96,24 @@ export default {
       'DECREMENT_CART_ITEM',
       'GET_DELIVERY_POINTS_FROM_API',
     ]),
+    test1() {
+      let date = new Date()
+      console.log(this.deliveryDay(date))
+    },
     currentDate(date) {
-      var dd = date.getDate();
+      let dd = date.getDate();
       if (dd < 10) dd = '0' + dd;
-      var mm = date.getMonth() + 1;
+      let mm = date.getMonth() + 1;
       if (mm < 10) mm = '0' + mm;
-      var yyyy = date.getFullYear();
+      let yyyy = date.getFullYear();
       if (yyyy < 10) yyyy = '0' + yyyy;
-      return yyyy + '-' + mm + '-' + dd;
+      let hour = date.getHours()
+      if (hour < 10) hour = '0' + hour
+      let minutes = date.getMinutes()
+      if (minutes < 10) minutes = '0' + minutes
+      let sec = date.getSeconds()
+      if (sec < 10) sec = '0' + sec
+      return yyyy + '-' + mm + '-' + dd + 'T' + hour + ':' + minutes + ':' + sec;
     },
     deliveryDay(date) {
     let result = new Date(date);
@@ -111,13 +121,14 @@ export default {
     result.setMonth(result.getMonth() + 1)
     return result;
 },
+
     orderUsers() {
       if (this.selected === 'Выберите адрес доставки') {
         alert('Выберите адрес доставки');
       } else {
         
         let date = new Date();
-        let dateDelivery = this.deliveryDay(date).getFullYear() + '-' + this.deliveryDay(date).getMonth() + '-' + this.deliveryDay(date).getDate() 
+        let dateDelivery = this.deliveryDay(date).getFullYear() + '-' + this.deliveryDay(date).getMonth() + '-' + this.deliveryDay(date).getDate()
       let order = {
         delivery_date: dateDelivery,
         payment_type: 1, //изменить

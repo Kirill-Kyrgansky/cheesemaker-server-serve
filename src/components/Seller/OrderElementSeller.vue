@@ -149,7 +149,13 @@ export default {
       if (mm < 10) mm = '0' + mm;
       let yyyy = date.getFullYear();
       if (yyyy < 10) yyyy = '0' + yyyy;
-      return yyyy + '-' + mm + '-' + dd;
+      let hour = date.getHours()
+      if (hour < 10) hour = '0' + hour
+      let minutes = date.getMinutes()
+      if (minutes < 10) minutes = '0' + minutes
+      let sec = date.getSeconds()
+      if (sec < 10) sec = '0' + sec
+      return yyyy + '-' + mm + '-' + dd + 'T' + hour + ':' + minutes + ':' + sec;
     },
     orderReceivedInFull() {
       let date = new Date();
