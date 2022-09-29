@@ -8,6 +8,7 @@
           <h1 name="title" class="title-2 text-centered border-wrap">
             Скидка для сотрудников АПХ «Зелёная Долина» 10%
           </h1>
+      <h2>sdcsdcsdcsdc</h2>
         </div>
       </div>
       <router-view :cart_data="CART"/>
