@@ -2,11 +2,9 @@
   <section class="section">
     <div class="container wrap-cheesemaker-order">
       <OrderElementSeller
-        v-for="(order, index) in ORDERS"
-        :key="order.id"
-        :order="ORDERS[index]"
-        :index="index"
-        :products="PRODUCTS"
+          v-for="order in ORDERS"
+          :key="order.id"
+          :order="order"
       />
     </div>
   </section>
@@ -23,16 +21,16 @@ export default {
   methods: {
     ...mapActions([
       'GET_ORDERS_FROM_API',
-      'GET_CONTENTS_FROM_API',
-      'GET_PRODUCTS_FROM_API',
-      'GET_USERS_FROM_API',
+      // 'GET_CONTENTS_FROM_API',
+      // 'GET_PRODUCTS_FROM_API',
+      // 'GET_USERS_FROM_API',
     ]),
   },
   mounted() {
     this.GET_ORDERS_FROM_API();
-    this.GET_CONTENTS_FROM_API();
-    this.GET_PRODUCTS_FROM_API();
-    this.GET_USERS_FROM_API();
+    // this.GET_CONTENTS_FROM_API();
+    // this.GET_PRODUCTS_FROM_API();
+    // this.GET_USERS_FROM_API();
   },
   computed: {
     ...mapGetters(['DELIVERY_POINTS', 'ORDERS', 'PRODUCTS', 'USERS']),

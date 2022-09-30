@@ -38,7 +38,7 @@
                 </a>
               </div>
               <router-link v-if="this.$cookies.get('fio') != null" to="/cart" class="header-link-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                <svg xmlns="http://www.w3.org/2000/svg"
                      viewBox="0 0 191.6 175.82" style="enable-background: new 0 0 191.6 175.82" xml:space="preserve"
                      class="header-link-icon-svg">
                   <g>
@@ -141,7 +141,7 @@
                 </svg>
               </router-link>
               <a class="header-link-icon menu" @click="toggleMenu" v-click-outside="onClickOutsideMenu">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                <svg xmlns="http://www.w3.org/2000/svg"
                      viewBox="0 0 150.4 134.46" xml:space="preserve" class="header-link-icon-svg">
                   <g>
                     <g>
@@ -298,14 +298,14 @@
                   </button>
                   <p class="title-3">Информация о заказах:</p>
                   <div class="flex-reverse">
-                    <PersonalСabinet v-for="orders in ORDERS_USERS"
+                    <PersonalCabinet v-for="orders in ORDERS_USERS"
                                      :key="orders.id"
                                      :orders ='orders'
-                                     ref="PersonalСabinet"
+                                     ref="PersonalCabinet"
                                      :historyOrders='historyOrders'
                                      :activeOrders='activeOrders'
                     >
-                    </PersonalСabinet>
+                    </PersonalCabinet>
                   </div>
                 </div>
               </div>
@@ -336,11 +336,11 @@ import vClickOutside from 'click-outside-vue3';
 import {mapGetters, mapActions} from 'vuex';
 import axios from 'axios';
 import config from '@/config.js';
-import PersonalСabinet from "@/components/Page/PersonalСabinet";
+import PersonalCabinet from "@/components/Page/PersonalCabinet";
 
 export default {
   name: 'ElementHeader',
-  components: {PersonalСabinet},
+  components: {PersonalCabinet},
   data() {
     return {
       isAdmin: '',
@@ -414,22 +414,18 @@ export default {
     },
     ...mapActions(['GET_ORDERS_USERS_FROM_API']),
     hideLogin() {
-      if (this.$cookies.get('fio')) {
-        this.logIn = false;
-      } else {
-        this.logIn = true;
-      }
+      this.logIn = !this.$cookies.get('fio');
     },
     adminVisible() {
-      if (this.$cookies.get('role') == 'Покупатель') {
+      if (this.$cookies.get('role') === 'Покупатель') {
         this.isAdminAuth = false;
-      } else if (this.$cookies.get('role') == 'Сыровар') {
+      } else if (this.$cookies.get('role') === 'Сыровар') {
         this.isCheesemakerAuth = true;
         this.isAdminAuth = false;
-      } else if (this.$cookies.get('role') == 'Администратор') {
+      } else if (this.$cookies.get('role') === 'Администратор') {
         this.isAdminAuth = true;
         this.isSeller = true
-      } else if (this.$cookies.get('role') == 'Продавец') {
+      } else if (this.$cookies.get('role') === 'Продавец') {
         this.isSeller = true
       }
     },
@@ -439,7 +435,7 @@ export default {
       window.location.href = `${config.urlHome}`
     },
     sendAuth() {
-      if (this.auth.password == '') {
+      if (this.auth.password === '') {
         this.isLoginEmpty = true
       } else {
         axios
@@ -453,10 +449,10 @@ export default {
               this.sendInfo();
             })
             .catch((error) => {
-              if (error.response.status == 401) {
+              if (error.response.status === 401) {
                 this.loginError = true
                 this.isLoginEmpty = false
-              } else if (error.response.status == 422) {
+              } else if (error.response.status === 422) {
                 this.isLoginEmpty = true
                 this.loginError = false
               }
@@ -498,12 +494,12 @@ export default {
       this.loginBar = !this.loginBar;
     },
     onClickOutsideMenu() {
-      if (this.menuMobile == true) {
+      if (this.menuMobile === true) {
         this.menuMobile = !this.menuMobile;
       }
     },
     onClickOutsideLogin() {
-      if (this.loginBar == true) {
+      if (this.loginBar === true) {
         this.loginBar = !this.loginBar;
       }
     },

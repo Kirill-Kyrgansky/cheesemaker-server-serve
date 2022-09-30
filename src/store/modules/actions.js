@@ -93,7 +93,7 @@ export default {
   GET_ORDERS_FROM_API({
     commit,
   }) {
-    return axios(`${config.url}/orders`, {
+    return axios(`${config.url}/orders/content`, {
       method: 'GET',
       headers: {
         "authorization": $cookies.get('authorization')

@@ -4,9 +4,9 @@
       <div class="margin-10-0">
         <p class="paragraph-small">
           <span class="title-3 bold"> Название: </span>
-          {{ name }}
+          {{ content.product.name }}
         </p>
-        <div v-if="content.comment != 'Комментарий'">
+        <div v-if="content.comment !== 'Комментарий'">
           <p class="paragraph">
             <span class="title-3 bold"> Комментарий: </span>
           </p>
@@ -15,13 +15,13 @@
         <p class="paragraph-small">
           <span class="title-3 bold"> Кол-во: </span>
           {{ content.amount }}
-          {{ measure }}
+          {{ content.price.item_measure }}
         </p>
         <p class="paragraph-small">
           <span class="title-3 bold"> Сумма: </span>
-          {{ (price * content.amount).toFixed(2) }} ₽
+          {{ (content.price.item_price * content.amount).toFixed(2) }} ₽
         </p>
-        <div class="order-title" v-if="measure == 'кг' && content.status == 'в обработке'">
+        <div class="order-title" v-if="measure === 'кг' && content.status === 'в обработке'">
           <div class="order-element margin-10-0"></div>
           <p class="paragraph">
             <span class="title-3 bold"> Фактический вес: </span>
@@ -35,26 +35,26 @@
         </div>
       </div>
       <div v-if="content.status === 'подготовлен к отправке' && order.status !== 'отправлен на точку' ">
-        <input type="button" class="btn" value="Товар принят в магазине" @click="orderRun" />
+        <input type="button" class="btn" value="Товар принят в магазине" @click="orderRun"/>
         <input type="button" class="cancellation text-centered" value="Товар НЕ принят в магазине"
-          @click="orderError" />
+               @click="orderError"/>
       </div>
       <input type="button" class="btn" value="Товар выдан" @click="orderDone"
-        v-if="content.status == 'прибыл в магазин'" />
+             v-if="content.status === 'прибыл в магазин'"/>
       <input type="button" class="cancellation text-centered" value="Покупатель отказался" @click="orderStop"
-        v-if="content.status == 'прибыл в магазин'" />
+             v-if="content.status === 'прибыл в магазин'"/>
     </div>
-    <p class="cancellation text-centered" v-if="content.status == 'отменен покупателем на точке'">
+    <p class="cancellation text-centered" v-if="content.status === 'отменен покупателем на точке'">
       Товар отменен
     </p>
-    <p class="btn text-centered" v-if="content.status == 'товар выдан'">
+    <p class="btn text-centered" v-if="content.status === 'товар выдан'">
       Товар выдан покупателю
     </p>
   </div>
 </template>
 <script>
 import axios from 'axios';
-import { mapGetters, mapActions } from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import config from '@/config.js';
 
 export default {
@@ -70,52 +70,8 @@ export default {
     };
   },
   props: ['content', 'index', 'order'],
-  mounted() {
-    this.getProductName();
-    this.GET_CONTENTS_FROM_API();
-    this.getPriceId();
-  },
-  // watch: {
-  //   test() {
-  //     if (this.orderRun == true) {
-  //       orderRun();
-  //     }
-  //   },
-  // },
   methods: {
     ...mapActions(['GET_CONTENTS_FROM_API']),
-    getProductName() {
-      axios({
-        method: 'GET',
-        url: `${config.url}/products/${this.content.product_id}`,
-        headers: {
-          authorization: this.$cookies.get('authorization'),
-        },
-      })
-        .then((product) => {
-          return (this.name = product.data.name);
-        })
-        .catch((error) => {
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
-    },
-    getPriceId() {
-      axios({
-        method: 'GET',
-        url: `${config.url}/prices/${this.content.price_id}`,
-        headers: {
-          authorization: this.$cookies.get('authorization'),
-        },
-      })
-        .then((price) => {
-          this.measure = price.data.item_measure;
-          this.price = price.data.item_price;
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
-    },
     currentDate(date) {
       let dd = date.getDate();
       if (dd < 10) dd = '0' + dd;
@@ -129,7 +85,7 @@ export default {
       if (minutes < 10) minutes = '0' + minutes
       let sec = date.getSeconds()
       if (sec < 10) sec = '0' + sec
-      return yyyy + '-' + mm + '-' + dd + 'T' + hour + ':' + minutes + ':' + sec;
+      return yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minutes + ':' + sec;
     },
     orderRun() {
       let date = new Date();
@@ -145,12 +101,10 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-        .then((order) => {
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
     orderError() {
       let comment = prompt('Укажите причину отказа');
@@ -172,13 +126,13 @@ export default {
             authorization: this.$cookies.get('authorization'),
           },
         })
-          .then((order) => {
-            alert('Вы отказались от товара.');
-          })
-          .catch((error) => {
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          });
+            .then(() => {
+              alert('Вы отказались от товара.');
+            })
+            .catch((error) => {
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
       }
     },
     orderDone() {
@@ -195,11 +149,10 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-        .then((order) => { })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
     orderStop() {
       let comment = prompt('Укажите причину отказа');
@@ -218,12 +171,10 @@ export default {
             authorization: this.$cookies.get('authorization'),
           },
         })
-          .then((order) => {
-          })
-          .catch((error) => {
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          });
+            .catch((error) => {
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
       } else {
         alert('Введите причину отмены')
       }

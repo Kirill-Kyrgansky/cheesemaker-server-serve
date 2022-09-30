@@ -1,15 +1,20 @@
 <template>
   <div class="order-element"
-       v-if="order.status == 'отправлен на точку' || order.status == 'прибыл в магазин' || order.status == 'прибыл в магазин частично'">
+       v-if="order.status === 'отправлен на точку' || order.status === 'прибыл в магазин' || order.status === 'прибыл в магазин частично'">
     <div class="order-title">
       <p class="title-2">Дата заказа: {{ date }}</p>
       <p class="title-2">Номер заказа: {{ order.id }}</p>
       <p class="title-2">Статус: {{ order.status }}</p>
       <div class="border-line"></div>
     </div>
-    <div v-for="(content, index) in CONTENTS" :key="content.id">
-      <ProductOrderElementSeller :content="content" v-if="content.order_id === order.id" :index="index"
-                                  :order="order"/>
+    <div
+        v-for="(content, index) in order.content"
+        :key="content.id"
+    >
+      <ProductOrderElementSeller
+          :content="content"
+          :index="index" :order="order"
+      />
     </div>
     <div v-for="pickpoint in DELIVERY_POINTS" :key="pickpoint.id">
       <p class="title-3" v-if="pickpoint.id === order.pickpoint_id">
@@ -49,7 +54,7 @@
                 d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
-      <button v-if="order.status == 'прибыл в магазин' " @click="orderIssued" type="button" class="btn centered">
+      <button v-if="order.status === 'прибыл в магазин' " @click="orderIssued" type="button" class="btn centered">
         Завершить заказ
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
              viewBox="0 0 16 16">
@@ -102,7 +107,7 @@ export default {
     },
   },
   mounted() {
-    this.GET_DELIVERY_POINTS_FROM_API();
+    // this.GET_DELIVERY_POINTS_FROM_API();
   },
   methods: {
     ...mapActions(['GET_DELIVERY_POINTS_FROM_API']),
@@ -120,28 +125,26 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-          .then((order) => {
-          })
           .catch((error) => {
             console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
     },
-    getUserInfo() {
-      axios({
-        method: 'GET',
-        url: `${config.url}/users/info/`,
-        headers: {
-          authorization: this.$cookies.get('authorization'),
-        },
-      })
-          .then((order) => {
-          })
-          .catch((error) => {
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          });
-    },
+    // getUserInfo() {
+    //   axios({
+    //     method: 'GET',
+    //     url: `${config.url}/users/info/`,
+    //     headers: {
+    //       authorization: this.$cookies.get('authorization'),
+    //     },
+    //   })
+    //       .then((order) => {
+    //       })
+    //       .catch((error) => {
+    //         console.log(error);
+    //         alert('Ошибка в работе приложения. Обратитесь к администратору.');
+    //       });
+    // },
     currentDate(date) {
       let dd = date.getDate();
       if (dd < 10) dd = '0' + dd;
@@ -155,7 +158,7 @@ export default {
       if (minutes < 10) minutes = '0' + minutes
       let sec = date.getSeconds()
       if (sec < 10) sec = '0' + sec
-      return yyyy + '-' + mm + '-' + dd + 'T' + hour + ':' + minutes + ':' + sec;
+      return yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minutes + ':' + sec;
     },
     orderReceivedInFull() {
       let date = new Date();
@@ -194,8 +197,6 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
-          .then((order) => {
-          })
           .catch((error) => {
             console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -210,7 +211,7 @@ export default {
       let globalValue = {}
       for (let value of Object.values(contents)) {
         globalValue = value
-        if (value.order_id == this.order.id) {
+        if (value.order_id === this.order.id) {
           allProducts.push(value)
             if(value.status === 'отменен покупателем на точке') {
               canceledProducts.push(value)
@@ -230,7 +231,7 @@ export default {
               },
             }
         )
-            .then((order) => {
+            .then(() => {
               alert(`Заказ № ${this.order.id} отменен`);
             })
             .catch((error) => {
@@ -253,8 +254,6 @@ export default {
             authorization: this.$cookies.get('authorization'),
           },
         })
-            .then((order) => {
-            })
             .catch((error) => {
               console.log(error);
               alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -274,7 +273,7 @@ export default {
               },
             }
         )
-            .then((order) => {
+            .then(() => {
               alert(`Заказ № ${this.order.id} успешно выдан`);
             })
             .catch((error) => {

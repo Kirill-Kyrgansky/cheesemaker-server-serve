@@ -4,10 +4,10 @@
       <div class="cart cart-sucsess order-title">
         <div class="position-end">
           <img
-            src="/allImage/Icons/cross.svg"
-            class="header-link-icon pointer close"
-            @click="close"
-          />
+              src="/allImage/Icons/cross.svg"
+              class="header-link-icon pointer close"
+              @click="close"
+              alt="close"/>
         </div>
         <h2 class="title-2">Заказ успешно сформирован!</h2>
         <p class="paragraph">Письмо с информацией отправлено вам на почту.</p>
@@ -20,26 +20,26 @@
         Корзина пуста
       </p>
       <CartElement
-        v-for="(item, index) in cart_data"
-        :key="item.id"
-        :cart_item_data="item"
-        @deliteFromCart="deliteFromCart(index)"
-        :index="index"
+          v-for="(item, index) in cart_data"
+          :key="item.id"
+          :cart_item_data="item"
+          @deliteFromCart="deliteFromCart(index)"
+          :index="index"
       />
       <div class="cart-footer" v-if="!(cart_data <= 1)">
         <div class="v-select">
           <p
-            class="input delivery"
-            @click="areOptionsVisible = !areOptionsVisible"
+              class="input delivery"
+              @click="areOptionsVisible = !areOptionsVisible"
           >
             {{ selected }}
           </p>
           <div class="options cart-options" v-if="areOptionsVisible">
             <p
-              class="paragraph input search-cart"
-              v-for="pickpoint in DELIVERY_POINTS"
-              :key="pickpoint.id"
-              @click="selectOption(pickpoint)"
+                class="paragraph input search-cart"
+                v-for="pickpoint in DELIVERY_POINTS"
+                :key="pickpoint.id"
+                @click="selectOption(pickpoint)"
             >
               {{ pickpoint.name }}
             </p>
@@ -53,7 +53,7 @@
   </section>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import axios from 'axios';
 import CartElement from './CartElement.vue';
 import config from '@/config.js'
@@ -113,49 +113,49 @@ export default {
       if (minutes < 10) minutes = '0' + minutes
       let sec = date.getSeconds()
       if (sec < 10) sec = '0' + sec
-      return yyyy + '-' + mm + '-' + dd + 'T' + hour + ':' + minutes + ':' + sec;
+      return yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minutes + ':' + sec;
     },
     deliveryDay(date) {
-    let result = new Date(date);
-    result.setDate(result.getDate() + 3);
-    result.setMonth(result.getMonth() + 1)
-    return result;
-},
+      let result = new Date(date);
+      result.setDate(result.getDate() + 3);
+      result.setMonth(result.getMonth() + 1)
+      return result;
+    },
 
     orderUsers() {
       if (this.selected === 'Выберите адрес доставки') {
         alert('Выберите адрес доставки');
       } else {
-        
+
         let date = new Date();
         let dateDelivery = this.deliveryDay(date).getFullYear() + '-' + this.deliveryDay(date).getMonth() + '-' + this.deliveryDay(date).getDate()
-      let order = {
-        delivery_date: dateDelivery,
-        payment_type: 1, //изменить
-        status: 'в обработке',
-        comment: 'None',
-        author_id: this.$cookies.get('id'), 
-        user_id: this.$cookies.get('id'),
-        pickpoint_id: this.pickpoint_id
-      };
-      order.date = this.currentDate(date);
-      axios
-      ({
+        let order = {
+          delivery_date: dateDelivery,
+          payment_type: 1, //изменить
+          status: 'в обработке',
+          comment: '',
+          author_id: this.$cookies.get('id'),
+          user_id: this.$cookies.get('id'),
+          pickpoint_id: this.pickpoint_id
+        };
+        order.date = this.currentDate(date);
+        axios
+        ({
           method: 'POST',
           url: `${config.url}/orders`,
-				  data: order,
-          headers: { 
-					    "authorization":  this.$cookies.get('authorization')
+          data: order,
+          headers: {
+            "authorization": this.$cookies.get('authorization')
           }
-			  })
-        .then((order) => {
-          let order_id = parseInt(order.data.detail.match(/\d+/));
-          this.contentAdd(order_id);
         })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+            .then((order) => {
+              let order_id = parseInt(order.data.detail.match(/\d+/));
+              this.contentAdd(order_id);
+            })
+            .catch((error) => {
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
       }
     },
     contentAdd(order_id) {
@@ -182,28 +182,26 @@ export default {
     sendForm(cartElement) {
       axios
       ({
-          method: 'POST',
-          url: `${config.url}/contents/`,
-				  data: cartElement,
-          headers: { 
-					    "authorization":  this.$cookies.get('authorization')
-          }
-			  })
-        .then((order) => {
-        })
-        .catch((error) => {
-          console.log(error);
-          alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
+        method: 'POST',
+        url: `${config.url}/contents/`,
+        data: cartElement,
+        headers: {
+          "authorization": this.$cookies.get('authorization')
+        }
+      })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
     deliteFromCart(index) {
       this.DELITE_FROM_CART(index);
     },
     hideShow() {
-      if (this.areOptionsVisible == true) {
-        this.areOptionsVisible == false;
+      if (this.areOptionsVisible === true) {
+        return this.areOptionsVisible === false;
       } else {
-        this.areOptionsVisible == true;
+        return this.areOptionsVisible === true;
       }
     },
     selectOption(pickpoint) {

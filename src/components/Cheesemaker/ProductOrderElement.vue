@@ -4,7 +4,7 @@
       <div class="margin-10-0">
         <p class="paragraph-small">
           <span class="title-3 bold"> Название: </span>
-          {{ name }}
+          {{ content.product.name }}
         </p>
         <div v-if="content.comment !== ''">
           <p class="paragraph">
@@ -15,13 +15,13 @@
         <p class="paragraph-small">
           <span class="title-3 bold"> Кол-во: </span>
           {{ content.amount }}
-          {{ measure }}
+          {{ content.price.item_measure }}
         </p>
         <p class="paragraph-small">
           <span class="title-3 bold"> Сумма: </span>
-          {{ (price * content.amount).toFixed(2) }} ₽
+          {{ (content.price.item_price * content.amount).toFixed(2) }} ₽
         </p>
-        <div v-if="measure === 'кг' && content.status === 'в обработке'" class="order-title">
+        <div v-if="content.price.item_measure === 'кг' && content.status === 'в обработке'" class="order-title">
           <p class="paragraph">
             <span class="title-3 bold"> Фактический вес: </span>
             {{ factWeight }}
@@ -36,13 +36,13 @@
       </div>
       <div class="header-nav">
         <div class="footer" v-if="content.status === 'в обработке'">
-          <input type="button" class="btn" value="Товар укомплектован" @click="productDone" />
+<!--          <input type="button" class="btn" value="Товар укомплектован" @click="productDone" />-->
           <input type="button" class="btn" value="С товаром возникли проблемы" @click="orderStop" />
           <div class="v-select">
             <p class="input delivery" @click="areOptionsVisible = !areOptionsVisible">
               {{ selected }}
             </p>
-            <div class="options cart-options" v-if="areOptionsVisible">
+            <div class="options cart-options" v-if="areOptionsVisible" >
               <p class="paragraph input search-cart" v-for="store in STORAGES" :key="store.id"
                 @click="selectOption(store)">
                 {{ store.name }}
@@ -86,7 +86,7 @@ export default {
     return {
       factWeight: 0,
       factPrice: 0,
-      name: '',
+      // name: '',
       price: '',
       measure: '',
       areOptionsVisible: false,
@@ -98,17 +98,10 @@ export default {
   props: ['content', 'index', 'order', 'orderRun'],
   mounted() {
     this.factWeight = this.content.amount
-    this.getProductName();
-    this.GET_CONTENTS_FROM_API();
-    this.getPriceId();
+    // this.getProductName();
+    // this.GET_CONTENTS_FROM_API();
+    // this.getPriceId();
     this.GET_STORAGES_FROM_API();
-  },
-  watch: {
-    // test() {
-    //   if (this.orderRun == true) {
-    //     orderRun();
-    //   }
-    // },
   },
   methods: {
     currentDate(date) {
@@ -124,30 +117,37 @@ export default {
       if (minutes < 10) minutes = '0' + minutes
       let sec = date.getSeconds()
       if (sec < 10) sec = '0' + sec
-      return yyyy + '-' + mm + '-' + dd + 'T' + hour + ':' + minutes + ':' + sec;
+      return yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minutes + ':' + sec;
     },
     productCheck() {
-      let name = this.name
-      let storage = this.storage_id
+      let name = this.content.product.name
+      let storage = Number(this.storage_id)
       let storageName = this.selected
       let date = new Date();
       if (this.content.status !== 'подготовлен к отправке') {
-        if (storage === 0) {
+        if (this.storage_id=== 0 && this.content.status !== 'отменен') {
           alert(`Выберете склад для товара ${name}`);
         } else if (this.content.status === 'отменен') {
         }
         else {
           this.addedChangeWeight()
-          this.content.date = this.currentDate(date);
+          let contentsIndex = {}
+          contentsIndex.date = this.currentDate(date);
+          contentsIndex.order_id = this.order.id
+          contentsIndex.product_id = this.content.product.id
+          contentsIndex.amount = this.factWeight;
+          contentsIndex.storage_id = Number(this.storage_id)
+          contentsIndex.operation = 1
+          contentsIndex.manufacturer_id = this.content.manufacturer.id
+          contentsIndex.price_id = this.content.price.id
+          contentsIndex.author_id = this.$cookies.get('id')
+          contentsIndex.status = 'подготовлен к отправке';
+          this.content.status =  'подготовлен к отправке'
           this.content.storage_id = storage;
-          this.content.operation = 1
-          let content = this.content;
-          content.status = 'подготовлен к отправке';
-          console.log(content);
           axios({
             method: 'PATCH',
             url: `${config.url}/contents/${this.content.id}`,
-            data: content,
+            data: contentsIndex,
             headers: {
               authorization: this.$cookies.get('authorization'),
             },
@@ -171,51 +171,23 @@ export default {
       this.areOptionsVisible = false;
     },
     ...mapActions(['GET_CONTENTS_FROM_API', 'GET_STORAGES_FROM_API']),
-    getProductName() {
-      axios({
-        method: 'GET',
-        url: `${config.url}/products/${this.content.product_id}`,
-        headers: {
-          authorization: this.$cookies.get('authorization'),
-        },
-      })
-        .then((product) => {
-          console.log(product)
-          return (this.name = product.data.name);
-        })
-        .catch((error) => {
-          console.log(error)
-          // alert('Ошибка в работе приложения. Обратитесь к администратору.');
-        });
-    },
-    getPriceId() {
-      axios({
-        method: 'GET',
-        url: `${config.url}/prices/${this.content.price_id}`,
-        headers: {
-          authorization: this.$cookies.get('authorization'),
-        },
-      })
-        .then((price) => {
-          console.log(price)
-          this.measure = price.data.item_measure;
-          this.price = price.data.item_price;
-        })
-        .catch((error) => {
-          console.log(error);
-          // alert(error);
-        });
-    },
     addedChangeWeight() {
-        let date = new Date();
-        this.CONTENTS[this.index].date = this.currentDate(date);
-        this.CONTENTS[this.index].amount = this.factWeight;
-        let contentsIndex = this.CONTENTS[this.index];
-        contentsIndex.storage_id = this.storage_id
-        contentsIndex.operation = 0
+      let date = new Date();
+      let contentsIndex = {}
+      contentsIndex.date = this.currentDate(date);
+      contentsIndex.order_id = this.order.id
+      contentsIndex.product_id = this.content.product.id
+      contentsIndex.amount = this.factWeight;
+      contentsIndex.storage_id = Number(this.storage_id)
+      contentsIndex.operation = 0
+      contentsIndex.manufacturer_id = this.content.manufacturer.id
+      contentsIndex.price_id = this.content.price.id
+      contentsIndex.status = 'подготовлен к отправке';
+      this.content.status =  'подготовлен к отправке'
+      contentsIndex.author_id = this.$cookies.get('id')
         axios({
           method: 'PATCH',
-          url: `${config.url}/contents/${this.CONTENTS[this.index].id}`,
+          url: `${config.url}/contents/${this.content.id}`,
           data: contentsIndex,
           headers: {
             authorization: this.$cookies.get('authorization'),
@@ -230,58 +202,8 @@ export default {
             }
           });
     },
-    // changeOrderForStart() {
-    //   let date = new Date();
-    //   // this.orderRun = true;
-    //   this.order.status = 'в работе';
-    //   this.order.date = this.currentDate(date);
-    //   this.order.delivery_date = this.currentDate(date);
-    //   let order = this.order;
-    //   axios({
-    //     method: 'PATCH',
-    //     url: `${config.url}/orders/${this.order.id}`,
-    //     data: order,
-    //     headers: {
-    //       authorization: this.$cookies.get('authorization'),
-    //     },
-    //   })
-    //     .then((order) => {
-    //       console.log(order);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //       alert('Ошибка в работе приложения. Обратитесь к администратору.');
-    //     });
-    // },
-    productRun() {
-      // let date = new Date();
-      //   this.content.date = this.currentDate(date);
-      //   this.content.status = 'отправлен';
-      //   this.content.storage_id = this.storage_id;
-      //   let content = this.content;
-      //   content.operation = 1
-      //   console.log(content);
-      //   axios({
-      //     method: 'PATCH',
-      //     url: `${config.url}/contents/${this.content.id}`,
-      //     data: content,
-      //     headers: {
-      //       authorization: this.$cookies.get('authorization'),
-      //     },
-      //   })
-      //     .then((order) => {
-      //       this.productRun == true      
-      //     })
-      //     .catch((error) => {
-      //       if (error.response.status == 500) {
-      //         alert(`Тована ${this.name} недостаточно на складе`)
-      //       }
-      //       console.log(error);
-      //       alert('Ошибка в работе приложения. Обратитесь к администратору.');
-      //     });
-    },
     orderStop() {
-      if (this.storage_id === '') {
+      if (this.content.storage.id === '0') {
         alert('Выберете склад.')
       } else {
         let comment = prompt('Введите причину отмены.');
@@ -289,24 +211,36 @@ export default {
           alert('Вы не ввели причину отмены. Пожалуйста, повторите попытку.');
         } else if (comment == null) {
         } else {
+          let contentsIndex = {}
           let date = new Date();
+          if (comment === 'None') {
+            return comment = ''
+          }
+          contentsIndex.date = this.currentDate(date);
+          contentsIndex.order_id = this.order.id
+          contentsIndex.product_id = this.content.product.id
+          contentsIndex.amount = this.factWeight;
+          contentsIndex.storage_id = Number(this.storage_id)
+          contentsIndex.operation = 0
+          contentsIndex.manufacturer_id = this.content.manufacturer.id
+          contentsIndex.price_id = this.content.price.id
+          contentsIndex.author_id = this.content.author_id
+          contentsIndex.status = 'отменен';
           this.content.date = this.currentDate(date);
           this.content.status = 'отменен';
-          this.content.comment = comment;
-          let content = this.content;
-          content.operation = 3
-          console.log(content);
+          contentsIndex.comment = comment;
+          contentsIndex.operation = 3
+          console.log(contentsIndex);
           axios({
             method: 'PATCH',
             url: `${config.url}/contents/${this.content.id}`,
-            data: content,
+            data: contentsIndex,
             headers: {
               authorization: this.$cookies.get('authorization'),
             },
           })
             .then((order) => {
               console.log(order);
-              alert('Товар убран из заказа.');
             })
             .catch((error) => {
               console.log(error);
@@ -320,7 +254,7 @@ export default {
     },
     productDone() {
       let name = this.name
-      if (this.storage_id === 0) {
+      if (this.content.storage.id === '0') {
         alert(`Выберете склад для продукта ${name}`);
       } else {
         if (this.order.status === 'подготовлен к отправке') {
