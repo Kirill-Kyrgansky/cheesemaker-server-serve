@@ -1,7 +1,8 @@
 name: Build Vue
 on: 
   push:
-    branches: [v_1_1]
+    branches: 
+      - '*'
 jobs:
   build_vue:
     runs-on: self-hosted
