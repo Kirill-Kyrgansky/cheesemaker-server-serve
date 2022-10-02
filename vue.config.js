@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service');
 
 module.exports = defineConfig({
-  publicPath: 'cheesemaker-server-serve',
+  // publicPath: 'cheesemaker-server-serve'
   configureWebpack: {
     devServer: {
       headers: { 'Access-Control-Allow-Origin': '*' },

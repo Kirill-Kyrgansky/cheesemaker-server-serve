@@ -47,6 +47,9 @@
     <p class="cancellation text-centered" v-if="content.status === 'отменен покупателем на точке'">
       Товар отменен
     </p>
+    <p class="cancellation text-centered" v-if="content.status === 'товар не принят на точке'">
+      Товар не принят в магазине
+    </p>
     <p class="btn text-centered" v-if="content.status === 'товар выдан'">
       Товар выдан покупателю
     </p>
@@ -125,10 +128,17 @@ export default {
       } else if (comment == null) {
       } else {
         let date = new Date();
-        this.content.date = this.currentDate(date);
-        this.content.status = 'товар не принят на точке';
-        this.content.comment = comment;
-        let content = this.content;
+        let content = {};
+        content.date = this.currentDate(date)
+        content.order_id = this.content.order_id
+        content.product_id = this.content.product.id
+        content.manufacturer_id = this.content.manufacturer.id
+        content.storage_id = this.content.storage.id
+        content.amount = this.content.amount
+        content.price_id = this.content.price.id
+        content.status = 'товар не принят на точке'
+        content.comment = comment
+        content.author_id = this.content.author_id
         content.operation = 3
         axios({
           method: 'PATCH',
@@ -139,6 +149,7 @@ export default {
           },
         })
             .then(() => {
+              this.content.status = 'товар не принят на точке';
               alert('Вы отказались от товара.');
             })
             .catch((error) => {
@@ -149,9 +160,17 @@ export default {
     },
     orderDone() {
       let date = new Date();
-      this.content.date = this.currentDate(date);
-      this.content.status = 'выдан покупателю';
-      let content = this.content;
+      let content = {};
+      content.date = this.currentDate(date)
+      content.order_id = this.content.order_id
+      content.product_id = this.content.product.id
+      content.manufacturer_id = this.content.manufacturer.id
+      content.storage_id = this.content.storage.id
+      content.amount = this.content.amount
+      content.price_id = this.content.price.id
+      content.status = 'выдан покупателю';
+      content.comment = this.content.comment
+      content.author_id = this.content.author_id
       content.operation = 2
       axios({
         method: 'PATCH',
@@ -161,6 +180,9 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
+          .then(() => {
+            this.content.status = 'выдан покупателю';
+          })
           .catch((error) => {
             console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -183,7 +205,6 @@ export default {
         content.author_id = this.content.author_id
         content.operation = this.content.operation
         content.operation = 3
-        this.content.date = this.currentDate(date);
         axios({
           method: 'PATCH',
           url: `${config.url}/contents/${this.content.id}`,

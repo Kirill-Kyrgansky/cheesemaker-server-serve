@@ -12,6 +12,7 @@
         :key="content.id"
     >
       <ProductOrderElementSeller
+          ref="ProductOrderElementSeller"
           :content="content"
           :order="order"
       />
@@ -172,38 +173,11 @@ export default {
     },
     orderReceivedInFull() {
       let date = new Date();
-      for (let value of Object.values(this.order.content)) {
-        if (value.order_id === this.order.id) {
-          let content = {}
-          content.date = this.currentDate(date);
-          content.order_id = value.order_id
-          content.product_id = value.id
-          content.manufacturer_id = value.manufacturer.id
-          content.storage_id = value.storage.id
-          content.amount = value.amount
-          content.price_id = value.price.id
-          content.status = 'прибыл в магазин'
-          content.comment = value.comment
-          content.author_id = value.author_id
-          content.operation = 0
-          axios({
-            method: 'PATCH',
-            url: `${config.url}/contents/${value.id}`,
-            data: content,
-            headers: {
-              authorization: this.$cookies.get('authorization'),
-            },
-          })
-              .then((order) => {
-                console.log(order);
-              })
-              .catch((error) => {
-                console.log(error);
-                alert('Ошибка в работе приложения. Обратитесь к администратору.');
-              });
-        }
-      }
       let nowDate = this.currentDate(date)
+      let contentsLength = Object.keys(this.order.content).length;
+      for (let i = 0; i < contentsLength; i++) {
+        this.$refs.ProductOrderElementSeller[i].orderRun()
+      }
       let order = {}
       order.delivery_date = this.order.delivery_date.split('T')[0]
       order.comment = this.order.comment
@@ -238,12 +212,10 @@ export default {
       let globalValue = {}
       for (let value of Object.values(this.order.content)) {
         globalValue = value
-        if (value.order_id === this.order.id) {
           allProducts.push(value)
             if(value.status === 'отменен покупателем на точке') {
               canceledProducts.push(value)
             }
-        }
       }
       if (allProducts.length === canceledProducts.length) {
         let date = new Date();
@@ -288,8 +260,8 @@ export default {
         order.price_id = globalValue.price.id
         order.status = 'заказ выдан'
         order.comment = globalValue.comment
-        order.author_id = globalValue.author.id
-        globalValue.operation = 2
+        order.author_id = globalValue.author_id
+        order.operation = 2
         axios({
           method: 'PATCH',
           url: `${config.url}/contents/${globalValue.id}`,

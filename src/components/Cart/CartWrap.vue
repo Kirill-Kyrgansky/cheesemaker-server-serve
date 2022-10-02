@@ -159,7 +159,7 @@ export default {
     },
     contentAdd(order_id) {
       let date = new Date();
-      const cart = this.cart_data;
+      let cart = this.cart_data;
       for (const i in cart) {
         cart[i].date = this.currentDate(date);
         cart[i].product_id = cart[i].id;
