@@ -15,7 +15,6 @@
       </div>
     </div>
     <div class="container cart cart-container" v-if="isVisible">
-      <button class="header-link" @click="test1()">тест</button>
       <p class="title-2 text-centered margin-10-0" v-if="cart_data <= 1">
         Корзина пуста
       </p>

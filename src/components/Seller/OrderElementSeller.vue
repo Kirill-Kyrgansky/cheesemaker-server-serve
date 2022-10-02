@@ -8,30 +8,30 @@
       <div class="border-line"></div>
     </div>
     <div
-        v-for="(content, index) in order.content"
+        v-for="content in order.content"
         :key="content.id"
     >
       <ProductOrderElementSeller
           :content="content"
-          :index="index" :order="order"
+          :order="order"
       />
     </div>
-    <div v-for="pickpoint in DELIVERY_POINTS" :key="pickpoint.id">
-      <p class="title-3" v-if="pickpoint.id === order.pickpoint_id">
+    <div >
+      <p class="title-3" >
         <span class="bold">Адрес доставки:</span>
-        {{ pickpoint.name }}
+        {{ order.pickpoint.name }}
       </p>
     </div>
-    <div v-for="user in USERS" :key="user.id">
-      <div v-if="user.id === order.user_id">
+    <div>
+      <div >
         <p class="title-3">
-          <span class="bold">Ф.И.О.</span> {{ user.fio }}
+          <span class="bold">Ф.И.О.</span> {{ order.author.fio }}
         </p>
         <p class="title-3">
-          <span class="bold">E-mail:</span> {{ user.email }}
+          <span class="bold">E-mail:</span> {{ order.author.email }}
         </p>
         <p class="title-3">
-          <span class="bold">Телефон:</span> {{ user.phone }}
+          <span class="bold">Телефон:</span> {{ order.author.phone }}
         </p>
       </div>
     </div>
@@ -54,7 +54,7 @@
                 d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
-      <button v-if="order.status === 'прибыл в магазин' " @click="orderIssued" type="button" class="btn centered">
+      <button v-if="order.status === 'прибыл в магазин' || order.status === 'прибыл в магазин частично' " @click="orderIssued" type="button" class="btn centered">
         Завершить заказ
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
              viewBox="0 0 16 16">
@@ -113,10 +113,17 @@ export default {
     ...mapActions(['GET_DELIVERY_POINTS_FROM_API']),
     orderReceivedInPart() {
       let date = new Date();
-      this.order.status = 'прибыл в магазин частично';
-      this.order.date = this.currentDate(date);
-      this.order.delivery_date = this.currentDate(date);
-      let order = this.order;
+      let nowDate = this.currentDate(date)
+      let order = {}
+      order.delivery_date = this.order.delivery_date.split('T')[0]
+      order.comment = this.order.comment
+      order.date = this.order.date
+      order.payment_type = this.order.payment_type
+      order.pickpoint_id = this.order.pickpoint.id
+      order.user_id = this.order.user_id
+      order.author_id = this.order.author.id
+      order.date = nowDate
+      order.status = 'прибыл в магазин частично'
       axios({
         method: 'PATCH',
         url: `${config.url}/orders/${this.order.id}`,
@@ -125,6 +132,9 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
+          .then(() => {
+            this.order.status = 'прибыл в магазин частично'
+          })
           .catch((error) => {
             console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -162,16 +172,24 @@ export default {
     },
     orderReceivedInFull() {
       let date = new Date();
-      let contents = this.CONTENTS
-      for (let value of Object.values(contents)) {
+      for (let value of Object.values(this.order.content)) {
         if (value.order_id === this.order.id) {
-          value.date = this.currentDate(date);
-          value.status = 'прибыл в магазин'
-          value.operation = 0
+          let content = {}
+          content.date = this.currentDate(date);
+          content.order_id = value.order_id
+          content.product_id = value.id
+          content.manufacturer_id = value.manufacturer.id
+          content.storage_id = value.storage.id
+          content.amount = value.amount
+          content.price_id = value.price.id
+          content.status = 'прибыл в магазин'
+          content.comment = value.comment
+          content.author_id = value.author_id
+          content.operation = 0
           axios({
             method: 'PATCH',
             url: `${config.url}/contents/${value.id}`,
-            data: value,
+            data: content,
             headers: {
               authorization: this.$cookies.get('authorization'),
             },
@@ -185,10 +203,17 @@ export default {
               });
         }
       }
-      this.order.status = 'прибыл в магазин';
-      this.order.date = this.currentDate(date);
-      this.order.delivery_date = this.currentDate(date);
-      let order = this.order;
+      let nowDate = this.currentDate(date)
+      let order = {}
+      order.delivery_date = this.order.delivery_date.split('T')[0]
+      order.comment = this.order.comment
+      order.date = this.order.date
+      order.payment_type = this.order.payment_type
+      order.pickpoint_id = this.order.pickpoint.id
+      order.user_id = this.order.user_id
+      order.author_id = this.order.author.id
+      order.date = nowDate
+      order.status = 'прибыл в магазин'
       axios({
         method: 'PATCH',
         url: `${config.url}/orders/${this.order.id}`,
@@ -197,6 +222,9 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
+          .then(() => {
+            this.order.status = 'прибыл в магазин';
+          })
           .catch((error) => {
             console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -205,11 +233,10 @@ export default {
 
     orderIssued() {
       let date = new Date();
-      let contents = this.CONTENTS
       let allProducts = []
       let canceledProducts = []
       let globalValue = {}
-      for (let value of Object.values(contents)) {
+      for (let value of Object.values(this.order.content)) {
         globalValue = value
         if (value.order_id === this.order.id) {
           allProducts.push(value)
@@ -219,19 +246,29 @@ export default {
         }
       }
       if (allProducts.length === canceledProducts.length) {
-        this.order.status = 'заказ отменен покупателем';
-        this.order.date = this.currentDate(date)
-        this.order.delivery_date = this.currentDate(date)
+        let date = new Date();
+        let nowDate = this.currentDate(date)
+        let order = {}
+        order.delivery_date = this.order.delivery_date.split('T')[0]
+        order.comment = this.order.comment
+        order.date = this.order.date
+        order.payment_type = this.order.payment_type
+        order.pickpoint_id = this.order.pickpoint.id
+        order.user_id = this.order.user_id
+        order.author_id = this.order.author.id
+        order.date = nowDate
+        order.status = 'заказ отменен покупателем'
         axios({
               method: 'PATCH',
               url:`${config.url}/orders/${this.order.id}`,
-              data: this.order,
+              data: order,
               headers: {
                 authorization: this.$cookies.get('authorization'),
               },
             }
         )
             .then(() => {
+              this.order.status = 'заказ отменен покупателем';
               alert(`Заказ № ${this.order.id} отменен`);
             })
             .catch((error) => {
@@ -241,33 +278,52 @@ export default {
               alert('Ошибка в работе приложения. Обратитесь к администратору.');
             });
       } else {
-        globalValue.date = date
-        globalValue.status = 'заказ выдан'
+        let order = {}
+        order.date = date
+        order.order_id = globalValue.order_id
+        order.product_id = globalValue.product.id
+        order.manufacturer_id = globalValue.manufacturer.id
+        order.storage_id = globalValue.storage.id
+        order.amount = globalValue.amount
+        order.price_id = globalValue.price.id
+        order.status = 'заказ выдан'
+        order.comment = globalValue.comment
+        order.author_id = globalValue.author.id
         globalValue.operation = 2
-        globalValue.date = this.currentDate(date);
-        globalValue.delivery_date = this.currentDate(date);
         axios({
           method: 'PATCH',
           url: `${config.url}/contents/${globalValue.id}`,
-          data: globalValue,
+          data: order,
           headers: {
             authorization: this.$cookies.get('authorization'),
           },
         })
+            .then(() => {
+              globalValue.status = 'заказ выдан'
+            })
             .catch((error) => {
               console.log(error);
               alert('Ошибка в работе приложения. Обратитесь к администратору.');
             });
-        console.log('bad')
       }
       if (this.order.status !== 'заказ отменен. покупатель отказался от товаров') {
-        this.order.status = 'заказ выдан';
-        this.order.date = this.currentDate(date)
-        this.order.delivery_date = this.currentDate(date)
+        let date = new Date();
+        let nowDate = this.currentDate(date)
+        let order = {}
+        order.delivery_date = this.order.delivery_date.split('T')[0]
+        order.comment = this.order.comment
+        order.date = this.order.date
+        order.payment_type = this.order.payment_type
+        order.pickpoint_id = this.order.pickpoint.id
+        order.user_id = this.order.user_id
+        order.author_id = this.order.author.id
+        order.date = nowDate
+        order.status = 'заказ выдан'
+
         axios({
               method: 'PATCH',
               url:`${config.url}/orders/${this.order.id}`,
-              data: this.order,
+              data: order,
               headers: {
                 authorization: this.$cookies.get('authorization'),
               },
@@ -275,6 +331,7 @@ export default {
         )
             .then(() => {
               alert(`Заказ № ${this.order.id} успешно выдан`);
+              this.order.status = 'заказ выдан';
             })
             .catch((error) => {
               this.order.status = 'в обработке'

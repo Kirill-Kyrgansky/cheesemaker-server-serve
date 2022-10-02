@@ -13,10 +13,11 @@
       <div class="border-line"></div>
     </div>
     <div
-        v-for="(content, index) in order.content"
-        :key="content.id"
+
     >
       <ProductOrderElement
+          v-for="(content, index) in order.content"
+          :key="content.id"
           ref="ProductOrderElement"
           :content="content"
           :index="index" :order="order"
@@ -99,9 +100,9 @@ export default {
         return {};
       },
     },
-    index: {
-      type: Number,
-    },
+    // index: {
+    //   type: Number,
+    // },
   },
   components: {
     ProductOrderElement,
@@ -204,7 +205,6 @@ export default {
           let content = {};
           content.date = this.currentDate(date);
           content.status = 'отменен';
-          value.status = 'отменен'
           content.comment = comment;
           content.operation = 3
           content.amount = value.amount
@@ -222,6 +222,9 @@ export default {
               authorization: this.$cookies.get('authorization'),
             },
           })
+              .then(()=> {
+                return value.status = 'отменен'
+              })
               .catch((error) => {
                 console.log(error);
                 alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -234,7 +237,6 @@ export default {
       this.order.status = 'отменен'
       sendOrder.comment = comment
       sendOrder.delivery_date = deliveryDate
-
       sendOrder.id = this.order.id
       sendOrder.payment_type = this.order.payment_type
       sendOrder.user_id = this.order.user_id

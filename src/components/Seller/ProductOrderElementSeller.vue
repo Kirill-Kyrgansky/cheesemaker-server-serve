@@ -54,7 +54,7 @@
 </template>
 <script>
 import axios from 'axios';
-import {mapGetters, mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import config from '@/config.js';
 
 export default {
@@ -89,10 +89,19 @@ export default {
     },
     orderRun() {
       let date = new Date();
-      this.content.date = this.currentDate(date);
-      this.content.status = 'прибыл в магазин';
-      let content = this.content;
-      content.operation = 1
+      let content = {};
+      content.date = this.currentDate(date)
+      content.order_id = this.content.order_id
+      content.product_id = this.content.product.id
+      content.manufacturer_id = this.content.manufacturer.id
+      content.storage_id = this.content.storage.id
+      content.amount = this.content.amount
+      content.price_id = this.content.price.id
+      content.status = 'прибыл в магазин'
+      content.comment = this.content.comment
+      content.author_id = this.content.author_id
+      content.operation = this.content.operation
+      content.operation = 0
       axios({
         method: 'PATCH',
         url: `${config.url}/contents/${this.content.id}`,
@@ -101,6 +110,9 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
+          .then(() => {
+            this.content.status = 'прибыл в магазин';
+          })
           .catch((error) => {
             console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
@@ -158,11 +170,20 @@ export default {
       let comment = prompt('Укажите причину отказа');
       if (comment !== '' && comment !== null) {
         let date = new Date();
-        this.content.date = this.currentDate(date);
-        this.content.status = 'отменен покупателем на точке';
-        this.content.comment = comment;
-        let content = this.content;
+        let content = {};
+        content.date = this.currentDate(date)
+        content.order_id = this.content.order_id
+        content.product_id = this.content.product.id
+        content.manufacturer_id = this.content.manufacturer.id
+        content.storage_id = this.content.storage.id
+        content.amount = this.content.amount
+        content.price_id = this.content.price.id
+        content.status = 'отменен покупателем на точке'
+        content.comment = comment
+        content.author_id = this.content.author_id
+        content.operation = this.content.operation
         content.operation = 3
+        this.content.date = this.currentDate(date);
         axios({
           method: 'PATCH',
           url: `${config.url}/contents/${this.content.id}`,
@@ -171,6 +192,10 @@ export default {
             authorization: this.$cookies.get('authorization'),
           },
         })
+            .then(() => {
+              this.content.status = content.status
+              this.content.comment = comment;
+            })
             .catch((error) => {
               console.log(error);
               alert('Ошибка в работе приложения. Обратитесь к администратору.');

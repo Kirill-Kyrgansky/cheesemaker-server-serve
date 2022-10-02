@@ -36,17 +36,17 @@
       </div>
       <div class="header-nav">
         <div class="footer" v-if="content.status === 'в обработке'">
-<!--          <input type="button" class="btn" value="Товар укомплектован" @click="productDone" />-->
           <input type="button" class="btn" value="С товаром возникли проблемы" @click="orderStop" />
           <div class="v-select">
             <p class="input delivery" @click="areOptionsVisible = !areOptionsVisible">
               {{ selected }}
             </p>
             <div class="options cart-options" v-if="areOptionsVisible" >
-              <p class="paragraph input search-cart" v-for="store in STORAGES" :key="store.id"
-                @click="selectOption(store)">
+              <div class="paragraph" v-click-outside="closeStoreOutside" @click="selectOption(store)" v-for="store in STORAGES" :key="store.id">
+              <p class="paragraph input search-cart" v-if="store.name !== 'Не выбранный склад'">
                 {{ store.name }}
               </p>
+              </div>
             </div>
           </div>
         </div>
@@ -79,6 +79,7 @@
 import axios from 'axios';
 import { mapGetters, mapActions } from 'vuex';
 import config from '@/config.js';
+import vClickOutside from 'click-outside-vue3';
 
 export default {
   name: 'ProductOrderElement',
@@ -86,7 +87,6 @@ export default {
     return {
       factWeight: 0,
       factPrice: 0,
-      // name: '',
       price: '',
       measure: '',
       areOptionsVisible: false,
@@ -98,12 +98,12 @@ export default {
   props: ['content', 'index', 'order', 'orderRun'],
   mounted() {
     this.factWeight = this.content.amount
-    // this.getProductName();
-    // this.GET_CONTENTS_FROM_API();
-    // this.getPriceId();
     this.GET_STORAGES_FROM_API();
   },
   methods: {
+    closeStoreOutside() {
+      this.areOptionsVisible = false
+    },
     currentDate(date) {
       let dd = date.getDate();
       if (dd < 10) dd = '0' + dd;
@@ -119,15 +119,15 @@ export default {
       if (sec < 10) sec = '0' + sec
       return yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minutes + ':' + sec;
     },
+
     productCheck() {
       let name = this.content.product.name
       let storage = Number(this.storage_id)
       let storageName = this.selected
       let date = new Date();
-      if (this.content.status !== 'подготовлен к отправке') {
-        if (this.storage_id=== 0 && this.content.status !== 'отменен') {
+      if (this.content.status === 'в обработке') {
+        if (this.content.storage.id === 0 && storage === 0) {
           alert(`Выберете склад для товара ${name}`);
-        } else if (this.content.status === 'отменен') {
         }
         else {
           this.addedChangeWeight()
@@ -163,6 +163,8 @@ export default {
               }
             });
         }
+      } else {
+        alert('Товары уже подготовлены к отправке.')
       }
     },
     selectOption(store) {
@@ -288,6 +290,9 @@ export default {
   },
   computed: {
     ...mapGetters(['ORDERS', 'CONTENTS', 'DELIVERY_POINTS', 'STORAGES']),
+  },
+  directives: {
+    clickOutside: vClickOutside.directive,
   },
 };
 </script>
