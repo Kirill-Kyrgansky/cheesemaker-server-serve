@@ -4,7 +4,7 @@ on:
     branches: [v_1_1]
 jobs:
   build_vue:
-    runs-on: windows-latest
+    runs-on: self-hosted
     name: Build Vue
     steps:
     - uses: actions/checkout@v2
