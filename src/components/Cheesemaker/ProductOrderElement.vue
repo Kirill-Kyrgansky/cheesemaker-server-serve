@@ -31,21 +31,22 @@
             <span class="title-3 bold"> Фактическая сумма: </span>
             {{ (price * factWeight).toFixed(2) }} ₽
           </p>
-          <input type="number" class="input" step="0.01" v-model="factWeight" />
+          <input type="number" class="input" step="0.01" v-model="factWeight"/>
         </div>
       </div>
       <div class="header-nav">
         <div class="footer" v-if="content.status === 'в обработке'">
-          <input type="button" class="btn" value="С товаром возникли проблемы" @click="orderStop" />
+          <input type="button" class="btn" value="С товаром возникли проблемы" @click="orderStop"/>
           <div class="v-select">
             <p class="input delivery" @click="areOptionsVisible = !areOptionsVisible">
               {{ selected }}
             </p>
-            <div class="options cart-options" v-if="areOptionsVisible" >
-              <div class="paragraph" v-click-outside="closeStoreOutside" @click="selectOption(store)" v-for="store in STORAGES" :key="store.id">
-              <p class="paragraph input search-cart" v-if="store.name !== 'Не выбранный склад'">
-                {{ store.name }}
-              </p>
+            <div class="options cart-options" v-if="areOptionsVisible">
+              <div class="paragraph" v-click-outside="closeStoreOutside" @click="selectOption(store)"
+                   v-for="store in STORAGES" :key="store.id">
+                <p class="paragraph input search-cart" v-if="store.name !== 'Не выбранный склад'">
+                  {{ store.name }}
+                </p>
               </div>
             </div>
           </div>
@@ -63,7 +64,7 @@
       </div>
       <div v-if="content.status === 'отменен покупателем на точке'">
         <p class="cancellation bold centered-horizontally">
-          Покупатель отказался от товара! Причина отказа: {{content.comment}}
+          Покупатель отказался от товара! Причина отказа: {{ content.comment }}
         </p>
       </div>
       <div v-if="content.status === 'заказ выдан' || content.status === 'прибыл в магазин'">
@@ -77,7 +78,7 @@
 </template>
 <script>
 import axios from 'axios';
-import { mapGetters, mapActions } from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import config from '@/config.js';
 import vClickOutside from 'click-outside-vue3';
 
@@ -128,8 +129,7 @@ export default {
       if (this.content.status === 'в обработке') {
         if (this.content.storage.id === 0 && storage === 0) {
           alert(`Выберете склад для товара ${name}`);
-        }
-        else {
+        } else {
           this.addedChangeWeight()
           let contentsIndex = {}
           contentsIndex.date = this.currentDate(date);
@@ -142,7 +142,7 @@ export default {
           contentsIndex.price_id = this.content.price.id
           contentsIndex.author_id = this.$cookies.get('id')
           contentsIndex.status = 'подготовлен к отправке';
-          this.content.status =  'подготовлен к отправке'
+          this.content.status = 'подготовлен к отправке'
           this.content.storage_id = storage;
           axios({
             method: 'PATCH',
@@ -152,16 +152,16 @@ export default {
               authorization: this.$cookies.get('authorization'),
             },
           })
-            .catch((error) => {
-              if (error.response.status === 500) {
-                console.log(error)
-                this.content.status = 'в обработке'
-                alert(`Товара ${name} недостаточно на складе ${storageName}`)
-              } else {
-                console.log(error);
-                alert('Ошибка в работе приложения. Обратитесь к администратору.');
-              }
-            });
+              .catch((error) => {
+                if (error.response.status === 500) {
+                  console.log(error)
+                  this.content.status = 'в обработке'
+                  alert(`Товара ${name} недостаточно на складе ${storageName}`)
+                } else {
+                  console.log(error);
+                  alert('Ошибка в работе приложения. Обратитесь к администратору.');
+                }
+              });
         }
       } else {
         alert('Товары уже подготовлены к отправке.')
@@ -185,16 +185,16 @@ export default {
       contentsIndex.manufacturer_id = this.content.manufacturer.id
       contentsIndex.price_id = this.content.price.id
       contentsIndex.status = 'подготовлен к отправке';
-      this.content.status =  'подготовлен к отправке'
+      this.content.status = 'подготовлен к отправке'
       contentsIndex.author_id = this.$cookies.get('id')
-        axios({
-          method: 'PATCH',
-          url: `${config.url}/contents/${this.content.id}`,
-          data: contentsIndex,
-          headers: {
-            authorization: this.$cookies.get('authorization'),
-          },
-        })
+      axios({
+        method: 'PATCH',
+        url: `${config.url}/contents/${this.content.id}`,
+        data: contentsIndex,
+        headers: {
+          authorization: this.$cookies.get('authorization'),
+        },
+      })
           .catch((error) => {
             if (error.response.status === 500) {
               console.log(error)
@@ -241,13 +241,13 @@ export default {
               authorization: this.$cookies.get('authorization'),
             },
           })
-            .then((order) => {
-              console.log(order);
-            })
-            .catch((error) => {
-              console.log(error);
-              alert('Ошибка в работе приложения. Обратитесь к администратору.');
-            });
+              .then((order) => {
+                console.log(order);
+              })
+              .catch((error) => {
+                console.log(error);
+                alert('Ошибка в работе приложения. Обратитесь к администратору.');
+              });
         }
       }
     },
@@ -275,14 +275,14 @@ export default {
               authorization: this.$cookies.get('authorization'),
             },
           })
-            .catch((error) => {
-              if (error.response.status === 500) {
-                console.log(error)
-                alert(`Тована ${this.name} недостаточно на складе`)
-              }
-              console.log(error);
-              alert('Ошибка в работе приложения. Обратитесь к администратору.');
-            });
+              .catch((error) => {
+                if (error.response.status === 500) {
+                  console.log(error)
+                  alert(`Тована ${this.name} недостаточно на складе`)
+                }
+                console.log(error);
+                alert('Ошибка в работе приложения. Обратитесь к администратору.');
+              });
         } else {
         }
       }
