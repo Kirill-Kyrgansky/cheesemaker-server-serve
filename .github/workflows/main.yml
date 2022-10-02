@@ -12,8 +12,8 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '14'
-    - name: npm install
+    - name: npm install 
       run: |
-        npm install
+        npm install -y
     - name: npm build
       run: npm build —if-present
