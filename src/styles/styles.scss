@@ -2,7 +2,7 @@
 @import 'mixins.scss';
 @import 'fonts.scss';
 @import 'animation.scss';
-@import "scroll.scss";
+//@import "scroll.scss";
 
 html {
   scroll-behavior: smooth;
@@ -47,7 +47,7 @@ input[type="file"] {
   background-image: url(/public/allImage/fone2.svg);
   background-repeat: repeat;
   max-height: 400px;
-  padding: 20px 10px 20px 25px;
+  padding: 20px 10px;
 }
 
 .personal-cabinet_wrap {
