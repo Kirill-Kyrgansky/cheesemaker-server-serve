@@ -1,10 +1,11 @@
+
+
 @mixin button {
   // opacity: 90%;
   background-color: $text-collor;
   text-decoration: none;
-  border: solid;
   border-radius: 10px;
-  border-color: $text-collor;
+  border: solid $text-collor;
   margin: 5px;
   text-align: center;
 } 

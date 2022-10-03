@@ -1,20 +1,37 @@
 <template>
   <div class="order-element">
     <div class="order-title">
-      <p class="title-2">Дата заказа: {{ date }}</p>
-      <p class="title-2">Номер заказа: {{ order.id }}</p>
-      <p class="title-2">Статус: {{ order.status }}</p>
-      <p class="cancellation bold centered-horizontally" v-if="order.status === 'отменен пользователем'">
-        Заказ отменен пользователем!
-      </p>
-      <p class="cancellation bold centered-horizontally" v-if="order.status === 'отменен'">
-        Заказ отменен сыроваром! Причина: {{ order.comment }}
-      </p>
+      <div class="order-info">
+        <div>
+          <p class="title-2">Номер заказа: {{ order.id }}</p>
+          <p class="title-2">Дата заказа: {{ date }}</p>
+          <p class="title-2">Статус: {{ order.status }}</p>
+        </div>
+        <div>
+          <p class="title-3"><span class="bold">Ф.И.О.</span> {{ order.author.fio }}</p>
+          <p class="title-3">
+            <span class="bold">E-mail:</span> {{ order.author.email }}
+          </p>
+          <p class="title-3">
+            <span class="bold">Телефон:</span> {{ order.author.phone }}
+          </p>
+          <div v-for="pickpoint in DELIVERY_POINTS" :key="pickpoint.id">
+            <p class="title-3">
+              <span class="bold">Адрес доставки:</span>
+              {{ pickpoint.name }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--      <p class="cancellation bold centered-horizontally" v-if="order.status === 'отменен пользователем'">-->
+      <!--        Заказ отменен пользователем!-->
+      <!--      </p>-->
+      <!--      <p class="cancellation bold centered-horizontally" v-if="order.status === 'отменен'">-->
+      <!--        Заказ отменен сыроваром! Причина: {{ order.comment }}-->
+      <!--      </p>-->
       <div class="border-line"></div>
     </div>
-    <div
-
-    >
+    <div>
       <ProductOrderElement
           v-for="(content, index) in order.content"
           :key="content.id"
@@ -22,23 +39,6 @@
           :content="content"
           :index="index" :order="order"
       />
-    </div>
-    <div v-for="pickpoint in DELIVERY_POINTS" :key="pickpoint.id">
-      <p class="title-3">
-        <span class="bold">Адрес доставки:</span>
-        {{ pickpoint.name }}
-      </p>
-    </div>
-    <div>
-      <div>
-        <p class="title-3"><span class="bold">Ф.И.О.</span> {{ order.author.fio }}</p>
-        <p class="title-3">
-          <span class="bold">E-mail:</span> {{ order.author.email }}
-        </p>
-        <p class="title-3">
-          <span class="bold">Телефон:</span> {{ order.author.phone }}
-        </p>
-      </div>
     </div>
     <div class="button-right">
       <button @click="orderSentToThePoint" type="button" class="btn centered" v-if="order.status === 'в обработке'">
@@ -67,12 +67,6 @@
         </svg>
       </button>
     </div>
-    <!--    <p v-if="order.status === 'отправлен на точку'" class="input bold centered-horizontally">-->
-    <!--      Заказ успешно отправлен на точку!-->
-    <!--    </p>-->
-    <!--    <p v-if="order.status === 'прибыл в магазин'" class="btn bold centered-horizontally">-->
-    <!--      Заказ прибыл на точку!-->
-    <!--    </p>-->
   </div>
 </template>
 <script>
@@ -100,9 +94,6 @@ export default {
         return {};
       },
     },
-    // index: {
-    //   type: Number,
-    // },
   },
   components: {
     ProductOrderElement,
@@ -119,7 +110,6 @@ export default {
   },
   methods: {
     ...mapActions(['GET_DELIVERY_POINTS_FROM_API']),
-
     currentDate(date) {
       let dd = date.getDate();
       if (dd < 10) dd = '0' + dd;
@@ -222,7 +212,7 @@ export default {
               authorization: this.$cookies.get('authorization'),
             },
           })
-              .then(()=> {
+              .then(() => {
                 return value.status = 'отменен'
               })
               .catch((error) => {

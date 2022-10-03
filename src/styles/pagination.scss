@@ -1,0 +1,65 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.page-link {
+  cursor: pointer;
+  padding: 6px;
+  font-weight: 900;
+}
+
+.btn-pagination {
+  text-decoration: none;
+  border-radius: 43px;
+  border: solid $text-collor;
+  color: $text-collor;
+  background-color: rgba(253, 217, 158, 0.5);;
+  margin: 5px;
+  text-align: center;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 10px 10px;
+}
+
+.pagination {
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.pagination__link[href]:not(:disabled):focus,
+.pagination__link[href]:not(:disabled):hover {
+  opacity: 0.6;
+}
+
+.pagination__link {
+  @include title-3;
+  margin: 15px;
+  padding: 5px;
+}
+
+.pagination__link--arrow {
+  padding-top: 10px;
+}
+
+.pagination__link--current {
+  opacity: 0.3;
+}
+
+.pagination__link--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.active {
+  width: 50px;
+  height: 25px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}

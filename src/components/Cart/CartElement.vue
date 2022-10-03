@@ -36,7 +36,7 @@
       </div>
       <div
         class="cart-element "
-        v-if="price.item_measure == 'кг'"
+        v-if="price.item_measure === 'кг'"
       >
         <input type="button" class="btn margin-0-10" @click="minus" value="-" />
         <input
