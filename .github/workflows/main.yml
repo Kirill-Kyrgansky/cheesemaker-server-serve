@@ -1,0 +1,19 @@
+name: Build Vue
+on: 
+  push:
+    branches: 
+      - '*'
+jobs:
+  build_vue:
+    runs-on: self-hosted
+    name: Build Vue
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: npm install 
+      run: |
+        npm install -y
+    - name: npm build
+      run: npm run build 
