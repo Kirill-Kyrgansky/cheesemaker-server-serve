@@ -231,7 +231,6 @@ export default {
           this.content.date = this.currentDate(date);
           this.content.status = 'отменен';
           contentsIndex.comment = comment;
-          contentsIndex.operation = 3
           console.log(contentsIndex);
           axios({
             method: 'PATCH',

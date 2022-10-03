@@ -91,35 +91,37 @@ export default {
       return yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minutes + ':' + sec;
     },
     orderRun() {
-      let date = new Date();
-      let content = {};
-      content.date = this.currentDate(date)
-      content.order_id = this.content.order_id
-      content.product_id = this.content.product.id
-      content.manufacturer_id = this.content.manufacturer.id
-      content.storage_id = this.content.storage.id
-      content.amount = this.content.amount
-      content.price_id = this.content.price.id
-      content.status = 'прибыл в магазин'
-      content.comment = this.content.comment
-      content.author_id = this.content.author_id
-      content.operation = this.content.operation
-      content.operation = 0
-      axios({
-        method: 'PATCH',
-        url: `${config.url}/contents/${this.content.id}`,
-        data: content,
-        headers: {
-          authorization: this.$cookies.get('authorization'),
-        },
-      })
-          .then(() => {
-            this.content.status = 'прибыл в магазин';
-          })
-          .catch((error) => {
-            console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
-          });
+      if (this.content.status !== 'отменен') {
+        let date = new Date();
+        let content = {};
+        content.date = this.currentDate(date)
+        content.order_id = this.content.order_id
+        content.product_id = this.content.product.id
+        content.manufacturer_id = this.content.manufacturer.id
+        content.storage_id = this.content.storage.id
+        content.amount = this.content.amount
+        content.price_id = this.content.price.id
+        content.status = 'прибыл в магазин'
+        content.comment = this.content.comment
+        content.author_id = this.content.author_id
+        content.operation = this.content.operation
+        content.operation = 0
+        axios({
+          method: 'PATCH',
+          url: `${config.url}/contents/${this.content.id}`,
+          data: content,
+          headers: {
+            authorization: this.$cookies.get('authorization'),
+          },
+        })
+            .then(() => {
+              this.content.status = 'прибыл в магазин';
+            })
+            .catch((error) => {
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
+      }
     },
     orderError() {
       let comment = prompt('Укажите причину отказа');
