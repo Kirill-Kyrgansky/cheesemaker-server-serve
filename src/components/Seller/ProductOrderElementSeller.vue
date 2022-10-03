@@ -50,7 +50,7 @@
     <p class="cancellation text-centered" v-if="content.status === 'товар не принят на точке'">
       Товар не принят в магазине
     </p>
-    <p class="btn text-centered" v-if="content.status === 'товар выдан'">
+    <p class="btn text-centered" v-if="content.status === 'заказ выдан'">
       Товар выдан покупателю
     </p>
   </div>

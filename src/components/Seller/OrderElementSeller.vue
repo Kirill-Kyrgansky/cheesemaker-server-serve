@@ -1,6 +1,8 @@
 <template>
-  <div class="order-element"
-       v-if="order.status === 'отправлен на точку' || order.status === 'прибыл в магазин' || order.status === 'прибыл в магазин частично'">
+  <div class="order-element">
+    <div class="order-finished" v-if="order.status !== 'отправлен на точку' && order.status !== 'прибыл в магазин' && order.status !== 'прибыл в магазин частично'">
+      <p class="title-1">Заказ закрыт.</p>
+    </div>
     <div class="order-title">
       <div class="order-info">
         <div>
