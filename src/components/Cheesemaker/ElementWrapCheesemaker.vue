@@ -13,7 +13,6 @@
             :key="product.id"
             :product="product"
             @addToCart="addToCart"
-            :price="PRICE"
           />
         </div>
       </div>

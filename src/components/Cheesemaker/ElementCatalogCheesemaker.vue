@@ -13,11 +13,30 @@
         Введите кол-во приготовленного продукта:
       </p>
       <input class="input" type="number" v-model="form.amount" step="0.01"/>
-      <select class="input" v-model="form.item_measure">
-        <option>кг</option>
-        <option>л</option>
-        <option>шт</option>
-      </select>
+<!--      <select class="input" v-model="form.item_measure">-->
+<!--        <option>кг</option>-->
+<!--        <option>л</option>-->
+<!--        <option>шт</option>-->
+<!--      </select>-->
+<!--      <select class="input" v-for="prices in PRICES" :key="prices.id">-->
+<!--        <option v-if="prices.product_id === product.id">{{prices.item_measure}}</option>-->
+<!--      </select>-->
+      <div>
+        <p
+            class="paragraph input search-cart pointer"
+           @click="isVisibleMeasureOptions = !isVisibleMeasureOptions"
+        > {{selectMeasure}}
+        </p>
+        <div class="pointer" v-for="prices in PRICES" :key="prices.id" v-if="isVisibleMeasureOptions">
+        <p
+            class="paragraph input search-cart"
+            v-if="prices.product_id === product.id"
+            @click="selectOption(prices)"
+        >
+          {{ prices.item_measure }}
+        </p>
+        </div>
+      </div>
       <select class="input" v-model="selectStore">
         <option disabled>Выбрать склад</option>
         <option
@@ -28,7 +47,7 @@
           {{ storage.name }}
         </option>
       </select>
-<!--      <input type="date" class="input" v-model="form.date"/>-->
+      <!--      <input type="date" class="input" v-model="form.date"/>-->
       <button class="btn" @click="addProductProduced()">Добавить</button>
     </div>
   </div>
@@ -43,6 +62,7 @@ export default {
   name: 'ElementCatalogCheesemaker',
   data() {
     return {
+      isVisibleMeasureOptions: false,
       units: [
         {value: 0, text: 'шт'},
         {value: 1, text: 'кг'},
@@ -51,10 +71,11 @@ export default {
       form: {
         amount: 0.01,
         manufacturer_id: 1,
-        item_measure: 'кг',
+        // item_measure: 'кг',
         operation: 'приход',
       },
       selectStore: 'Выбрать склад',
+      selectMeasure: 'Выберете меру'
     };
   },
   props: {
@@ -69,12 +90,23 @@ export default {
       default() {
         return {};
       },
+      price: {
+        type: Object,
+        default() {
+          return {};
+        },
+      }
     },
   },
   computed: {
-    ...mapGetters(['PRODUCTS', 'CATEGORY', 'STORAGES']),
+    ...mapGetters(['PRODUCTS', 'CATEGORY', 'STORAGES', 'PRICES']),
   },
   methods: {
+    selectOption(PRICES) {
+      this.selectMeasure = PRICES.item_measure;
+      this.isVisibleMeasureOptions = false
+      console.log(this.selectMeasure)
+    },
     // ...mapActions(['GET_PRICES_FROM_API']),
     currentDate(date) {
       let dd = date.getDate();
@@ -94,13 +126,14 @@ export default {
     addProductProduced() {
       if (this.selectStore === 'Выбрать склад') {
         alert('Выберете склад!');
-      // } else if (this.form.date == null) {
-      //   alert('Введите дату!');
+        // } else if (this.form.date == null) {
+        //   alert('Введите дату!');
       } else {
         let date = new Date();
         this.form.date = this.currentDate(date);
         // let date = this.form.date.split('-');
         // this.form.date = date[2] + '-' + date[1] + '-' + date[0];
+        this.form.item_measure = this.selectMeasure
         this.form.product_id = this.product.id;
         this.form.storage_id = this.selectStore;
         this.form.author_id = this.$cookies.get('id')
