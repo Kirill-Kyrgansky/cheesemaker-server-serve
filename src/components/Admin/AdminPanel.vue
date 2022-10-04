@@ -105,7 +105,7 @@
                 v-if="!price.visible"
             />
             <p class="paragraph" v-if="!price.visible">
-              {{ price.item_price }}&nbsp;₽ | 1 &nbsp; {{ price.item_measure }}
+              {{ price.item_price }}&nbsp;₽&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 {{ price.item_measure }}
             </p>
             <button
                 class="btn"
@@ -127,7 +127,7 @@
                 required
             />
           </label>
-          <p class="paragraph margin-0-10">| 1</p>
+          <p class="paragraph margin-0-10"> 1</p>
           <select v-model="item_measure" class="input">
             <option>кг</option>
             <option>л</option>

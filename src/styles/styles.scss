@@ -222,7 +222,7 @@ input[type="file"] {
 }
 
 .order-element {
-  padding: 0 20px;
+  padding: 10px 20px;
   border: 4px solid $text-collor-opacity;
   border-radius: 10px;
   margin: 10px;
@@ -1199,6 +1199,8 @@ input::placeholder {
     padding-right: 20px;
   }
 
+
+
   .header-list-mobile {
     top: 80px;
     padding: 10px 20px;
@@ -1277,6 +1279,11 @@ input::placeholder {
   //   flex-direction: column;
   // }
 
+  .order-info {
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
   // .header-nav {
   //   flex-direction: column-reverse;

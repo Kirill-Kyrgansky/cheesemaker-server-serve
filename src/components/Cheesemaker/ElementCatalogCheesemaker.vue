@@ -13,28 +13,24 @@
         Введите кол-во приготовленного продукта:
       </p>
       <input class="input" type="number" v-model="form.amount" step="0.01"/>
-<!--      <select class="input" v-model="form.item_measure">-->
-<!--        <option>кг</option>-->
-<!--        <option>л</option>-->
-<!--        <option>шт</option>-->
-<!--      </select>-->
-<!--      <select class="input" v-for="prices in PRICES" :key="prices.id">-->
-<!--        <option v-if="prices.product_id === product.id">{{prices.item_measure}}</option>-->
-<!--      </select>-->
       <div>
         <p
             class="paragraph input search-cart pointer"
            @click="isVisibleMeasureOptions = !isVisibleMeasureOptions"
         > {{selectMeasure}}
         </p>
-        <div class="pointer" v-for="prices in PRICES" :key="prices.id" v-if="isVisibleMeasureOptions">
-        <p
+
+        <div v-if="isVisibleMeasureOptions">
+          <p class="paragraph input search-cart pointer" @click="createItemMeasure()"> Создать новую меру</p>
+        <div class="pointer" v-for="prices in PRICES" :key="prices.id" >
+          <p
             class="paragraph input search-cart"
             v-if="prices.product_id === product.id"
             @click="selectOption(prices)"
         >
           {{ prices.item_measure }}
         </p>
+        </div>
         </div>
       </div>
       <select class="input" v-model="selectStore">
@@ -47,14 +43,13 @@
           {{ storage.name }}
         </option>
       </select>
-      <!--      <input type="date" class="input" v-model="form.date"/>-->
       <button class="btn" @click="addProductProduced()">Добавить</button>
     </div>
   </div>
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import {mapGetters} from 'vuex';
 import axios from 'axios';
 import config from '@/config.js'
 
@@ -102,6 +97,35 @@ export default {
     ...mapGetters(['PRODUCTS', 'CATEGORY', 'STORAGES', 'PRICES']),
   },
   methods: {
+    createItemMeasure() {
+      let sendNewMeasuer = {}
+      sendNewMeasuer.item_measure = prompt('Введите новую меру товара.')
+      if (sendNewMeasuer.item_measure === null || sendNewMeasuer.item_measure === '') {
+      } else {
+        sendNewMeasuer.product_id = this.product.id
+        sendNewMeasuer.item_price = 0
+        sendNewMeasuer.active = 0
+        sendNewMeasuer.author_id = this.$cookies.get('id')
+        axios
+        ({
+          method: 'POST',
+          url: `${config.url}/prices`,
+          data: sendNewMeasuer,
+          headers: {
+            "authorization": this.$cookies.get('authorization')
+          }
+        })
+            .then((res) => {
+              alert('Новая мера добавлена.');
+              location.reload()
+            })
+            .catch((error) => {
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
+      }
+
+    },
     selectOption(PRICES) {
       this.selectMeasure = PRICES.item_measure;
       this.isVisibleMeasureOptions = false

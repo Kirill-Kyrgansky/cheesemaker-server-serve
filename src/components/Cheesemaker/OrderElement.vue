@@ -7,7 +7,7 @@
           <p class="title-2">Дата заказа: {{ date }}</p>
           <p class="title-2">Статус: {{ order.status }}</p>
         </div>
-        <div>
+        <div class="margin-10-0">
           <p class="title-3"><span class="bold">Ф.И.О.</span> {{ order.author.fio }}</p>
           <p class="title-3">
             <span class="bold">E-mail:</span> {{ order.author.email }}
