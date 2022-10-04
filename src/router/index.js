@@ -105,7 +105,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.beforeEach((to, from, next) => {
-    if (!($cookies.get('role') !== 'Сыровар') && to.name === 'cheesemaker') {
+    if (!($cookies.get('role') === 'Сыровар') && to.name === 'cheesemaker') {
         alert('Пожалуйста, авторизуйтесь!');
     } else {
         next();
