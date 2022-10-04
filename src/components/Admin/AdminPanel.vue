@@ -100,7 +100,7 @@
               </select>
               <button
                   class="btn"
-                  @click="chagePriceChanges(price)"
+                  @click="changePriceChanges(price)"
                   v-if="price.visible"
               >
                 Применить
@@ -224,10 +224,17 @@ export default {
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
     },
-    chagePriceChanges(price) {
+    changePriceChanges(price) {
+      let sendPriceChanges = {}
+      sendPriceChanges.author_id = this.$cookies.get('id')
+      sendPriceChanges.active = price.active
+      sendPriceChanges.item_measure = price.item_measure
+      sendPriceChanges.product_id = price.product_id
+      sendPriceChanges.item_price = price.item_price
       axios({
         method: 'PATCH',
         url: `${config.url}/prices/${price.id}`,
+        data: sendPriceChanges,
         headers: {
           authorization: this.$cookies.get('authorization'),
         },
@@ -235,6 +242,7 @@ export default {
           .then((res) => {
             alert('Цена успешно изменена');
             price.visible = !price.visible;
+
           })
           .catch((error) => {
             console.log(error);
