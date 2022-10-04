@@ -24,23 +24,35 @@
             required
         ></textarea>
       </div>
-      <p>Категория: {{ selectCategory.name }}</p>
-      <select class="input" v-model="selectCategory.id">
-        <option
-            v-for="category in CATEGORY"
-            :key="category.id"
-            :value="category.id"
-            :selected="selectCategory.name"
-        >
-          {{ category.name }}
-        </option>
-      </select>
-      <!-- <div  v-for="category in CATEGORY"
-          :key="category.id">
-      <input type="radio" v-model="selectCategory.id"
-          :value="category"/>
-          <label :checked="selectCategory.name">{{category.name}}</label>
-        </div> -->
+      <!--      <select class="input" v-model="selectCategory.id">-->
+      <!--        <option-->
+      <!--            v-for="category in CATEGORY"-->
+      <!--            :key="category.id"-->
+      <!--            :value="category.id"-->
+      <!--            :selected="selectCategory.name"-->
+      <!--        >-->
+      <!--          {{ category.name }}-->
+      <!--        </option>-->
+      <!--      </select>-->
+      <p class="paragraph">Категория:</p>
+      <p
+          class="paragraph input search-cart pointer"
+          @click="isVisibleCategory = !isVisibleCategory"
+          v-if="!isVisibleCategory"
+      >
+        {{ selectCategory.name }}
+      </p>
+      <div v-if="isVisibleCategory">
+        <div class="pointer" v-for="category in CATEGORY" :key="category.id">
+          <p
+              class="paragraph input search-cart"
+              @click="selectOption(category)"
+          >
+            {{ category.name }}
+          </p>
+        </div>
+      </div>
+
       <div class="text-centered">
         <button class="btn" @click="ApplyProductChanges(product.id)">
           Применить изменения
@@ -65,7 +77,7 @@
       </button>
       <div class="border-no-absolutle margin-10-0" v-if="priceChange">
         <div v-for="price in PRICES" :key="price.id">
-          <div v-if="price.product_id == product.id">
+          <div v-if="price.product_id === product.id">
             <div class="cart-element-wrap">
               <input
                   type="number"
@@ -152,8 +164,6 @@ import config from '@/config.js'
 
 export default {
   name: 'AdminPanel',
-  components: {},
-
   props: {
     adminLogin: {
       type: Object,
@@ -177,6 +187,8 @@ export default {
       priceChange: false,
       isActivePrice: true,
       selectCategory: {name: 'Все категории', id: ''},
+      isVisibleCategory: false
+
     };
   },
   computed: {
@@ -188,6 +200,11 @@ export default {
     this.nameSelect();
   },
   methods: {
+    selectOption(category) {
+      this.selectCategory.name = category.name
+      this.selectCategory.id = category.id
+      this.isVisibleCategory = !this.isVisibleCategory
+    },
     addFiles() {
       this.$refs.files.click()
     },
@@ -286,8 +303,12 @@ export default {
       return;
     },
     ApplyProductChanges(index) {
-      this.product.category_id = this.selectCategory.id;
+      if (this.selectCategory.id !== '') {
+        this.product.category_id = this.selectCategory.id;
+      } else {
+      }
       let product = this.product;
+      console.log(product.category_id)
       axios({
         method: 'PATCH',
         url: `${config.url}/products/${index}`,
