@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="border-surround filter admin-panel">
     <div class="categories" v-if="!categories">
       <h3 class="title-3 text-centered">Категории</h3>
@@ -71,12 +72,15 @@
       Закрыть редактирование категорий
     </button>
   </div>
+    <Report/>
+  </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import axios from 'axios';
 import CreateStorage from '../Admin/CreateStorage.vue';
 import config from '@/config.js'
+import Report from "@/components/Admin/Report";
 
 export default {
   NAME: 'ElementSortingAdmin',
@@ -111,7 +115,7 @@ export default {
       },
     },
   },
-  components: { CreateStorage },
+  components: {Report, CreateStorage },
   computed: {
     ...mapGetters(['CATEGORY', 'SEARCH_VALUE']),
   },

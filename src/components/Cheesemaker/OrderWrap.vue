@@ -2,9 +2,10 @@
   <section class="section">
     <div class="container wrap-cheesemaker-order">
       <OrderElement
-          v-for="order in orders"
+          v-for="(order, index) in orders"
           :key="order.id"
           :order="order"
+          :index="index"
       />
     </div>
     <paginate

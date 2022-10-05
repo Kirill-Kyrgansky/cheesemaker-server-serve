@@ -41,8 +41,8 @@
             <p class="input delivery" @click="areOptionsVisible = !areOptionsVisible">
               {{ selected }}
             </p>
-            <div class="options cart-options" v-if="areOptionsVisible">
-              <div class="paragraph" v-click-outside="closeStoreOutside" @click="selectOption(store)"
+            <div class="options order-options" v-if="areOptionsVisible">
+              <div class="paragraph pointer" v-click-outside="closeStoreOutside" @click="selectOption(store)"
                    v-for="store in STORAGES" :key="store.id">
                 <p class="paragraph input search-cart" v-if="store.name !== 'Не выбранный склад'">
                   {{ store.name }}

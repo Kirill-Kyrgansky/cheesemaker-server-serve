@@ -11,12 +11,15 @@ import vClickOutside from 'click-outside-vue3'
 import VueCookies from 'vue-cookies';
 import Paginate from "vuejs-paginate-next";
 
+// Global register
+
 const app = createApp(App);
 
 app.use(store);
 app.use(vClickOutside);
 app.use(router);
-app.use(VueCookies)
-app.component('Paginate', Paginate)
+app.use(VueCookies);
+app.component('Paginate', Paginate);
+
 
 app.mount('#app');

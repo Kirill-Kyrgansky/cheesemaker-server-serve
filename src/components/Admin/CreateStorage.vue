@@ -4,7 +4,7 @@
       <div class="options-admin">
         <h3 class="title-3 text-centered">Активные склады</h3>
         <div v-for="storage in STORAGES" :key="storage.id">
-          <div class="input search" v-if="storage.active">
+          <div class="input search" v-if="storage.active || storage.id !== 0">
             <p href="#" class="paragraph">
               {{ storage.name }} 
               <br v-if="storage.comment" /><span v-if="storage.comment" class="paragraph-small"
@@ -34,7 +34,7 @@
       <div class="options-admin margin-10-0">
         <h3 class="title-3 text-centered">Неактивные склады</h3>
         <div v-for="storage in STORAGES" :key="storage.id">
-          <div class="input search" v-if="!storage.active">
+          <div class="input search" v-if="!storage.active && storage.id !== 0">
             <p href="#" class="paragraph">
               {{ storage.name }} <br /><span class="paragraph-small"
                 >комментарий:</span

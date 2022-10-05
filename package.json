@@ -12,6 +12,7 @@
   },
   "main": "babel.config.js",
   "dependencies": {
+    "@vuepic/vue-datepicker": "^3.5.0",
     "axios": "^0.27.2",
     "click-outside-vue3": "^4.0.1",
     "material-symbols": "^0.2.1",

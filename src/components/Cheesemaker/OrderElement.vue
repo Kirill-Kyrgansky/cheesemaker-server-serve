@@ -1,5 +1,5 @@
 <template>
-  <div class="order-element">
+  <div class="order-element" :style="{'z-index': order.id,}">
     <div class="order-title">
       <div class="order-info">
         <div>
@@ -88,6 +88,9 @@ export default {
     };
   },
   props: {
+    index: {
+      type: Number
+    },
     order: {
       type: Object,
       default() {
