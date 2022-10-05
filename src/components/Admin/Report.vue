@@ -9,7 +9,7 @@
               @click="reportVisible"
               alt="close"/>
         </div>
-        <input class="btn" type="button" @click="report('dsf')" value="Отчет по производству">
+        <input class="btn" type="button" @click="report('production')" value="Отчет по производству">
         <input class="btn" type="button" @click="report('hello')" value="Отчет по заказам">
         <Datepicker
             v-model="date"
@@ -91,21 +91,30 @@ export default {
       let sendData = {}
       sendData.start_date = firstDate.toISOString().split('T')[0]
       sendData.end_date = secondDate.toISOString().split('T')[0]
-      // axios({
-      //   method: 'POST',
-      //   // url: `${config.url}/orders/${url}`,
-      //   data: sendData,
-      //   headers: {
-      //     authorization: this.$cookies.get('authorization'),
-      //   },
-      // })
-      //     .then((res) => {
-      //       console.log(res)
-      //     })
-      //     .catch((error) => {
-      //       console.log(error);
-      //       alert('Ошибка в работе приложения. Обратитесь к администратору.');
-      //     });
+      axios({
+        method: 'GET',
+        url: `${config.url}/reports/${url}`,
+        data: sendData,
+        headers: {
+          authorization: this.$cookies.get('authorization'),
+        },
+      })
+          .then((res) => {
+            let base64 = res.data
+            this.saveXLSXFile(base64)
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    saveXLSXFile(base64) {
+      // console.log(base64)
+      let mediaType="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,";
+      let create = document.createElement('create')
+      create.href = mediaType + base64
+      create.download = 'hello.xlsx'
+      create.textContent = 'save'
+      console.log(create)
     },
     closeMenu() {
       this.$refs.Datepicker.closeMenu();
