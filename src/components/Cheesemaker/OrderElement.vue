@@ -41,7 +41,7 @@
       />
     </div>
     <div class="button-right">
-      <button @click="orderSentToThePoint" type="button" class="btn centered" v-if="order.status === 'в обработке'">
+      <button @click="orderSentToThePoint" type="button" class="btn centered" v-if="startOrder && order.status !=='отправлен на точку' ">
         Отправить заказ на точку
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
              viewBox="0 0 16 16">
@@ -49,7 +49,7 @@
                 d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
-      <button @click="orderCheckToThePoint" type="button" class="btn centered" v-if="order.status === 'в обработке'">
+      <button @click="orderCheckToThePoint" type="button" class="btn centered" v-if="checkOrder">
         Подготовить заказ для отправки
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
              viewBox="0 0 16 16">
@@ -85,6 +85,8 @@ export default {
       products: {},
       usersInfo: {},
       content: {},
+      startOrder: false,
+      checkOrder: false
     };
   },
   props: {
@@ -105,13 +107,34 @@ export default {
     ...mapGetters(['CONTENTS', 'USERS', 'DELIVERY_POINTS']),
     date() {
       let date = this.order.order_date.split('T')[0].split('-');
-      return date[2] + '-' + date[1] + '-' + date[0];
+      return date[2] + '.' + date[1] + '.' + date[0];
     },
+
   },
   mounted() {
     this.GET_DELIVERY_POINTS_FROM_API();
+    this.visibleBottom();
   },
   methods: {
+    visibleBottom() {
+      let staffed = []
+      let notStaffed = []
+      let cancelled = []
+      let all = []
+      for (let value of Object.values(this.order.content)) {
+        all.push(value)
+          if (value.status === 'подготовлен к отправке') {
+            staffed.push(value)
+          } else if (value.status === 'отменен') {
+            cancelled.push(value)
+          } else if (value.status === 'в обработке'){
+            notStaffed.push(value)
+          }
+      }
+      if ((staffed.length + cancelled.length) === all.length) {
+        return this.startOrder = true
+      } else if (notStaffed.length >= 1) this.checkOrder = true
+    },
     ...mapActions(['GET_DELIVERY_POINTS_FROM_API']),
     currentDate(date) {
       let dd = date.getDate();

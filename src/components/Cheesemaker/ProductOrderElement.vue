@@ -31,7 +31,7 @@
             <span class="title-3 bold"> Фактическая сумма: </span>
             {{ (price * factWeight).toFixed(2) }} ₽
           </p>
-          <input type="number" class="input" step="0.01" v-model="factWeight"/>
+          <input type="number" class="input" step="0.1" v-model="factWeight"/>
         </div>
       </div>
       <div class="header-nav">
@@ -100,6 +100,9 @@ export default {
   mounted() {
     this.factWeight = this.content.amount
     this.GET_STORAGES_FROM_API();
+  },
+  computed: {
+    ...mapGetters(['ORDERS', 'CONTENTS', 'DELIVERY_POINTS', 'STORAGES']),
   },
   methods: {
     closeStoreOutside() {
@@ -286,9 +289,6 @@ export default {
         }
       }
     },
-  },
-  computed: {
-    ...mapGetters(['ORDERS', 'CONTENTS', 'DELIVERY_POINTS', 'STORAGES']),
   },
   directives: {
     clickOutside: vClickOutside.directive,

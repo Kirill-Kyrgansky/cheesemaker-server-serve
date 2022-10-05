@@ -110,7 +110,7 @@ export default {
     ...mapGetters(['CONTENTS', 'USERS', 'DELIVERY_POINTS']),
     date() {
       let date = this.order.order_date.split('T')[0].split('-');
-      return date[2] + '-' + date[1] + '-' + date[0];
+      return date[2] + '.' + date[1] + '.' + date[0];
     },
   },
   methods: {

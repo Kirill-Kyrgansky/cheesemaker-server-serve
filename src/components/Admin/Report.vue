@@ -10,12 +10,12 @@
               alt="close"/>
         </div>
         <input class="btn" type="button" @click="report('production')" value="Отчет по производству">
-        <input class="btn" type="button" @click="report('hello')" value="Отчет по заказам">
+        <input class="btn" type="button" @click="report('orders')" value="Отчет по заказам">
         <Datepicker
             v-model="date"
             ref="Datepicker"
             locale="ru"
-            :presetRanges="presetRanges"
+            :presetRanges="setup"
             :monthChangeOnScroll="false"
             :enableTimePicker="false"
             placeholder="Выберете промежуток"
@@ -53,30 +53,24 @@ export default {
   name: 'Report',
   components: {Datepicker},
   computed: {
-    setup(){
-    const date = ref();
-    const presetRanges = ref([
-      {label: 'Сегодня', range: [new Date(), new Date()]},
-      {label: 'Этот месяц', range: [startOfMonth(new Date()), endOfMonth(new Date())]},
-      {
-        label: 'Прошлый месяц',
-        range: [startOfMonth(subMonths(new Date(), 1)), endOfMonth(subMonths(new Date(), 1))],
-      },
-      {label: 'Этот год', range: [startOfYear(new Date()), endOfYear(new Date())]},
-    ]);
-    const format = (date) => {
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-
-      return `Selected date is ${day}/${month}/${year}`;
-    }
-    return {
-      // date,
-      // presetRanges,
-      format
-    }
-    }
+    // setup() {
+    //   const date = ref();
+    //   const presetRanges = ref([
+    //     {label: 'Сегодня', range: [new Date(), new Date()]},
+    //     {label: 'Этот месяц', range: [startOfMonth(new Date()), endOfMonth(new Date())]},
+    //     {
+    //       label: 'Прошлый месяц',
+    //       range: [startOfMonth(subMonths(new Date(), 1)), endOfMonth(subMonths(new Date(), 1))],
+    //     },
+    //     {label: 'Этот год', range: [startOfYear(new Date()), endOfYear(new Date())]},
+    //   ]);
+    //
+    //   return {
+    //     // date,
+    //     presetRanges,
+    //     // format
+    //   }
+    // }
   },
   data() {
     return {
@@ -86,35 +80,45 @@ export default {
   },
   methods: {
     report(url) {
-      let firstDate = this.date[0]
-      let secondDate = this.date[1]
-      let sendData = {}
-      sendData.start_date = firstDate.toISOString().split('T')[0]
-      sendData.end_date = secondDate.toISOString().split('T')[0]
+      if (this.date === null) {
+        alert('Выберите дату.')
+      } else if (this.date[0] !== null && this.date[1] === null) {
+        let firstDate = this.date[0]
+        let secondDate = this.date[0]
+        let start_date = firstDate.toISOString().split('T')[0]
+        secondDate.setDate(secondDate.getDate() + 1)
+        let end_date = secondDate.toISOString().split('T')[0]
+        this.getFile(url, start_date, end_date)
+        secondDate.setDate(secondDate.getDate() - 1)
+      } else {
+        let firstDate = this.date[0]
+        let secondDate = this.date[1]
+        let start_date = firstDate.toISOString().split('T')[0]
+        let end_date = secondDate.toISOString().split('T')[0]
+        this.getFile(url, start_date, end_date)
+      }
+    },
+    getFile(url, start_date, end_date) {
       axios({
         method: 'GET',
         url: `${config.url}/reports/${url}`,
-        data: sendData,
+        params: {
+          start_date,
+          end_date
+        },
         headers: {
           authorization: this.$cookies.get('authorization'),
+
         },
       })
           .then((res) => {
             let base64 = res.data
-            this.saveXLSXFile(base64)
+            console.log(res)
+            window.open("data:application/vnd.ms-excel;base64," + base64);
           })
           .catch((error) => {
             console.log(error);
           });
-    },
-    saveXLSXFile(base64) {
-      // console.log(base64)
-      let mediaType="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,";
-      let create = document.createElement('create')
-      create.href = mediaType + base64
-      create.download = 'hello.xlsx'
-      create.textContent = 'save'
-      console.log(create)
     },
     closeMenu() {
       this.$refs.Datepicker.closeMenu();
