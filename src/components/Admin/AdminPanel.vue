@@ -24,16 +24,6 @@
             required
         ></textarea>
       </div>
-      <!--      <select class="input" v-model="selectCategory.id">-->
-      <!--        <option-->
-      <!--            v-for="category in CATEGORY"-->
-      <!--            :key="category.id"-->
-      <!--            :value="category.id"-->
-      <!--            :selected="selectCategory.name"-->
-      <!--        >-->
-      <!--          {{ category.name }}-->
-      <!--        </option>-->
-      <!--      </select>-->
       <p class="paragraph">Категория:</p>
       <p
           class="paragraph input search-cart pointer"
@@ -107,7 +97,7 @@
               </button>
             </div>
           </div>
-          <div v-if="price.product_id == product.id" class="cart-element-wrap">
+          <div v-if="price.product_id === product.id" class="cart-element-wrap">
             <input
                 type="checkbox"
                 true-value="1"
@@ -275,22 +265,20 @@ export default {
     handleImage(e) {
       const selectedImage = e.target.files[0]; // get first file
       this.createBase64Image(selectedImage);
-      let type = selectedImage.type.split('/')[1];
-      this.product.ext = type;
+      this.product.ext = selectedImage.type.split('/')[1];
     },
     createBase64Image(fileObject) {
       const reader = new FileReader();
       reader.onload = (e) => {
         this.image = e.target.result;
         const {image} = this;
-        let base64 = image.split(',')[1];
-        this.product.image = base64;
+        this.product.image = image.split(',')[1];
       };
       reader.readAsDataURL(fileObject);
     },
     isVisibleProduct(index) {
       let proof = confirm('Изменить видимость товара?');
-      if (proof == true) {
+      if (proof === true) {
         this.product.active = !this.product.active;
         axios({
           method: 'PATCH',
@@ -308,7 +296,7 @@ export default {
               alert('Ошибка в работе приложения. Обратитесь к администратору.');
             });
       }
-      return;
+
     },
     ApplyProductChanges(index) {
       if (this.selectCategory.id !== '') {

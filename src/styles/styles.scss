@@ -605,6 +605,29 @@ input[type="file"] {
   border-radius: 10px;
 }
 
+.options-cheesemaker {
+  bottom: 0;
+  left: 25%;
+  background-color: #FDD99E;
+  border: 2.5px solid #6E492A;
+  border-radius: 10px;
+  position: absolute;
+  right: -4px;
+  width: 50%;
+  z-index: 999;
+  background-image: url(http://172.16.2.132:8080/img/fone.b55511a7.png);
+}
+
+.description-enter-active,
+.description-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.description-enter-from,
+.description-leave-to {
+  opacity: 0;
+}
+
 .order-title {
   position: relative;
 }

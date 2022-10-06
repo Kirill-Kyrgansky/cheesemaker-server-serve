@@ -1,25 +1,25 @@
 <template>
   <div class="section wrap-cheesemaker">
     <ElementSortingAdmin
-      :selected="selected"
-      :options="CATEGORY"
-      @select="sortByCategories"
+        :selected="selected"
+        :options="CATEGORY"
+        @select="sortByCategories"
     />
     <div class="container">
       <div class="catalog-items-admin">
-        <CreateElementCatalog :product="product" />
+        <CreateElementCatalog :product="product"/>
         <ElementCatalogAdmin
-          v-for="product in filteredProducts"
-          :key="product.id"
-          :product="product"
-          @addToCart="addToCart"
+            v-for="product in filteredProducts"
+            :key="product.id"
+            :product="product"
+            @addToCart="addToCart"
         />
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import CreateElementCatalog from './CreateElementCatalog';
 import ElementCatalogAdmin from './ElementCatalogAdmin.vue';
 import ElementSortingAdmin from '../Filter/ElementSortingAdmin.vue';
@@ -46,7 +46,7 @@ export default {
     ElementSortingAdmin,
     CreateElementCatalog,
     CreateStorage
-},
+  },
   methods: {
     sortByCategories(category) {
       this.sortedProducts = [];

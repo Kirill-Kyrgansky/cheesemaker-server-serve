@@ -3,44 +3,120 @@
     <section class="section header">
       <div class="container">
         <div class="centered">
-          <a href="/" class="logo">
-            <img class="logo" id="logo" alt="Логотип компании Славный сыровар." src="/allImage/logo/logo_no_text.png"/>
+          <a
+              href="/"
+              class="logo"
+          >
+            <img
+                class="logo"
+                id="logo"
+                alt="Логотип компании Славный сыровар."
+                src="/allImage/logo/logo_no_text.png"
+            />
           </a>
           <nav class="header-nav">
             <transition name="fade">
-              <div class="header-list-mobile" v-show="menuMobile">
-                <router-link class="header-link" to="/products">Продукция</router-link>
-                <router-link class="header-link" to="/seller-orders" v-if="isSeller">Продавец</router-link>
-                <router-link class="header-link" to="/admin" v-if="isAdminAuth">Администратор</router-link>
-                <router-link class="header-link" to="/cheesemaker" v-if="isCheesemakerAuth">Сыровар</router-link>
-                <router-link class="header-link" to="/cheesemaker-orders" v-if="isCheesemakerAuth || isAdminAuth">Заказы
+              <div
+                  class="header-list-mobile"
+                  v-show="menuMobile"
+              >
+                <router-link
+                    class="header-link"
+                    to="/products"
+                >Продукция
                 </router-link>
-                <router-link class="header-link" to="/delivery">Адреса</router-link>
+                <router-link
+                    class="header-link"
+                    to="/seller-orders"
+                    v-if="isSeller"
+                >Продавец
+                </router-link>
+                <router-link
+                    class="header-link"
+                    to="/admin"
+                    v-if="isAdminAuth"
+                >Администратор
+                </router-link>
+                <router-link
+                    class="header-link"
+                    to="/cheesemaker"
+                    v-if="isCheesemakerAuth"
+                >Сыровар
+                </router-link>
+                <router-link
+                    class="header-link"
+                    to="/cheesemaker-orders"
+                    v-if="isCheesemakerAuth || isAdminAuth"
+                >Заказы
+                </router-link>
+                <router-link
+                    class="header-link"
+                    to="/delivery"
+                >Адреса
+                </router-link>
               </div>
             </transition>
             <div class="header-list desctop">
-              <router-link class="header-link" to="/products">Продукция</router-link>
-              <router-link class="header-link" to="/seller-orders" v-if="isSeller">Продавец</router-link>
-              <router-link class="header-link" to="/admin" v-if="isAdminAuth">Администратор</router-link>
-              <router-link class="header-link" to="/cheesemaker" v-if="isCheesemakerAuth">Сыровар</router-link>
-              <router-link class="header-link" to="/cheesemaker-orders" v-if="isCheesemakerAuth || isAdminAuth">Заказы
+              <router-link
+                  class="header-link"
+                  to="/products"
+              >Продукция
               </router-link>
-              <router-link class="header-link" to="/delivery">Адреса</router-link>
+              <router-link
+                  class="header-link"
+                  to="/seller-orders"
+                  v-if="isSeller"
+              >Продавец
+              </router-link>
+              <router-link
+                  class="header-link"
+                  to="/admin"
+                  v-if="isAdminAuth"
+              >Администратор
+              </router-link>
+              <router-link
+                  class="header-link"
+                  to="/cheesemaker"
+                  v-if="isCheesemakerAuth"
+              >Сыровар
+              </router-link>
+              <router-link
+                  class="header-link"
+                  to="/cheesemaker-orders"
+                  v-if="isCheesemakerAuth || isAdminAuth"
+              >Заказы
+              </router-link>
+              <router-link
+                  class="header-link"
+                  to="/delivery">
+                Адреса
+              </router-link>
             </div>
             <div class="header-list-item">
               <div class="header-list-item-item">
                 <a class="header-link-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" style="color: #372311" class="header-link-icon-svg"
-                       @click="toggleLogin" fill="currentColor" viewBox="0 0 16 16">
+                  <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      style="color: #372311"
+                      class="header-link-icon-svg"
+                      @click="toggleLogin"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                  >
                     <path
                         d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
                   </svg>
                 </a>
               </div>
-              <router-link v-if="this.$cookies.get('fio') != null" to="/cart" class="header-link-icon">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     viewBox="0 0 191.6 175.82" style="enable-background: new 0 0 191.6 175.82" xml:space="preserve"
-                     class="header-link-icon-svg">
+              <router-link
+                  v-if="this.$cookies.get('fio') != null"
+                  to="/cart"
+                  class="header-link-icon">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 191.6 175.82"
+                    style="enable-background: new 0 0 191.6 175.82" xml:space="preserve"
+                    class="header-link-icon-svg">
                   <g>
                     <g>
                       <path class="st0" d="M183.2,75.84h-10.03c0.1-0.7,0.2-1.39,0.3-2.08c0.34-2.36,0.67-4.59,0.85-6.89
@@ -140,9 +216,17 @@
                   </g>
                 </svg>
               </router-link>
-              <a class="header-link-icon menu" @click="toggleMenu" v-click-outside="onClickOutsideMenu">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     viewBox="0 0 150.4 134.46" xml:space="preserve" class="header-link-icon-svg">
+              <a
+                  class="header-link-icon menu"
+                  @click="toggleMenu"
+                  v-click-outside="onClickOutsideMenu"
+              >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 150.4 134.46"
+                    xml:space="preserve"
+                    class="header-link-icon-svg"
+                >
                   <g>
                     <g>
                       <g id="hINDUH.tif">
@@ -269,41 +353,98 @@
                 </svg>
               </a>
             </div>
-            <transition name="fade" v-click-outside="onClickOutsideLogin">
-              <div class="cart login-pop-up login" id="login-form" v-if="loginBar">
+            <transition
+                name="fade"
+                v-click-outside="onClickOutsideLogin"
+            >
+              <div
+                  class="cart login-pop-up login"
+                  id="login-form"
+                  v-if="loginBar"
+              >
                 <div>
                   <div v-if="logIn">
                     <div class="text-centered margin-10-0">
                       <p class="title-3 text-centered">Логин</p>
-                      <input type="text" required id="name" class="input" placeholder="Название" v-model="auth.name"/>
+                      <input
+                          type="text"
+                          required id="name"
+                          class="input"
+                          placeholder="Название"
+                          v-model="auth.name"
+                      />
                     </div>
                     <div class="text-centered">
                       <p class="title-3 text-centered">Пароль</p>
-                      <input required type="password" id="name" class="input" placeholder="Название"
-                             v-on:keyup.enter="sendAuth" v-model="auth.password"/>
-                      <p class="paragraph-tiny text-centered text-red" v-if="loginError">Неверный логин или пароль</p>
-                      <p class="paragraph-tiny text-centered text-red" v-if="isLoginEmpty">Введите логин и пароль</p>
-                      <input required class="btn" type="submit" form="login" value="Принять" @click="sendAuth"/>
+                      <input
+                          required
+                          type="password"
+                          id="name"
+                          class="input"
+                          placeholder="Название"
+                          v-on:keyup.enter="sendAuth"
+                          v-model="auth.password"
+                      />
+                      <p
+                          class="paragraph-tiny text-centered text-red"
+                          v-if="loginError"
+                      >
+                        Неверный логин или пароль
+                      </p>
+                      <p
+                          class="paragraph-tiny text-centered text-red"
+                          v-if="isLoginEmpty"
+                      >
+                        Введите логин и пароль
+                      </p>
+                      <input
+                          required
+                          class="btn"
+                          type="submit"
+                          form="login"
+                          value="Принять"
+                          @click="sendAuth"
+                      />
                     </div>
                   </div>
                 </div>
-                <div v-if="!logIn" class="personal-cabinet_wrap">
+                <div
+                    v-if="!logIn"
+                    class="personal-cabinet_wrap"
+                >
                   <div class="margin-10-0">
                     <h3 class="title-3">Добрый день</h3>
                     <h3 class="title-3">{{ fio }}</h3>
                   </div>
-                  <button @click="logOut" class="btn">Выйти</button>
-                  <button v-if="activeOrders" @click="isHistoryOrdersVisible" class="btn">История заказов</button>
-                  <button v-if="historyOrders" @click="isHistoryOrdersVisible" class="btn">Скрыть историю заказов
+                  <button
+                      @click="logOut"
+                      class="btn"
+                  >
+                    Выйти
+                  </button>
+                  <button
+                      v-if="activeOrders"
+                      @click="isHistoryOrdersVisible"
+                      class="btn"
+                  >
+                    История заказов
+                  </button>
+                  <button
+                      v-if="historyOrders"
+                      @click="isHistoryOrdersVisible"
+                      class="btn"
+                  >
+                    Скрыть историю заказов
                   </button>
                   <p class="title-3">Информация о заказах:</p>
                   <div class="flex-reverse">
-                    <PersonalCabinet v-for="orders in ORDERS_USERS"
-                                     :key="orders.id"
-                                     :orders ='orders'
-                                     ref="PersonalCabinet"
-                                     :historyOrders='historyOrders'
-                                     :activeOrders='activeOrders'
+                    <PersonalCabinet
+                        v-for="orders in ORDERS_USERS"
+                        :key="orders.id"
+                        :orders='orders'
+                        ref="PersonalCabinet"
+                        :historyOrders='historyOrders'
+                        :activeOrders='activeOrders'
                     >
                     </PersonalCabinet>
                   </div>
@@ -314,14 +455,30 @@
         </div>
       </div>
       <div class="border-bottom"></div>
-      <div class="cart-done" v-if="messagePhone">
+      <div
+          class="cart-done"
+          v-if="messagePhone"
+      >
         <div class="cart cart-sucsess order-title">
           <h2 class="title-2">Пожалуйста, введите свой номер телефона</h2>
-          <p class="text-red" v-if="errorPhone">
+          <p
+              class="text-red"
+              v-if="errorPhone"
+          >
             Ошибка! Неверно указан номер.
           </p>
-          <input class="input" type="number" v-model="userPhone" placeholder="+7**********"/>
-          <input class="btn" type="button" @click="phone" value="Применить"/>
+          <input
+              class="input"
+              type="number"
+              v-model="userPhone"
+              placeholder="+7**********"
+          />
+          <input
+              class="btn"
+              type="button"
+              @click="phone"
+              value="Применить"
+          />
           <p class="paragraph">
             Он будет использоваться только для обработки заказа.
           </p>
@@ -373,7 +530,6 @@ export default {
     this.GET_ORDERS_USERS_FROM_API();
   },
   methods: {
-
     isHistoryOrdersVisible() {
       this.historyOrders = !this.historyOrders
       this.activeOrders = !this.activeOrders

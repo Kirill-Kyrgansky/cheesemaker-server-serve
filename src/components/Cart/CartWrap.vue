@@ -1,6 +1,9 @@
 <template>
   <section class="section">
-    <div class="cart-done" v-if="sucsess">
+    <div
+        class="cart-done"
+        v-if="sucsess"
+    >
       <div class="cart cart-sucsess order-title">
         <div class="position-end">
           <img
@@ -14,18 +17,27 @@
         <p class="paragraph">Спасибо за заказ!</p>
       </div>
     </div>
-    <div class="container cart cart-container" v-if="isVisible">
-      <p class="title-2 text-centered margin-10-0" v-if="cart_data <= 1">
+    <div
+        class="container cart cart-container"
+        v-if="isVisible"
+    >
+      <p
+          class="title-2 text-centered margin-10-0"
+          v-if="cart_data <= 1"
+      >
         Корзина пуста
       </p>
       <CartElement
           v-for="(item, index) in cart_data"
           :key="item.id"
           :cart_item_data="item"
-          @deliteFromCart="deliteFromCart(index)"
+          @deleteFromCart="deleteFromCart(index)"
           :index="index"
       />
-      <div class="cart-footer" v-if="!(cart_data <= 1)">
+      <div
+          class="cart-footer"
+          v-if="!(cart_data <= 1)"
+      >
         <div class="v-select">
           <p
               class="input delivery"
@@ -33,7 +45,10 @@
           >
             {{ selected }}
           </p>
-          <div class="options cart-options" v-if="areOptionsVisible">
+          <div
+              class="options cart-options"
+              v-if="areOptionsVisible"
+          >
             <p
                 class="paragraph input search-cart"
                 v-for="pickpoint in DELIVERY_POINTS"
@@ -45,7 +60,12 @@
           </div>
         </div>
         <div class="cart-footer-element">
-          <button class="header-link" @click="orderUsers()">Заказать</button>
+          <button
+              class="header-link"
+              @click="orderUsers()"
+          >
+            Заказать
+          </button>
         </div>
       </div>
     </div>
@@ -95,10 +115,6 @@ export default {
       'DECREMENT_CART_ITEM',
       'GET_DELIVERY_POINTS_FROM_API',
     ]),
-    test1() {
-      let date = new Date()
-      console.log(this.deliveryDay(date))
-    },
     currentDate(date) {
       let dd = date.getDate();
       if (dd < 10) dd = '0' + dd;
@@ -120,12 +136,10 @@ export default {
       result.setMonth(result.getMonth() + 1)
       return result;
     },
-
     orderUsers() {
       if (this.selected === 'Выберите адрес доставки') {
         alert('Выберите адрес доставки');
       } else {
-
         let date = new Date();
         let dateDelivery = this.deliveryDay(date).getFullYear() + '-' + this.deliveryDay(date).getMonth() + '-' + this.deliveryDay(date).getDate()
         let order = {
@@ -193,7 +207,7 @@ export default {
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
     },
-    deliteFromCart(index) {
+    deleteFromCart(index) {
       this.DELITE_FROM_CART(index);
     },
     hideShow() {

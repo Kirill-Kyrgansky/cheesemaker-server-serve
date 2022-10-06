@@ -1,5 +1,8 @@
 <template>
-  <div class="order-element" :style="{'z-index': order.id,}">
+  <div
+      class="order-element"
+      :style="{'z-index': order.id}"
+  >
     <div class="order-title">
       <div class="order-info">
         <div>
@@ -8,14 +11,22 @@
           <p class="title-2">Статус: {{ order.status }}</p>
         </div>
         <div class="margin-10-0">
-          <p class="title-3"><span class="bold">Ф.И.О.</span> {{ order.author.fio }}</p>
           <p class="title-3">
-            <span class="bold">E-mail:</span> {{ order.author.email }}
+            <span class="bold">Ф.И.О.</span>
+            {{ order.author.fio }}
           </p>
           <p class="title-3">
-            <span class="bold">Телефон:</span> {{ order.author.phone }}
+            <span class="bold">E-mail:</span>
+            {{ order.author.email }}
           </p>
-          <div v-for="pickpoint in DELIVERY_POINTS" :key="pickpoint.id">
+          <p class="title-3">
+            <span class="bold">Телефон:</span>
+            {{ order.author.phone }}
+          </p>
+          <div
+              v-for="pickpoint in DELIVERY_POINTS"
+              :key="pickpoint.id"
+          >
             <p class="title-3">
               <span class="bold">Адрес доставки:</span>
               {{ pickpoint.name }}
@@ -23,12 +34,6 @@
           </div>
         </div>
       </div>
-      <!--      <p class="cancellation bold centered-horizontally" v-if="order.status === 'отменен пользователем'">-->
-      <!--        Заказ отменен пользователем!-->
-      <!--      </p>-->
-      <!--      <p class="cancellation bold centered-horizontally" v-if="order.status === 'отменен'">-->
-      <!--        Заказ отменен сыроваром! Причина: {{ order.comment }}-->
-      <!--      </p>-->
       <div class="border-line"></div>
     </div>
     <div>
@@ -41,27 +46,59 @@
       />
     </div>
     <div class="button-right">
-      <button @click="orderSentToThePoint" type="button" class="btn centered" v-if="startOrder && order.status !=='отправлен на точку' ">
+      <button
+          @click="orderSentToThePoint"
+          type="button"
+          class="btn centered"
+          v-if="startOrder && order.status !=='отправлен на точку' "
+      >
         Отправить заказ на точку
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
-             viewBox="0 0 16 16">
-          <path fill-rule="evenodd"
-                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-bar-right"
+            viewBox="0 0 16 16"
+        >
+          <path
+              fill-rule="evenodd"
+              d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
-      <button @click="orderCheckToThePoint" type="button" class="btn centered" v-if="checkOrder">
+      <button
+          @click="orderCheckToThePoint"
+          type="button"
+          class="btn centered"
+          v-if="checkOrder"
+      >
         Подготовить заказ для отправки
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
-             viewBox="0 0 16 16">
-          <path fill-rule="evenodd"
-                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-bar-right"
+            viewBox="0 0 16 16"
+        >
+          <path
+              fill-rule="evenodd"
+              d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
-      <button @click="orderStopToThePoint" v-if="order.status === 'в обработке'" type="button"
-              class="cancellation centered-horizontally btn-text">
+      <button
+          @click="orderStopToThePoint"
+          v-if="order.status === 'в обработке'"
+          type="button"
+          class="cancellation centered-horizontally btn-text">
         Отменить заказ
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
-             viewBox="0 0 16 16">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-bar-right"
+            viewBox="0 0 16 16">
           <path fill-rule="evenodd"
                 d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
@@ -109,7 +146,6 @@ export default {
       let date = this.order.order_date.split('T')[0].split('-');
       return date[2] + '.' + date[1] + '.' + date[0];
     },
-
   },
   mounted() {
     this.GET_DELIVERY_POINTS_FROM_API();
@@ -123,13 +159,13 @@ export default {
       let all = []
       for (let value of Object.values(this.order.content)) {
         all.push(value)
-          if (value.status === 'подготовлен к отправке') {
-            staffed.push(value)
-          } else if (value.status === 'отменен') {
-            cancelled.push(value)
-          } else if (value.status === 'в обработке'){
-            notStaffed.push(value)
-          }
+        if (value.status === 'подготовлен к отправке') {
+          staffed.push(value)
+        } else if (value.status === 'отменен') {
+          cancelled.push(value)
+        } else if (value.status === 'в обработке') {
+          notStaffed.push(value)
+        }
       }
       if ((staffed.length + cancelled.length) === all.length) {
         return this.startOrder = true

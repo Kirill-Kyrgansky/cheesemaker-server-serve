@@ -1,18 +1,13 @@
 <template>
-  <div >
+  <div>
     <div class="section wrap-cheesemaker">
-<!--      <ElementSorting-->
-<!--        :selected="selected"-->
-<!--        :options="CATEGORY"-->
-<!--        @select="sortByCategories"-->
-<!--      />-->
       <div class="container">
         <div class="catalog-items-admin">
           <ElementCatalogCheesemaker
-            v-for="product in filteredProducts"
-            :key="product.id"
-            :product="product"
-            @addToCart="addToCart"
+              v-for="product in filteredProducts"
+              :key="product.id"
+              :product="product"
+              @addToCart="addToCart"
           />
         </div>
       </div>
@@ -20,7 +15,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import ElementSorting from '../Filter/ElementSorting.vue';
 import ElementCatalogCheesemaker from './ElementCatalogCheesemaker.vue';
 
@@ -43,7 +38,7 @@ export default {
   components: {
     ElementSorting,
     ElementCatalogCheesemaker,
-},
+  },
   methods: {
     ...mapActions(['GET_PRODUCTS_FROM_API', 'GET_PRICES_FROM_API', 'ADD_TO_CART', 'GET_CATEGORY_FROM_API', 'GET_STORAGES_FROM_API']),
     sortByCategories(category) {

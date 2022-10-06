@@ -1,24 +1,29 @@
 <template>
-  <button class="btn" @click="getInfoForProduct">Просмотр заказа</button>
+  <button
+      class="btn"
+      @click="getInfoForProduct"
+  >
+    Просмотр заказа
+  </button>
   <div v-if="isVisible">
-  <div v-for="(product, index) in info.content" :key="product.id">
-    <p class="paragraph-small">
-      <span class="title-3 bold"> № </span>
-      {{ index + 1 }}
-    </p>
-    <p class="paragraph-small">
-      <span class="title-3 bold"> Название: </span>
-      {{product.product.name}}
-    </p>
-<!--    <p class="paragraph-small">-->
-<!--      <span class="title-3 bold"> Кол-во: </span>-->
-<!--      -->
-<!--    </p>-->
-    <p class="paragraph-small">
-      <span class="title-3 bold"> Цена: </span>
-      {{product.price.item_price}} ₽ / {{ product.amount }}
-    </p>
-  </div>
+    <div
+        v-for="(product, index) in info.content"
+        :key="product.id"
+    >
+      <p class="paragraph-small">
+        <span class="title-3 bold"> № </span>
+        {{ index + 1 }}
+      </p>
+      <p class="paragraph-small">
+        <span class="title-3 bold"> Название: </span>
+        {{ product.product.name }}
+      </p>
+
+      <p class="paragraph-small">
+        <span class="title-3 bold"> Цена: </span>
+        {{ product.price.item_price }} ₽ / {{ product.amount }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -34,9 +39,6 @@ export default {
       info: {},
 
     }
-  },
-  computed: {
-
   },
   props: ['orders'],
   methods: {
@@ -60,7 +62,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

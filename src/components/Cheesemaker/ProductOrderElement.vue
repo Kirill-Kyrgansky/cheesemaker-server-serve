@@ -21,7 +21,10 @@
           <span class="title-3 bold"> Сумма: </span>
           {{ (content.price.item_price * content.amount).toFixed(2) }} ₽
         </p>
-        <div v-if="content.price.item_measure === 'кг' && content.status === 'в обработке'" class="order-title">
+        <div
+            v-if="content.price.item_measure === 'кг' && content.status === 'в обработке'"
+            class="order-title"
+        >
           <p class="paragraph">
             <span class="title-3 bold"> Фактический вес: </span>
             {{ factWeight }}
@@ -31,20 +34,46 @@
             <span class="title-3 bold"> Фактическая сумма: </span>
             {{ (price * factWeight).toFixed(2) }} ₽
           </p>
-          <input type="number" class="input" step="0.1" v-model="factWeight"/>
+          <input
+              type="number"
+              class="input"
+              step="0.1"
+              v-model="factWeight"
+          />
         </div>
       </div>
       <div class="header-nav">
-        <div class="footer" v-if="content.status === 'в обработке'">
-          <input type="button" class="btn" value="С товаром возникли проблемы" @click="orderStop"/>
+        <div
+            class="footer"
+            v-if="content.status === 'в обработке'"
+        >
+          <input
+              type="button"
+              class="btn"
+              value="С товаром возникли проблемы"
+              @click="orderStop"
+          />
           <div class="v-select">
-            <p class="input delivery" @click="areOptionsVisible = !areOptionsVisible">
+            <p
+                class="input delivery"
+                @click="areOptionsVisible = !areOptionsVisible"
+            >
               {{ selected }}
             </p>
-            <div class="options order-options" v-if="areOptionsVisible">
-              <div class="paragraph pointer" v-click-outside="closeStoreOutside" @click="selectOption(store)"
-                   v-for="store in STORAGES" :key="store.id">
-                <p class="paragraph input search-cart" v-if="store.name !== 'Не выбранный склад'">
+            <div
+                class="options order-options"
+                v-if="areOptionsVisible"
+            >
+              <div
+                  class="paragraph pointer"
+                  v-click-outside="closeStoreOutside"
+                  @click="selectOption(store)"
+                  v-for="store in STORAGES"
+                  :key="store.id">
+                <p
+                    class="paragraph input search-cart"
+                    v-if="store.name !== 'Не выбранный склад'"
+                >
                   {{ store.name }}
                 </p>
               </div>
@@ -72,7 +101,6 @@
           Товар принят на точку!
         </p>
       </div>
-
     </div>
   </div>
 </template>
@@ -123,7 +151,6 @@ export default {
       if (sec < 10) sec = '0' + sec
       return yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minutes + ':' + sec;
     },
-
     productCheck() {
       let name = this.content.product.name
       let storage = Number(this.storage_id)

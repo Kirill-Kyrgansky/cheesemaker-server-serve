@@ -1,5 +1,8 @@
 <template>
-  <div class="product-order-element" v-if="content.status !== 'отменен'">
+  <div
+      class="product-order-element"
+      v-if="content.status !== 'отменен'"
+  >
     <div>
       <div class="margin-10-0">
         <p class="paragraph-small">
@@ -21,7 +24,10 @@
           <span class="title-3 bold"> Сумма: </span>
           {{ (content.price.item_price * content.amount).toFixed(2) }} ₽
         </p>
-        <div class="order-title" v-if="measure === 'кг' && content.status === 'в обработке'">
+        <div
+            class="order-title"
+            v-if="measure === 'кг' && content.status === 'в обработке'"
+        >
           <div class="order-element margin-10-0"></div>
           <p class="paragraph">
             <span class="title-3 bold"> Фактический вес: </span>
@@ -34,23 +40,53 @@
           </p>
         </div>
       </div>
-      <div v-if="content.status === 'подготовлен к отправке' && order.status !== 'отправлен на точку' ">
-        <input type="button" class="btn" value="Товар принят в магазине" @click="orderRun"/>
-        <input type="button" class="cancellation text-centered" value="Товар НЕ принят в магазине"
-               @click="orderError"/>
+      <div
+          v-if="content.status === 'подготовлен к отправке' && order.status !== 'отправлен на точку' "
+      >
+        <input
+            type="button"
+            class="btn"
+            value="Товар принят в магазине"
+            @click="orderRun"
+        />
+        <input
+            type="button"
+            class="cancellation text-centered"
+            value="Товар НЕ принят в магазине"
+            @click="orderError"
+        />
       </div>
-      <input type="button" class="btn" value="Товар выдан" @click="orderDone"
-             v-if="content.status === 'прибыл в магазин'"/>
-      <input type="button" class="cancellation text-centered" value="Покупатель отказался" @click="orderStop"
-             v-if="content.status === 'прибыл в магазин'"/>
+      <input
+          type="button"
+          class="btn"
+          value="Товар выдан"
+          @click="orderDone"
+          v-if="content.status === 'прибыл в магазин'"
+      />
+      <input
+          type="button"
+          class="cancellation text-centered"
+          value="Покупатель отказался"
+          @click="orderStop"
+          v-if="content.status === 'прибыл в магазин'"
+      />
     </div>
-    <p class="cancellation text-centered" v-if="content.status === 'отменен покупателем на точке'">
+    <p
+        class="cancellation text-centered"
+        v-if="content.status === 'отменен покупателем на точке'"
+    >
       Товар отменен
     </p>
-    <p class="cancellation text-centered" v-if="content.status === 'товар не принят на точке'">
+    <p
+        class="cancellation text-centered"
+        v-if="content.status === 'товар не принят на точке'"
+    >
       Товар не принят в магазине
     </p>
-    <p class="btn text-centered" v-if="content.status === 'заказ выдан'">
+    <p
+        class="btn text-centered"
+        v-if="content.status === 'заказ выдан'"
+    >
       Товар выдан покупателю
     </p>
   </div>

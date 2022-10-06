@@ -1,6 +1,9 @@
 <template>
   <div class="order-element">
-    <div class="order-finished" v-if="order.status !== 'отправлен на точку' && order.status !== 'прибыл в магазин' && order.status !== 'прибыл в магазин частично'">
+    <div
+        class="order-finished"
+        v-if="order.status !== 'отправлен на точку' && order.status !== 'прибыл в магазин' && order.status !== 'прибыл в магазин частично'"
+    >
       <p class="title-1">Заказ закрыт.</p>
     </div>
     <div class="order-title">
@@ -42,31 +45,63 @@
 
     </div>
     <div class="button-right">
-      <button v-if="order.status === 'отправлен на точку'" @click="orderReceivedInFull" type="button"
-              class="btn centered">
+      <button
+          v-if="order.status === 'отправлен на точку'"
+          @click="orderReceivedInFull"
+          type="button"
+          class="btn centered"
+      >
         Заказ принят в магазине полностью
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
-             viewBox="0 0 16 16">
-          <path fill-rule="evenodd"
-                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-bar-right"
+            viewBox="0 0 16 16"
+        >
+          <path
+              fill-rule="evenodd"
+              d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
-      <button v-if="order.status === 'отправлен на точку'" @click="orderReceivedInPart" type="button"
-              class="cancellation centered">
+      <button
+          v-if="order.status === 'отправлен на точку'"
+          @click="orderReceivedInPart"
+          type="button"
+          class="cancellation centered"
+      >
         Заказ принят в магазине частично
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
-             viewBox="0 0 16 16">
-          <path fill-rule="evenodd"
-                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-bar-right"
+            viewBox="0 0 16 16"
+        >
+          <path
+              fill-rule="evenodd"
+              d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
-      <button v-if="order.status === 'прибыл в магазин' || order.status === 'прибыл в магазин частично' "
-              @click="orderIssued" type="button" class="btn centered">
+      <button
+          v-if="order.status === 'прибыл в магазин' || order.status === 'прибыл в магазин частично' "
+          @click="orderIssued"
+          type="button"
+          class="btn centered">
         Завершить заказ
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-bar-right"
-             viewBox="0 0 16 16">
-          <path fill-rule="evenodd"
-                d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-bar-right"
+            viewBox="0 0 16 16"
+        >
+          <path
+              fill-rule="evenodd"
+              d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z"/>
         </svg>
       </button>
     </div>
@@ -87,7 +122,7 @@ export default {
       comment: '',
       products: {},
       usersInfo: {},
-      cancellProduct: [],
+      cancelProduct: [],
       allProduct: [],
       doneProduct: [],
     };
@@ -192,7 +227,6 @@ export default {
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
     },
-
     orderIssued() {
       let date = new Date();
       let allProducts = []
@@ -233,8 +267,6 @@ export default {
               });
         }
       }
-      console.log(allProducts)
-      console.log(canceledProducts)
       if (allProducts.length === canceledProducts.length) {
         let date = new Date();
         let nowDate = this.currentDate(date)

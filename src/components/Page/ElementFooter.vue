@@ -6,7 +6,10 @@
         <div class="container bottom">
           <div class="centered catalog-element-footer">
             <div class="column-centered">
-              <a href="" class="logo">
+              <a
+                  href=""
+                  class="logo"
+              >
                 <img
                   class="logo"
                   id="logo"
@@ -22,7 +25,9 @@
                 ремесленные сыры&raquo; <br />+7 (4722) 73-23-92
               </a>
             </div>
-            <img class="footer-image-center" src="/allImage/cow.png" />
+            <img class="footer-image-center"
+                 src="/allImage/cow.png"
+            />
             <div class="column-centered">
               <a
                 href="http://zelenaya-dolina.com/"

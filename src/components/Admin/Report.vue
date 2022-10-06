@@ -1,16 +1,36 @@
 <template>
   <div class="report">
-    <div class="cart-done" v-if="reportDateVisible">
+    <div
+        class="cart-done"
+        v-if="reportDateVisible"
+    >
       <div class="cart cart-sucsess order-title">
         <div class="position-end">
           <img
               src="/allImage/Icons/cross.svg"
               class="header-link-icon pointer close"
               @click="reportVisible"
-              alt="close"/>
+              alt="close"
+          />
         </div>
-        <input class="btn" type="button" @click="report('production')" value="Отчет по производству">
-        <input class="btn" type="button" @click="report('orders')" value="Отчет по заказам">
+        <input
+            class="btn margin-10-0"
+            type="button"
+            @click="report('production')"
+            value="Отчет по производству"
+        >
+        <input
+            class="btn margin-10-0"
+            type="button"
+            @click="report('order-contents')"
+            value="Отчет по движению товара"
+        >
+        <input
+            class="btn margin-10-0"
+            type="button"
+            @click="report('orders')"
+            value="Отчет по заказам"
+        >
         <Datepicker
             v-model="date"
             ref="Datepicker"
@@ -28,15 +48,28 @@
             <span @click="presetDateRange(range)">{{ label }}</span>
           </template>
           <template #action-select class="dp-inline">
-            <p class="custom-select" @click="closeMenu">Закрыть</p>
-            <p class="custom-select" @click="selectDate">Выбрать</p>
+            <p
+                class="custom-select"
+                @click="closeMenu"
+            >Закрыть
+            </p>
+            <p
+                class="custom-select"
+                @click="selectDate"
+            >Выбрать
+            </p>
           </template>
         </Datepicker>
       </div>
     </div>
 
     <div class="report-button">
-      <input class="btn" type="button" @click="reportVisible" value="Отчеты">
+      <input
+          class="btn"
+          type="button"
+          @click="reportVisible"
+          value="Отчеты"
+      >
     </div>
   </div>
 </template>
@@ -44,34 +77,13 @@
 <script>
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-import {ref} from 'vue';
-import {endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths} from 'date-fns';
 import axios from "axios";
 import config from "@/config";
 
 export default {
   name: 'Report',
   components: {Datepicker},
-  computed: {
-    // setup() {
-    //   const date = ref();
-    //   const presetRanges = ref([
-    //     {label: 'Сегодня', range: [new Date(), new Date()]},
-    //     {label: 'Этот месяц', range: [startOfMonth(new Date()), endOfMonth(new Date())]},
-    //     {
-    //       label: 'Прошлый месяц',
-    //       range: [startOfMonth(subMonths(new Date(), 1)), endOfMonth(subMonths(new Date(), 1))],
-    //     },
-    //     {label: 'Этот год', range: [startOfYear(new Date()), endOfYear(new Date())]},
-    //   ]);
-    //
-    //   return {
-    //     // date,
-    //     presetRanges,
-    //     // format
-    //   }
-    // }
-  },
+
   data() {
     return {
       reportDateVisible: false,
@@ -133,27 +145,3 @@ export default {
 }
 
 </script>
-
-<style>
-/*.custom-select:hover {*/
-/*  background-color: red;*/
-/*}*/
-
-
-.report-wrap {
-
-}
-
-.report-date {
-
-}
-
-.report {
-
-}
-
-.report-button {
-
-}
-
-</style>

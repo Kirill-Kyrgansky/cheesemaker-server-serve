@@ -7,43 +7,79 @@
           class="catalog-element-img"
       />
       <div class="text-align-right">
-        <h3 class="title-3 text-centered">{{ product.name }}</h3>
+        <h3 class="title-3 text-centered">
+          {{ product.name }}
+        </h3>
       </div>
       <p class="paragraph-small margin-10-0 text-centered">
         Введите кол-во приготовленного продукта:
       </p>
-      <input class="input" type="number" v-model="form.amount" step="0.01"/>
+      <input
+          class="input"
+          type="number"
+          v-model="form.amount"
+          step="0.1"
+      />
       <div>
         <p
             class="paragraph input search-cart pointer"
-           @click="isVisibleMeasureOptions = !isVisibleMeasureOptions"
-        > {{selectMeasure}}
-        </p>
-
-        <div v-if="isVisibleMeasureOptions">
-          <p class="paragraph input search-cart pointer" @click="createItemMeasure()"> Создать новую меру</p>
-        <div class="pointer" v-for="prices in PRICES" :key="prices.id" >
-          <p
-            class="paragraph input search-cart"
-            v-if="prices.product_id === product.id"
-            @click="selectOption(prices)"
+            @click="isVisibleMeasureOptions = !isVisibleMeasureOptions"
         >
-          {{ prices.item_measure }}
+          {{ selectMeasure }}
         </p>
-        </div>
+        <div class="options-cheesemaker" v-click-outside="onClickOutsideMenu" v-if="isVisibleMeasureOptions">
+          <p
+              class="paragraph input search-cart pointer"
+              @click="createItemMeasure()"
+          >
+            Создать новую меру
+          </p>
+          <div
+              class="pointer"
+              v-for="prices in PRICES"
+              :key="prices.id"
+
+          >
+            <p
+                class="paragraph input search-cart"
+                v-if="prices.product_id === product.id"
+                @click="selectOption(prices)"
+            >
+              {{ prices.item_measure }}
+            </p>
+          </div>
         </div>
       </div>
-      <select class="input" v-model="selectStore">
-        <option disabled>Выбрать склад</option>
-        <option
+
+      <p
+          class="paragraph input search-cart pointer"
+          @click="isVisibleStorages = !isVisibleStorages"
+      >{{ selectStore }}</p>
+      <div
+          class="options-cheesemaker"
+          v-click-outside="onClickOutsideMenu"
+          v-if="isVisibleStorages"
+      >
+        <div
+            class="pointer"
             v-for="storage in STORAGES"
             :key="storage.id"
-            :value="storage.id"
         >
-          {{ storage.name }}
-        </option>
-      </select>
-      <button class="btn" @click="addProductProduced()">Добавить</button>
+          <p
+              class="paragraph input search-cart"
+              v-if="storage.id !== 0"
+              @click="selectStorage(storage)"
+          >
+            {{ storage.name }}
+          </p>
+        </div>
+      </div>
+      <button
+          class="btn"
+          @click="addProductProduced()"
+      >
+        Добавить
+      </button>
     </div>
   </div>
 </template>
@@ -52,6 +88,7 @@
 import {mapGetters} from 'vuex';
 import axios from 'axios';
 import config from '@/config.js'
+import vClickOutside from "click-outside-vue3";
 
 export default {
   name: 'ElementCatalogCheesemaker',
@@ -66,11 +103,12 @@ export default {
       form: {
         amount: 0.01,
         manufacturer_id: 1,
-        // item_measure: 'кг',
         operation: 'приход',
       },
       selectStore: 'Выбрать склад',
-      selectMeasure: 'Выберете меру'
+      selectMeasure: 'Выберете меру',
+      selectStoreId: null,
+      isVisibleStorages: false
     };
   },
   props: {
@@ -97,20 +135,24 @@ export default {
     ...mapGetters(['PRODUCTS', 'CATEGORY', 'STORAGES', 'PRICES']),
   },
   methods: {
+    onClickOutsideMenu() {
+      this.isVisibleMeasureOptions = false
+      this.isVisibleStorages = false
+    },
     createItemMeasure() {
-      let sendNewMeasuer = {}
-      sendNewMeasuer.item_measure = prompt('Введите новую меру товара.')
-      if (sendNewMeasuer.item_measure === null || sendNewMeasuer.item_measure === '') {
+      let sendNewMeasure = {}
+      sendNewMeasure.item_measure = prompt('Введите новую меру товара.')
+      if (sendNewMeasure.item_measure === null || sendNewMeasure.item_measure === '') {
       } else {
-        sendNewMeasuer.product_id = this.product.id
-        sendNewMeasuer.item_price = 0
-        sendNewMeasuer.active = 0
-        sendNewMeasuer.author_id = this.$cookies.get('id')
+        sendNewMeasure.product_id = this.product.id
+        sendNewMeasure.item_price = 0
+        sendNewMeasure.active = 0
+        sendNewMeasure.author_id = this.$cookies.get('id')
         axios
         ({
           method: 'POST',
           url: `${config.url}/prices`,
-          data: sendNewMeasuer,
+          data: sendNewMeasure,
           headers: {
             "authorization": this.$cookies.get('authorization')
           }
@@ -124,14 +166,16 @@ export default {
               alert('Ошибка в работе приложения. Обратитесь к администратору.');
             });
       }
-
     },
     selectOption(PRICES) {
       this.selectMeasure = PRICES.item_measure;
       this.isVisibleMeasureOptions = false
-      console.log(this.selectMeasure)
     },
-    // ...mapActions(['GET_PRICES_FROM_API']),
+    selectStorage(STORAGES) {
+      this.selectStore = STORAGES.name;
+      this.selectStoreId = STORAGES.id
+      this.isVisibleStorages = false
+    },
     currentDate(date) {
       let dd = date.getDate();
       if (dd < 10) dd = '0' + dd;
@@ -150,16 +194,12 @@ export default {
     addProductProduced() {
       if (this.selectStore === 'Выбрать склад') {
         alert('Выберете склад!');
-        // } else if (this.form.date == null) {
-        //   alert('Введите дату!');
       } else {
         let date = new Date();
         this.form.date = this.currentDate(date);
-        // let date = this.form.date.split('-');
-        // this.form.date = date[2] + '-' + date[1] + '-' + date[0];
         this.form.item_measure = this.selectMeasure
         this.form.product_id = this.product.id;
-        this.form.storage_id = this.selectStore;
+        this.form.storage_id = this.selectStoreId;
         this.form.author_id = this.$cookies.get('id')
         let content = this.form
         axios
@@ -182,8 +222,10 @@ export default {
     },
     isEmpty() {
       return this.product.inStock !== 0;
-
     },
+  },
+  directives: {
+    clickOutside: vClickOutside.directive,
   },
 };
 </script>

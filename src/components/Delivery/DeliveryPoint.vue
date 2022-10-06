@@ -2,13 +2,20 @@
   <CreateDeliveryPoint v-if="$cookies.get('role_id') == 1" />
   <section class="section">
     <div class="container pickpoint-map-container">
-      <div class="map" v-for="pickpoint in DELIVERY_POINTS" :key="pickpoint.id">
-        <div class="map-border" v-if="pickpoint.active == 1 || $cookies.get('role_id') == 1">
+      <div
+          class="map"
+          v-for="pickpoint in DELIVERY_POINTS"
+          :key="pickpoint.id"
+      >
+        <div
+            class="map-border"
+            v-if="pickpoint.active == 1 || $cookies.get('role_id') == 1"
+        >
           <input
             type="checkbox"
             true-value="1"
             false-value="0"
-            @click="сhangeVisibilityPickpoint(pickpoint.active, pickpoint)"
+            @click="changeVisibilityPickpoint(pickpoint.active, pickpoint)"
             v-model="pickpoint.active"
             v-if="$cookies.get('role_id') == 1"
           />
@@ -35,7 +42,10 @@
                 required
                 v-if="$cookies.get('role_id') == 1"
               ></textarea>
-              <a href="tel:+79912105757" class="title-3 margin-10-0">
+              <a
+                  href="tel:+79912105757"
+                  class="title-3 margin-10-0"
+              >
                 {{ pickpoint.phone }}
               </a>
               <input
@@ -61,7 +71,6 @@
               v-if="$cookies.get('role_id') == 1"
             />
           </div>
-          
           <div v-if="$cookies.get('role_id') == 1">
             <p class="title-3">link_point</p>
             <textarea
@@ -70,8 +79,7 @@
               class="pickpoint-input margin-10-0"
               v-model="pickpoint.link_point"
               required
-              
-            ></textarea>
+            />
             <p class="title-3">link_yandex</p>
             <textarea
               placeholder="Описание"
@@ -79,7 +87,7 @@
               class="pickpoint-input margin-10-0"
               v-model="pickpoint.link_yandex"
               required
-            ></textarea>
+            />
             <p class="title-3">map_frame</p>
             <textarea
               placeholder="Описание"
@@ -87,7 +95,7 @@
               class="pickpoint-input margin-10-0"
               v-model="pickpoint.map_frame"
               required
-            ></textarea>
+            />
           </div>
           <button
             class="btn"
@@ -164,8 +172,8 @@ export default {
         });
     },
     ...mapActions(['GET_DELIVERY_POINTS_FROM_API']),
-    сhangeVisibilityPickpoint(isActive, pickpoint) {
-      (pickpoint.active = Number(!isActive)),
+    changeVisibilityPickpoint(isActive, pickpoint) {
+      pickpoint.active = Number(!isActive)
         axios({
           method: 'PATCH',
           url: `${config.url}/pickpoints/${pickpoint.id}`,
@@ -176,7 +184,7 @@ export default {
         })
           .then((res) => {
             location.reload(res);
-            if (res == 404) {
+            if (res === 404) {
               alert('Ошибка в работе сервера. Перезагрузите страницу');
             }
           })

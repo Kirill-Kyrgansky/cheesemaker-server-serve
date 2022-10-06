@@ -83,7 +83,6 @@ export default {
         },
       })
           .then((res) => {
-            console.log(res)
             this.orders = res.data
           })
           .catch((error) => {

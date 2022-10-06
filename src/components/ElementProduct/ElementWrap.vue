@@ -15,7 +15,10 @@
         />
       </div>
       <transition name="fade">
-        <div class="successfully" v-if="isVisible">
+        <div
+            class="successfully"
+            v-if="isVisible"
+        >
           <p class="title-3 text-centered">Товар успешно добавлен в корзину!</p>
         </div>
       </transition>
@@ -110,15 +113,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
