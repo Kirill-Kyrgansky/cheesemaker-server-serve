@@ -1,6 +1,7 @@
 <template xmlns="">
   <section class="section">
     <div class="container wrap-cheesemaker-order">
+      <Report/>
       <OrderElement
           v-for="(order, index) in orders"
           :key="order.id"
@@ -23,9 +24,9 @@
 </template>
 <script>
 import OrderElement from './OrderElement.vue';
-
 import axios from "axios";
 import config from "@/config";
+import Report from "@/components/Admin/Report";
 
 export default {
   name: 'OrderWrap',
@@ -40,6 +41,7 @@ export default {
     }
   },
   components: {
+    Report,
     OrderElement,
   },
   mounted() {
