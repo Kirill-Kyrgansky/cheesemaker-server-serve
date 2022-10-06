@@ -90,6 +90,7 @@
               >Заказы
               </router-link>
               <report
+                  v-if="isCheesemakerAuth || isAdminAuth"
               />
               <router-link
                   class="header-link"
