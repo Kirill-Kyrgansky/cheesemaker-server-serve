@@ -4,7 +4,11 @@
         class="cart-done"
         v-if="reportDateVisible"
     >
-      <div class="cart cart-sucsess order-title">
+      <div
+          class="cart cart-sucsess order-title"
+          v-click-outside="isVisibleReport"
+
+      >
         <div class="position-end">
           <img
               src="/allImage/Icons/cross.svg"
@@ -24,6 +28,7 @@
             type="button"
             @click="report('order-contents')"
             value="Отчет по движению товара"
+
         >
         <input
             class="btn margin-10-0"
@@ -79,11 +84,14 @@ import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import axios from "axios";
 import config from "@/config";
+import vClickOutside from "click-outside-vue3";
 
 export default {
   name: 'Report',
   components: {Datepicker},
-
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
   data() {
     return {
       reportDateVisible: false,
@@ -91,6 +99,9 @@ export default {
     }
   },
   methods: {
+    isVisibleReport() {
+      this.reportDateVisible = false
+    },
     report(url) {
       if (this.date === null) {
         alert('Выберите дату.')
