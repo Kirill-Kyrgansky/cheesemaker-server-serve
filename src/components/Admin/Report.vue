@@ -7,7 +7,6 @@
       <div
           class="cart cart-sucsess order-title"
           v-click-outside="isVisibleReport"
-
       >
         <div class="position-end">
           <img
@@ -70,7 +69,7 @@
 
     <div class="report-button">
       <input
-          class="btn"
+          class="header-link pointer"
           type="button"
           @click="reportVisible"
           value="Отчеты"

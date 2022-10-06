@@ -49,6 +49,9 @@
                     v-if="isCheesemakerAuth || isAdminAuth"
                 >Заказы
                 </router-link>
+                <report
+                    v-if="isCheesemakerAuth || isAdminAuth"
+                />
                 <router-link
                     class="header-link"
                     to="/delivery"
@@ -86,6 +89,8 @@
                   v-if="isCheesemakerAuth || isAdminAuth"
               >Заказы
               </router-link>
+              <report
+              />
               <router-link
                   class="header-link"
                   to="/delivery">
@@ -494,10 +499,11 @@ import {mapGetters, mapActions} from 'vuex';
 import axios from 'axios';
 import config from '@/config.js';
 import PersonalCabinet from "@/components/Page/PersonalCabinet";
+import Report from "@/components/Admin/Report";
 
 export default {
   name: 'ElementHeader',
-  components: {PersonalCabinet},
+  components: {Report, PersonalCabinet},
   data() {
     return {
       isAdmin: '',
