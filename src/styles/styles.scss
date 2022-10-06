@@ -656,10 +656,11 @@ p {
 }
 
 .border-surround {
-  max-width: 250px;
-  padding: 0px 20px 10px 20px;
-  position: sticky;
-  top: 60px;
+  padding: 0 20px 10px 20px;
+  position: relative;
+  top: 0;
+  max-width: none;
+  margin-bottom: 20px;
 }
 
 .img-filter {
@@ -1014,9 +1015,9 @@ input::placeholder {
 }
 
 .wrap-cheesemaker {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  //display: flex;
+  //flex-direction: row;
+  //align-items: flex-start;
   margin-bottom: 50px;
 }
 
@@ -1197,10 +1198,6 @@ input::placeholder {
     display: none;
   }
 
-  .wrap-cheesemaker {
-    display: block;
-  }
-
   .menu {
     display: block;
   }
@@ -1225,13 +1222,13 @@ input::placeholder {
     padding: 0px;
   }
 
-  .border-surround {
-    max-width: none;
-    position: relative;
-    top: 0;
-    max-width: none;
-    margin-bottom: 20px;
-  }
+  //.border-surround {
+  //  max-width: none;
+  //  position: relative;
+  //  top: 0;
+  //  max-width: none;
+  //  margin-bottom: 20px;
+  //}
 
 
   .arrow {

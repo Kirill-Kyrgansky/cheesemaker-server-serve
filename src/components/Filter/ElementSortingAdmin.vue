@@ -119,7 +119,7 @@ export default {
   },
   methods: {
     openCategories() {
-      window.scrollTo(top, 140);
+      window.scrollTo(top, 0);
       this.categories = !this.categories
     },
     ...mapActions(['GET_SEARCH_VALUE_TO_VUEX']),
