@@ -3,12 +3,12 @@
 @import 'fonts.scss';
 @import 'animation.scss';
 @import 'pagination.scss';
+@import "input.scss";
 //@import "scroll.scss";
 
 html {
   scroll-behavior: smooth;
 }
-
 
 body {
   background-color: $main-collor;
@@ -44,10 +44,6 @@ textarea {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-}
-
-input[type="file"] {
-  display: none;
 }
 
 .login-pop-up {
@@ -916,6 +912,8 @@ input::placeholder {
   padding: 10px 5px;
   transition: 0.4s;
 }
+
+
 
 .delivery {
   text-align: center;

@@ -38,6 +38,7 @@
               type="number"
               class="input"
               step="0.1"
+              min="0.1"
               v-model="factWeight"
           />
         </div>
