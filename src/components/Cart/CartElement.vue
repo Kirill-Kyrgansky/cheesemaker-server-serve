@@ -35,7 +35,7 @@
         <input
             type="button"
             class="btn margin-0-10"
-            @click="minus"
+            @click="minusAmount"
             value="-"
         />
         <p
@@ -56,7 +56,7 @@
         <input
             type="button"
             class="btn margin-0-10"
-            @click="minus"
+            @click="minusAmount"
             value="-"
         />
         <input
@@ -73,7 +73,7 @@
         <input
             type="button"
             class="btn margin-0-10"
-            @click="cart_item_data.amount++"
+            @click="summAmount"
             value="+"
         />
       </div>
@@ -139,16 +139,33 @@ export default {
         this.cart_item_data.amount = 0;
       }
     },
-    minus() {
-      if (this.cart_item_data.amount === 1) {
-        let isDelete = confirm('Удалить товар из корзины?');
-        if (isDelete === true) {
-          this.deleteFromCart();
-        }
-        this.cart_item_data.amount == 1;
+    summAmount() {
+      let mounted = this.price.item_measure
+      console.log(mounted);
+      if (mounted.toLowerCase() === 'кг' || mounted.toLowerCase() === 'л'){
+        let summ = parseFloat(this.cart_item_data.amount + 0.1)
+        this.cart_item_data.amount = Math.round(summ * 10) /10
+        console.log(this.cart_item_data.amount)
       } else {
-        this.cart_item_data.amount--;
+        this.cart_item_data.amount++
       }
+    },
+    minusAmount() {
+      let mounted = this.price.item_measure
+      if (mounted.toLowerCase() === 'кг' || mounted.toLowerCase() === 'л'){
+        if (this.cart_item_data.amount === 0.1) {
+          this.cart_item_data.amount = 0.1
+        } else  {
+          let minus = parseFloat(this.cart_item_data.amount - 0.1)
+          this.cart_item_data.amount = Math.round(minus * 10) /10
+        }
+      } else {
+        this.cart_item_data.amount--
+        if (this.cart_item_data.amount <= 1) {
+          this.cart_item_data.amount = 1
+        }
+      }
+
     },
     getPrice() {
       axios({

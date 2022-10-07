@@ -168,7 +168,9 @@ export default {
         }
       }
       if ((staffed.length + cancelled.length) === all.length) {
-        return this.startOrder = true
+        this.startOrder = true
+        this.checkOrder = false
+        return
       } else if (notStaffed.length >= 1) this.checkOrder = true
     },
     ...mapActions(['GET_DELIVERY_POINTS_FROM_API']),
@@ -191,7 +193,10 @@ export default {
       let contentsLength = Object.keys(this.order.content).length;
       for (let i = 0; i < contentsLength; i++) {
         this.$refs.ProductOrderElement[i].productCheck();
+        this.visibleBottom();
+
       }
+
     },
     orderSentToThePoint() {
       let staffed = []

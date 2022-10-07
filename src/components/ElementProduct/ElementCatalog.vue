@@ -66,11 +66,9 @@
         />
         <input
             type="number"
-            v-model="amount"
+            v-model="test1"
             class="input max-width-50"
-            step="1"
             min="1"
-            x-data="{}"
             @keydown="
             if (['+', '-', 'e'].includes($event.key)) $event.preventDefault();
           "
@@ -131,7 +129,7 @@ export default {
       areOptionsVisible: false,
       selected: {name: 'Выбрать упаковку'},
       isVisible: false,
-      amount: 1
+      amount: 1,
     };
   },
   props: {
@@ -150,19 +148,47 @@ export default {
   },
   computed: {
     ...mapGetters(['PRODUCTS', 'CATEGORIES', 'PRICES']),
+    test1() {
+      let mounted = this.selected.name
+      if (mounted.toLowerCase().indexOf('кг') !== -1 || mounted.toLowerCase().indexOf('л') !== -1  ){
+        return this.amount.toFixed(1)
+      } else {
+        return this.amount
+      }
+    }
   },
   methods: {
     summAmount() {
-      this.amount++
-      this.product.amount = this.amount
-    },
-    minusAmount() {
-      this.amount--
-      if (this.amount === 0) {
-        this.amount = 1
+      let mounted = this.selected.name
+      if (mounted.toLowerCase().indexOf('кг') !== -1 || mounted.toLowerCase().indexOf('л') !== -1  ){
+        let summ = parseFloat(this.amount + 0.1)
+        this.amount = Math.round(summ * 10) /10
+        this.product.amount = Math.round(summ * 10) /10
+      } else {
+        this.amount++
         this.product.amount = this.amount
       }
-      this.product.amount = this.amount
+    },
+    minusAmount() {
+      let mounted = this.selected.name
+      if (mounted.toLowerCase().indexOf('кг') !== -1 || mounted.toLowerCase().indexOf('л') !== -1  ){
+        if (this.amount === 0.1) {
+          this.amount = 0.1
+        } else  {
+          let minus = parseFloat(this.amount - 0.1)
+          this.amount = Math.round(minus * 10) /10
+          this.product.amount = Math.round(minus * 10) /10
+        }
+      } else {
+        this.amount--
+        this.product.amount = this.amount
+        this.amount.toFixed(1)
+        if (this.amount === 0) {
+          this.amount = 1
+          this.product.amount = this.amount
+        }
+        this.product.amount = this.amount
+      }
     },
     onClickOutside() {
       this.areOptionsVisible = false;

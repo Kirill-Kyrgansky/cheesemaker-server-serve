@@ -23,7 +23,7 @@
                 <router-link
                     class="header-link"
                     to="/products"
-                >Продукция
+                >Каталог
                 </router-link>
                 <router-link
                     class="header-link"
@@ -63,7 +63,7 @@
               <router-link
                   class="header-link"
                   to="/products"
-              >Продукция
+              >Каталог
               </router-link>
               <router-link
                   class="header-link"
