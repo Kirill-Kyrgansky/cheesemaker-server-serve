@@ -30,10 +30,6 @@
             {{ factWeight }}
             кг
           </p>
-          <p class="paragraph-small">
-            <span class="title-3 bold"> Фактическая сумма: </span>
-            {{ (price * factWeight).toFixed(2) }} ₽
-          </p>
           <input
               type="number"
               class="input"
