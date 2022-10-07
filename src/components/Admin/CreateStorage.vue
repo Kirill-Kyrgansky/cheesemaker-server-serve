@@ -147,11 +147,11 @@ export default {
     ...mapGetters(['STORAGES']),
   },
   methods: {
-    openStorages() {
-      window.scrollTo(top, 140);
+    openStorages() { //действие при открытии управление складами
+      window.scrollTo(top, 0);
       this.storage = !this.storage
     },
-    changeVisibility(storage) {
+    changeVisibility(storage) { //изменить видимость складов
       storage.active = !storage.active;
       axios({
         method: 'PATCH',
@@ -172,7 +172,7 @@ export default {
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
     },
-    changeCategory(storage) {
+    changeCategory(storage) { //изменение существующей категории
       let newName = prompt('Введите новое имя категории.', storage.name);
       if (newName != null) {
         let newComment = prompt('Введите новый комментарий.', storage.comment);
@@ -202,7 +202,7 @@ export default {
 
       }
     },
-    createNewStorage() {
+    createNewStorage() { //создать новый склад
       if (this.createStorage.name == '' && this.createStorage.address == '') {
         alert('Заполните пожалуйста все поля')
       } else {

@@ -2,8 +2,25 @@
   <div class="admin-panel">
     <div class="catalog-element-wrap text-centered">
       <label class="text-reader">
-        <input type="file" ref="files" id="files" @change="handleImage" accept="image/*"/>
-        <input type="button" class="btn" value="Загрузить изображение" @click="addFiles()"/>
+        <input
+            type="file"
+            ref="files"
+            id="files"
+            @change="handleImage"
+            accept="image/*"
+        />
+        <input
+            type="button"
+            class="btn"
+            value="Загрузить изображение"
+            @click="addFiles()"
+        />
+        <p
+            class="paragraph"
+            v-if="fileUpload"
+        >
+          Файл загружен
+        </p>
       </label>
       <div class="catalog-element-text">
         <label for="name">
@@ -177,7 +194,8 @@ export default {
       priceChange: false,
       isActivePrice: true,
       selectCategory: {name: 'Все категории', id: ''},
-      isVisibleCategory: false
+      isVisibleCategory: false,
+      fileUpload: false
 
     };
   },
@@ -185,20 +203,20 @@ export default {
     ...mapGetters(['PRICES', 'CATEGORY']),
   },
   mounted() {
-    this.form = this.product;
-    this.isActivePrice = this.PRICES.active;
-    this.nameSelect();
+    // this.form = this.product;
+    this.isActivePrice = this.PRICES.active;  //изменение видимости цены
+    this.nameSelect(); //установка имени категории
   },
   methods: {
-    selectOption(category) {
+    selectOption(category) { //выподающий список категорий
       this.selectCategory.name = category.name
       this.selectCategory.id = category.id
       this.isVisibleCategory = !this.isVisibleCategory
     },
-    addFiles() {
+    addFiles() { //загрузка изображения на сервер
       this.$refs.files.click()
     },
-    nameSelect() {
+    nameSelect() { //получение имен категорий
       axios({
         method: 'GET',
         url: `${config.url}/categories/${this.product.category_id}`,
@@ -239,7 +257,7 @@ export default {
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
     },
-    addPriceProduct(item_measure, item_price) {
+    addPriceProduct(item_measure, item_price) { //добавить цену к продукту
       let formAddPrice = {};
       formAddPrice.item_measure = item_measure;
       formAddPrice.item_price = item_price;
@@ -262,21 +280,25 @@ export default {
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
     },
-    handleImage(e) {
+    handleImage(e) {    //подготовка изображения для отправки на сервер
       const selectedImage = e.target.files[0]; // get first file
       this.createBase64Image(selectedImage);
       this.product.ext = selectedImage.type.split('/')[1];
     },
-    createBase64Image(fileObject) {
+    createBase64Image(fileObject) {   //конвертирование в base64
       const reader = new FileReader();
       reader.onload = (e) => {
         this.image = e.target.result;
         const {image} = this;
         this.product.image = image.split(',')[1];
+
+        if (this.product.image != '') {
+          this.fileUpload = true
+        }
       };
       reader.readAsDataURL(fileObject);
     },
-    isVisibleProduct(index) {
+    isVisibleProduct(index) { //настройка видимости товара
       let proof = confirm('Изменить видимость товара?');
       if (proof === true) {
         this.product.active = !this.product.active;
@@ -296,9 +318,8 @@ export default {
               alert('Ошибка в работе приложения. Обратитесь к администратору.');
             });
       }
-
     },
-    ApplyProductChanges(index) {
+    ApplyProductChanges(index) { //отправить изменения продукта в backend
       if (this.selectCategory.id !== '') {
         this.product.category_id = this.selectCategory.id;
       } else {
@@ -322,7 +343,7 @@ export default {
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
     },
-    ApplyPriceChanges(isActive, price, index) {
+    ApplyPriceChanges(isActive, price, index) { //отправить изменения цены продукта в backend
       price.active = Number(!isActive);
       axios({
         method: 'PATCH',

@@ -98,15 +98,15 @@ export default {
     ...mapGetters(['CATEGORY']),
   },
   methods: {
-    addFiles() {
+    addFiles() {  //загрузка изображения на сервер
       this.$refs.files.click()
     },
-    handleImage(e) {
+    handleImage(e) {   //подготовка изображения для отправки на сервер
       const selectedImage = e.target.files[0]; // get first file
       this.createBase64Image(selectedImage);
       this.productCreate.ext = selectedImage.type.split('/')[1];
     },
-    createBase64Image(fileObject) {
+    createBase64Image(fileObject) {   //конвертирование в base64
       const reader = new FileReader();
       reader.onload = (e) => {
         this.image = e.target.result;
@@ -119,7 +119,7 @@ export default {
       };
       reader.readAsDataURL(fileObject);
     },
-    createProduct() {
+    createProduct() { //создание продукта
       let createNewProduct = this.productCreate;
       createNewProduct.category_id = this.selectCategory;
       axios({
