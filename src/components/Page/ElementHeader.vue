@@ -74,34 +74,42 @@
               <input
                   type="button"
                   @click="serviseMenu"
-                  class="header-link"
+                  class="header-link pointer"
                   value="Сервисное меню"
                   v-if="isCheesemakerAuth || isAdminAuth"
               >
-              <div class="relative" v-if="isServiseMenuVisible" v-click-outside="onClickOutsideServise">
+              <div
+                  class="relative"
+                  v-if="isServiseMenuVisible"
+                  v-click-outside="onClickOutsideServise"
+              >
                 <div class="header-link-burger">
                 <router-link
                     class="header-link"
                     to="/admin"
                     v-if="isAdminAuth"
+                    @click="serviseMenu"
                 >Администратор
                 </router-link>
                 <router-link
                     class="header-link"
                     to="/cheesemaker"
                     v-if="isCheesemakerAuth"
+                    @click="serviseMenu"
                 >Сыровар
                 </router-link>
                 <router-link
                     class="header-link"
                     to="/cheesemaker-orders"
                     v-if="isCheesemakerAuth || isAdminAuth"
+                    @click="serviseMenu"
                 >Заказы
                 </router-link>
                 <router-link
                     class="header-link"
                     to="/warehouse"
                     v-if="isCheesemakerAuth || isAdminAuth"
+                    @click="serviseMenu"
                 >Склад
                 </router-link>
                 <report
