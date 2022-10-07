@@ -1123,6 +1123,7 @@ input::placeholder {
 }
 
 .warehouse {
+  overflow: auto;
   background-color: #FDD99E;
   display: grid;
   grid-template-columns: repeat(5, auto);
@@ -1130,6 +1131,7 @@ input::placeholder {
   align-items: center;
   border: 4px solid $text-collor-opacity;
   border-radius: 10px;
+
 }
 
 .warehouse-element-column {
