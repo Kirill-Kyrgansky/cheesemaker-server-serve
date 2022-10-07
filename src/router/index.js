@@ -11,6 +11,7 @@ import HomePageWrap from '../components/HomePageWrap.vue';
 import OrderWrap from '../components/Cheesemaker/OrderWrap.vue';
 import OrderWrapSeller from '../components/Seller/OrderWrapSeller.vue';
 import PageNotFound from '../components/Page/PageNotFound.vue'
+import WarehouseWrap from "@/components/Cheesemaker/Warehouse/WarehouseWrap";
 
 const router = createRouter({
     history: createWebHistory('/'),
@@ -80,6 +81,15 @@ const router = createRouter({
             },
         },
         {
+            path: '/warehouse',
+            component: WarehouseWrap,
+            name: 'warehouse',
+            meta: {
+                cheesemaker: true,
+                adminLogin: true,
+            },
+        },
+        {
             path: '/seller-orders',
             component: OrderWrapSeller,
             name: 'seller-orders',
@@ -125,6 +135,17 @@ router.beforeEach((to, from, next) => {
 
 router.beforeEach((to, from, next) => {
     if (!$cookies.get('role') && to.name === 'cart') {
+        alert('Пожалуйста, авторизуйтесь!');
+    } else {
+        next();
+    }
+});
+
+router.beforeEach((to, from, next) => {
+    if (
+        $cookies.get('role') === 'Покупатель' &&
+        to.name === 'warehouse'
+    ) {
         alert('Пожалуйста, авторизуйтесь!');
     } else {
         next();

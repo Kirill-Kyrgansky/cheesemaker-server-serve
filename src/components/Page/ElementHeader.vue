@@ -49,6 +49,12 @@
                     v-if="isCheesemakerAuth || isAdminAuth"
                 >Заказы
                 </router-link>
+                <router-link
+                    class="header-link"
+                    to="/warehouse"
+                    v-if="isCheesemakerAuth || isAdminAuth"
+                >Склад
+                </router-link>
                 <report
                     v-if="isCheesemakerAuth || isAdminAuth"
                 />
@@ -88,6 +94,12 @@
                   to="/cheesemaker-orders"
                   v-if="isCheesemakerAuth || isAdminAuth"
               >Заказы
+              </router-link>
+              <router-link
+                  class="header-link"
+                  to="/warehouse"
+                  v-if="isCheesemakerAuth || isAdminAuth"
+              >Склад
               </router-link>
               <report
                   v-if="isCheesemakerAuth || isAdminAuth"
