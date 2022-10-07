@@ -1,0 +1,70 @@
+@import "variables.scss";
+
+@media screen and (max-width: $xs) {
+  .section {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .button-right {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-list-mobile {
+    top: 80px;
+    padding: 10px 20px;
+  }
+
+  .logo {
+    max-width: 120px;
+  }
+  .header-link-icon {
+    display: flex;
+    width: 40px;
+    padding: 0 3px;
+  }
+
+  .title-1 {
+    font-size: xx-large;
+  }
+
+  .header-link-icon-svg {
+    width: 35px;
+    height: 35px;
+    color: #372311;
+  }
+
+  .pagination__link {
+    margin: 5px;
+  }
+
+  .catalog-items {
+    margin-left: 0;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));;
+  }
+  .header {
+    background-image: none
+  }
+
+  .catalog-element-footer {
+    flex-direction: column;
+    margin: auto;
+  }
+
+  .btn-qty {
+    display: none;
+  }
+
+  .logo-home {
+    max-width: 200px;
+  }
+
+  .space-between {
+    flex-direction: column
+  }
+
+  .catalog-items-admin {
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  }
+}

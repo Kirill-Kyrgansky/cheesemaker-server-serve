@@ -418,6 +418,7 @@
                     v-if="!logIn"
                     class="personal-cabinet_wrap"
                 >
+                  <img src="/allImage/Icons/cross.svg" @click="toggleLogin" class="header-link-icon pointer close" alt="close">
                   <div class="margin-10-0">
                     <h3 class="title-3">Добрый день</h3>
                     <h3 class="title-3">{{ fio }}</h3>

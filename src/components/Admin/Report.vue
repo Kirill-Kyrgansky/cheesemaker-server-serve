@@ -69,7 +69,7 @@
 
     <div class="report-button">
       <input
-          class="header-link pointer"
+          class="header-link pointer header-link-report"
           type="button"
           @click="reportVisible"
           value="Отчеты"

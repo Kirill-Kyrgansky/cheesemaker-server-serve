@@ -41,7 +41,7 @@
       </div>
       <div class="header-nav">
         <div
-            class="footer"
+            class="order-element-button"
             v-if="content.status === 'в обработке'"
         >
           <input

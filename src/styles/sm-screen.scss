@@ -1,0 +1,61 @@
+@import "variables.scss";
+
+@media screen and (max-width: $sm) {
+
+  .map-border {
+    max-width: 250px;
+  }
+
+  .order-element-button {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .footer-image-center {
+    display: none;
+  }
+
+  .order-info {
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .top {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .home-wrap-element {
+    flex-direction: column
+  }
+
+  .home-wrap-element-text {
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .home-wrap-element-right {
+    flex-direction: column-reverse
+  }
+
+  .footer-list {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cart-footer {
+    flex-direction: column;
+    margin-right: 0px;
+    margin-bottom: 20px;
+  }
+
+  .sction-footer-bg {
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: 100%;
+  }
+}
