@@ -71,8 +71,14 @@
                   to="/products"
               >Каталог
               </router-link>
-              <input type="button" @click="serviseMenu" class="header-link" value="Сервисное меню">
-              <div style="position: relative;" v-if="isServiseMenuVisible" v-click-outside="onClickOutsideServise">
+              <input
+                  type="button"
+                  @click="serviseMenu"
+                  class="header-link"
+                  value="Сервисное меню"
+                  v-if="isCheesemakerAuth || isAdminAuth"
+              >
+              <div class="relative" v-if="isServiseMenuVisible" v-click-outside="onClickOutsideServise">
                 <div class="header-link-burger">
                 <router-link
                     class="header-link"
