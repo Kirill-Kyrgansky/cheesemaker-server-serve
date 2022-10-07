@@ -477,6 +477,19 @@ textarea {
   align-items: center;
   transition: opacity 0.2s;
   padding: 10px 20px;
+  justify-content: center;
+}
+
+.header-link-report {
+  @include button;
+  @include btn-text;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s;
+  padding: 10px 20px;
+  justify-content: center;
+  width: 95%;
+  cursor: pointer;
 }
 
 .header-link:hover {
@@ -1150,6 +1163,22 @@ input::placeholder {
   justify-content: center;
 }
 
+.header-link-burger {
+  position: absolute;
+  top: 50px;
+  left: -173px;
+  z-index: 999;
+  width: 166px;
+  display: flex;
+  justify-content: space-between;
+  background-color: $main-collor;
+  flex-direction: column;
+  border: 2px solid $text-collor;
+  border-radius: 10px;
+  padding: 5px 5px;
+  align-items: stretch;
+}
+
 .bottom-warehouse-table {
   border-bottom: 2px solid $text-collor-opacity;
 }
@@ -1211,16 +1240,7 @@ input::placeholder {
   .catalog-items {
     padding: 0px;
   }
-
-  //.border-surround {
-  //  max-width: none;
-  //  position: relative;
-  //  top: 0;
-  //  max-width: none;
-  //  margin-bottom: 20px;
-  //}
-
-
+  
   .arrow {
     z-index: 999;
     display: block;

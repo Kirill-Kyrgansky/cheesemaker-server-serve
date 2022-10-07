@@ -71,39 +71,46 @@
                   to="/products"
               >Каталог
               </router-link>
+              <input type="button" @click="serviseMenu" class="header-link" value="Сервисное меню">
+              <div style="position: relative;" v-if="isServiseMenuVisible" v-click-outside="onClickOutsideServise">
+                <div class="header-link-burger">
+                <router-link
+                    class="header-link"
+                    to="/admin"
+                    v-if="isAdminAuth"
+                >Администратор
+                </router-link>
+                <router-link
+                    class="header-link"
+                    to="/cheesemaker"
+                    v-if="isCheesemakerAuth"
+                >Сыровар
+                </router-link>
+                <router-link
+                    class="header-link"
+                    to="/cheesemaker-orders"
+                    v-if="isCheesemakerAuth || isAdminAuth"
+                >Заказы
+                </router-link>
+                <router-link
+                    class="header-link"
+                    to="/warehouse"
+                    v-if="isCheesemakerAuth || isAdminAuth"
+                >Склад
+                </router-link>
+                <report
+                    v-if="isCheesemakerAuth || isAdminAuth"
+                />
+                </div>
+              </div>
               <router-link
                   class="header-link"
                   to="/seller-orders"
                   v-if="isSeller"
               >Продавец
               </router-link>
-              <router-link
-                  class="header-link"
-                  to="/admin"
-                  v-if="isAdminAuth"
-              >Администратор
-              </router-link>
-              <router-link
-                  class="header-link"
-                  to="/cheesemaker"
-                  v-if="isCheesemakerAuth"
-              >Сыровар
-              </router-link>
-              <router-link
-                  class="header-link"
-                  to="/cheesemaker-orders"
-                  v-if="isCheesemakerAuth || isAdminAuth"
-              >Заказы
-              </router-link>
-              <router-link
-                  class="header-link"
-                  to="/warehouse"
-                  v-if="isCheesemakerAuth || isAdminAuth"
-              >Склад
-              </router-link>
-              <report
-                  v-if="isCheesemakerAuth || isAdminAuth"
-              />
+
+
               <router-link
                   class="header-link"
                   to="/delivery">
@@ -536,7 +543,8 @@ export default {
       loginError: false,
       isLoginEmpty: false,
       historyOrders: false,
-      activeOrders: true
+      activeOrders: true,
+      isServiseMenuVisible: false
     };
   },
   computed: {
@@ -550,6 +558,9 @@ export default {
     this.GET_ORDERS_USERS_FROM_API();
   },
   methods: {
+    serviseMenu() {
+      this.isServiseMenuVisible = !this.isServiseMenuVisible
+    },
     isHistoryOrdersVisible() {
       this.historyOrders = !this.historyOrders
       this.activeOrders = !this.activeOrders
@@ -677,6 +688,11 @@ export default {
     onClickOutsideLogin() {
       if (this.loginBar === true) {
         this.loginBar = !this.loginBar;
+      }
+    },
+    onClickOutsideServise() {
+      if (this.isServiseMenuVisible === true) {
+        this.isServiseMenuVisible = !this.isServiseMenuVisible
       }
     },
   },
