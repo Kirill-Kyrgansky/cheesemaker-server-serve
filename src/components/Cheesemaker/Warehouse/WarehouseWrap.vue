@@ -16,12 +16,12 @@
       <div class="warehouse-element-column-first">
         <p class="paragraph bold">Резерв</p>
       </div>
-      <WarehouseElement
-          v-for="(warehouse, index) in warehouses"
-          :key="warehouse.id"
-          :warehouse="warehouse"
-          :index="index+1"
-      />
+        <WarehouseElement
+            v-for="(warehouse, index) in sort"
+            :key="warehouse.id"
+            :warehouse="warehouse"
+            :index="index"
+        />
     </div>
   </section>
 </template>
@@ -35,7 +35,8 @@ export default {
   name: "WarehouseWrap",
   data() {
     return {
-      warehouses: {}
+      allWarehouses: {},
+      sort: []
     }
   },
   components: {WarehouseElement},
@@ -43,6 +44,15 @@ export default {
     this.getInfoWarehouses()
   },
   methods: {
+    sortingWarehouse() {
+      let sortedWarehouse = []
+        for (let value of this.allWarehouses) {
+        if (value.storage !=='Не выбранный склад') {
+          sortedWarehouse.push(value)
+        }
+      }
+      this.sort = sortedWarehouse
+    },
     getInfoWarehouses() {
       axios({
         method: 'GET',
@@ -52,8 +62,8 @@ export default {
         },
       })
           .then((req) => {
-            console.log(req)
-            this.warehouses = req.data
+            this.allWarehouses = req.data
+            this.sortingWarehouse()
           })
           .catch((error) => {
             console.log(error);
