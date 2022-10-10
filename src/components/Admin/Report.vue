@@ -66,7 +66,6 @@
         </Datepicker>
       </div>
     </div>
-
     <div class="report-button">
       <input
           class="header-link pointer header-link-report"
