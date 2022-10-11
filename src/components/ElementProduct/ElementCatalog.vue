@@ -66,7 +66,7 @@
         />
         <input
             type="number"
-            v-model="test1"
+            v-model="filteredAmount"
             class="input max-width-50"
             min="1"
             @keydown="
@@ -80,7 +80,7 @@
             value="+"
         />
       </div>
-      <button type="submit" @click="addToCart" class="btn centered">
+      <button type="submit" @click="addToCart" class="btn centered" v-if="isVisibleButtonCart">
         В корзину
         <img
             alt="Иконка корзины"
@@ -88,6 +88,14 @@
             class="element-catalog-bottom-img-cart"
         />
       </button>
+<!--      <button type="submit" @click="deleteFromCart(index)" class="btn centered" v-if="!isVisibleButtonCart">-->
+<!--        Удалить из корзины-->
+<!--        <img-->
+<!--            alt="Иконка корзины"-->
+<!--            src="/allImage/Icons/buybuttone.png"-->
+<!--            class="element-catalog-bottom-img-cart"-->
+<!--        />-->
+<!--      </button>-->
     </div>
     <transition name="description">
       <div
@@ -108,7 +116,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 
 export default {
   name: 'ElementCatalog',
@@ -130,6 +138,8 @@ export default {
       selected: {name: 'Выбрать упаковку'},
       isVisible: false,
       amount: 1,
+      cartPrise: [],
+      isVisibleButtonCart: true
     };
   },
   props: {
@@ -147,8 +157,8 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['PRODUCTS', 'CATEGORIES', 'PRICES']),
-    test1() {
+    ...mapGetters(['PRODUCTS', 'CATEGORIES', 'PRICES', 'CART']),
+    filteredAmount() {
       let mounted = this.selected.name
       if (mounted.toLowerCase().indexOf('кг') !== -1 || mounted.toLowerCase().indexOf('л') !== -1  ){
         return this.amount.toFixed(1)
@@ -157,7 +167,36 @@ export default {
       }
     }
   },
+  // mounted() {
+  //   this.test1()
+  // },
   methods: {
+    // ...mapActions([
+    //   'DELITE_FROM_CART',
+    // ]),
+    // deleteFromCart(index) {
+    //   this.DELITE_FROM_CART(index)
+    // },
+    // test1() {
+    //   if (this.cartPrise.includes(this.selected.id)) {
+    //     console.log('good')
+    //     console.log(this.cartPrise)
+    //   } else if (this.cartPrise.length === 0) {
+    //     console.log('empty')
+    //   }{
+    //     this.cartPrise.push(this.selected.id)
+    //     this.isVisibleButtonCart = false
+    //   }
+    //   // console.log(this.CART);
+    //   // let data = this.CART
+    //   // let cutySearch = this.product.price_id;
+    //   //
+    //   // let cityId = data.filter(function(val) {
+    //   //   return val.price_id === cutySearch;
+    //   // });
+    //   //
+    //   // return console.log(!!cityId)
+    // },
     summAmount() {
       let mounted = this.selected.name
       if (mounted.toLowerCase().indexOf('кг') !== -1 || mounted.toLowerCase().indexOf('л') !== -1  ){
@@ -213,6 +252,7 @@ export default {
         }, 2000);
         return (this.isVisible = !this.isVisible);
       }
+      // this.test1()
       this.product.amount = this.amount
       this.$emit('addToCart', this.product, this.selected);
     },
