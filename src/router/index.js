@@ -12,6 +12,7 @@ import OrderWrap from '../components/Cheesemaker/OrderWrap.vue';
 import OrderWrapSeller from '../components/Seller/OrderWrapSeller.vue';
 import PageNotFound from '../components/Page/PageNotFound.vue'
 import WarehouseWrap from "@/components/Cheesemaker/Warehouse/WarehouseWrap";
+import UsersWrap from "@/components/Admin/Users/UsersWrap";
 
 const router = createRouter({
     history: createWebHistory('/'),
@@ -59,6 +60,14 @@ const router = createRouter({
             path: '/admin',
             component: ElementWrapAdmin,
             name: 'admin',
+            meta: {
+                adminLogin: true,
+            },
+        },
+        {
+            path: '/users',
+            component: UsersWrap,
+            name: 'users',
             meta: {
                 adminLogin: true,
             },
@@ -145,6 +154,18 @@ router.beforeEach((to, from, next) => {
     if (
         $cookies.get('role') === 'Покупатель' &&
         to.name === 'warehouse'
+    ) {
+        alert('Пожалуйста, авторизуйтесь!');
+    } else {
+        next();
+    }
+});
+
+router.beforeEach((to, from, next) => {
+    if (
+        ($cookies.get('role') === 'Покупатель') |
+        ($cookies.get('role') === 'Сыровар') &&
+        to.name === 'users'
     ) {
         alert('Пожалуйста, авторизуйтесь!');
     } else {

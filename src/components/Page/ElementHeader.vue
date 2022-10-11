@@ -39,6 +39,12 @@
                 </router-link>
                 <router-link
                     class="header-link"
+                    to="/users"
+                    v-if="isAdminAuth"
+                >Управление пользователями
+                </router-link>
+                <router-link
+                    class="header-link"
                     to="/cheesemaker"
                     v-if="isCheesemakerAuth"
                 >Сыровар
@@ -84,37 +90,43 @@
                   v-click-outside="onClickOutsideServise"
               >
                 <div class="header-link-burger">
-                <router-link
-                    class="header-link"
-                    to="/admin"
-                    v-if="isAdminAuth"
-                    @click="serviseMenu"
-                >Администратор
-                </router-link>
-                <router-link
-                    class="header-link"
-                    to="/cheesemaker"
-                    v-if="isCheesemakerAuth"
-                    @click="serviseMenu"
-                >Сыровар
-                </router-link>
-                <router-link
-                    class="header-link"
-                    to="/cheesemaker-orders"
-                    v-if="isCheesemakerAuth || isAdminAuth"
-                    @click="serviseMenu"
-                >Заказы
-                </router-link>
-                <router-link
-                    class="header-link"
-                    to="/warehouse"
-                    v-if="isCheesemakerAuth || isAdminAuth"
-                    @click="serviseMenu"
-                >Склад
-                </router-link>
-                <report
-                    v-if="isCheesemakerAuth || isAdminAuth"
-                />
+                  <router-link
+                      class="header-link"
+                      to="/admin"
+                      v-if="isAdminAuth"
+                      @click="serviseMenu"
+                  >Администратор
+                  </router-link>
+                  <router-link
+                      class="header-link"
+                      to="/users"
+                      v-if="isAdminAuth"
+                  >Управление пользователями
+                  </router-link>
+                  <router-link
+                      class="header-link"
+                      to="/cheesemaker"
+                      v-if="isCheesemakerAuth"
+                      @click="serviseMenu"
+                  >Сыровар
+                  </router-link>
+                  <router-link
+                      class="header-link"
+                      to="/cheesemaker-orders"
+                      v-if="isCheesemakerAuth || isAdminAuth"
+                      @click="serviseMenu"
+                  >Заказы
+                  </router-link>
+                  <router-link
+                      class="header-link"
+                      to="/warehouse"
+                      v-if="isCheesemakerAuth || isAdminAuth"
+                      @click="serviseMenu"
+                  >Склад
+                  </router-link>
+                  <report
+                      v-if="isCheesemakerAuth || isAdminAuth"
+                  />
                 </div>
               </div>
               <router-link
@@ -451,7 +463,8 @@
                     v-if="!logIn"
                     class="personal-cabinet_wrap"
                 >
-                  <img src="/allImage/Icons/cross.svg" @click="toggleLogin" class="header-link-icon pointer close" alt="close">
+                  <img src="/allImage/Icons/cross.svg" @click="toggleLogin" class="header-link-icon pointer close"
+                       alt="close">
                   <div class="margin-10-0">
                     <h3 class="title-3">Добрый день</h3>
                     <h3 class="title-3">{{ fio }}</h3>
@@ -558,7 +571,8 @@ export default {
       isLoginEmpty: false,
       historyOrders: false,
       activeOrders: true,
-      isServiseMenuVisible: false
+      isServiseMenuVisible: false,
+      user: {}
     };
   },
   computed: {
@@ -592,12 +606,13 @@ export default {
       let user = {
         phone: '+' + this.userPhone,
         role_id: Number(this.$cookies.get('role_id')),
-        active: 1,
+        id: this.user.id,
+        active: this.user.active
       }
       this.messagePhone = false;
       axios({
         method: 'PATCH',
-        url: `${config.url}/users`,
+        url: `${config.url}/users/${user.id}`,
         data: user,
         headers: {
           authorization: this.$cookies.get('authorization'),
@@ -670,6 +685,7 @@ export default {
       })
           .then((authRes) => {
             console.log(authRes);
+            this.user = authRes.data
             this.$cookies.set('email', authRes.data.email, 60 * 60 * 23);
             this.$cookies.set('fio', authRes.data.fio, 60 * 60 * 23);
             this.$cookies.set('id', authRes.data.id, 60 * 60 * 23);
