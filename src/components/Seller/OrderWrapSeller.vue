@@ -34,7 +34,7 @@ export default {
       limit: 20,
       offset: 0,
       orders: 0,
-      perPage: 3,
+      perPage: 20,
       page: 1,
     }
   },

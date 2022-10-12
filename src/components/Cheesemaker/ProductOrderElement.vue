@@ -184,6 +184,7 @@ export default {
                   console.log(error)
                   this.content.status = 'в обработке'
                   alert(`Товара ${name} недостаточно на складе ${storageName}`)
+                  location.reload()
                 } else {
                   console.log(error);
                   alert('Ошибка в работе приложения. Обратитесь к администратору.');

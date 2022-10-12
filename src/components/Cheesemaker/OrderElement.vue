@@ -50,7 +50,7 @@
           @click="orderSentToThePoint"
           type="button"
           class="btn centered"
-          v-if="startOrder && order.status !=='отправлен на точку' "
+          v-if="startOrder && order.status !=='отправлен на точку' && order.status !== 'отменен' && order.status !== 'заказ выдан'"
       >
         Отправить заказ на точку
         <svg
@@ -123,7 +123,8 @@ export default {
       usersInfo: {},
       content: {},
       startOrder: false,
-      checkOrder: false
+      checkOrder: false,
+      sendComment: ''
     };
   },
   props: {
@@ -194,9 +195,7 @@ export default {
       for (let i = 0; i < contentsLength; i++) {
         this.$refs.ProductOrderElement[i].productCheck();
         this.visibleBottom();
-
       }
-
     },
     orderSentToThePoint() {
       let staffed = []
@@ -210,6 +209,7 @@ export default {
             cancelled.push(value)
           } else {
             notStaffed.push(value)
+
           }
         }
       }
@@ -235,6 +235,10 @@ export default {
             authorization: this.$cookies.get('authorization'),
           },
         })
+            .then(() => {
+              this.getRoles(1)
+              this.sendEmailForBuyer(1)
+            })
             .catch((error) => {
               this.order.status = 'в обработке'
               console.log(error);
@@ -293,6 +297,7 @@ export default {
       sendOrder.status = 'отменен';
       this.order.status = 'отменен'
       sendOrder.comment = comment
+      this.sendComment = comment
       sendOrder.delivery_date = deliveryDate
       sendOrder.id = this.order.id
       sendOrder.payment_type = this.order.payment_type
@@ -307,11 +312,92 @@ export default {
           authorization: this.$cookies.get('authorization'),
         },
       })
+          .then(() => {
+            this.getRoles(0)
+            this.sendEmailForBuyer(0)
+            this.checkOrder = false
+          })
           .catch((error) => {
             console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
     },
+    sendEmailForBuyer(active) {
+      let sendMessage = {}
+      if (active === 1) {
+        sendMessage.address = this.order.author.email
+        sendMessage.subject = `Заказ № ${this.order.id} отправлен`
+        sendMessage.body = `Ваш заказ № ${this.order.id} отправлен в магазин ${this.order.pickpoint.name}`
+      } else {
+        sendMessage.address = this.order.author.email
+        sendMessage.subject = `Заказ № ${this.order.id} `
+        sendMessage.body = `C заказом № ${this.order.id} возникли проблемы. Пожалуйста, обратитесь в магазин`
+      }
+        axios
+        ({
+          method: 'POST',
+          url: `${config.url}/users/sendmail`,
+          data: sendMessage,
+          headers: {
+            "authorization": this.$cookies.get('authorization')
+          }
+        })
+            .catch((error) => {
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
+
   },
-};
+  sendEmail(role, message) {
+    for (let i = 0; i < role.length; i++) {
+      let sendMessage = {}
+      sendMessage.address = role[i].email
+      sendMessage.subject = message.subject
+      sendMessage.body = message.body
+      console.log(sendMessage)
+      axios
+      ({
+        method: 'POST',
+        url: `${config.url}/users/sendmail`,
+        data: sendMessage,
+        headers: {
+          "authorization": this.$cookies.get('authorization')
+        }
+      })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
+    }
+  },
+  getRoles(active) {
+    let send = {}
+    if (active === 1) {
+      send.subject = `Заказ № ${this.order.id} отправлен`
+      send.body = `Заказ для пользователя "${this.order.author.fio}" отправлен на точку "${this.order.pickpoint.name}"`
+    } else if (active === 0) {
+      send.subject = `Заказ № ${this.order.id} отменен`
+      send.body = `Заказ для пользователя "${this.order.author.fio}" отменен. Причина отмены: "${this.sendComment}"`
+    }
+    axios
+    ({
+      method: 'GET',
+      url: `${config.url}/users/role/admin`,
+      headers: {
+        "authorization": this.$cookies.get('authorization')
+      }
+    })
+        .then((req) => {
+          console.log(req.data)
+          this.sendEmail(req.data, send)
+        })
+        .catch((error) => {
+          console.log(error);
+          alert('Ошибка в работе приложения. Обратитесь к администратору.');
+        });
+  },
+}
+,
+}
+;
 </script>

@@ -87,7 +87,8 @@ export default {
       cart: {},
       isVisible: true,
       sucsess: false,
-      pickpoint_id: ''
+      pickpoint_id: '',
+      orderNumber: ''
     };
   },
   props: {
@@ -162,14 +163,59 @@ export default {
           }
         })
             .then((order) => {
+
               let order_id = parseInt(order.data.detail.match(/\d+/));
+              this.orderNumber = parseInt(order.data.detail.match(/\d+/));
               this.contentAdd(order_id);
+              this.getRoles('admin')
+              this.getRoles('cheesemaster')
             })
             .catch((error) => {
               console.log(error);
               alert('Ошибка в работе приложения. Обратитесь к администратору.');
             });
       }
+    },
+    sendEmail(role) {
+      for (let i = 0; i < role.length; i++) {
+        console.log(role[i].email)
+        let sendMessage = {}
+        sendMessage.address = role[i].email
+        sendMessage.subject = `Новый заказ № ${this.orderNumber}`
+        sendMessage.body = `Пользователь ${this.$cookies.get('fio')} сделал новый заказ`
+        axios
+        ({
+          method: 'POST',
+          url: `${config.url}/users/sendmail`,
+          data: sendMessage,
+          headers: {
+            "authorization": this.$cookies.get('authorization')
+          }
+        })
+
+            .catch((error) => {
+              console.log(error);
+              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
+      }
+    },
+    getRoles(roleName) {
+      axios
+      ({
+        method: 'GET',
+        url: `${config.url}/users/role/${roleName}`,
+        headers: {
+          "authorization": this.$cookies.get('authorization')
+        }
+      })
+          .then((req) => {
+            console.log(req.data)
+            this.sendEmail(req.data)
+          })
+          .catch((error) => {
+            console.log(error);
+            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
     contentAdd(order_id) {
       let date = new Date();

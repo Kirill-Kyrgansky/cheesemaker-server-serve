@@ -1,5 +1,8 @@
 <template>
-  <div class="order-element">
+  <div class="order-element"
+
+       v-if="order.status === 'отправлен на точку' || order.status === 'прибыл в магазин' || order.status === 'прибыл в магазин частично'"
+  >
     <div
         class="order-finished"
         v-if="order.status !== 'отправлен на точку' && order.status !== 'прибыл в магазин' && order.status !== 'прибыл в магазин частично'"
@@ -172,11 +175,13 @@ export default {
         },
       })
           .then(() => {
+            this.getRoles(2)
+            this.sendEmailForBuyer(0)
             this.order.status = 'прибыл в магазин частично'
           })
           .catch((error) => {
             console.log(error);
-            alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            return alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
     },
     currentDate(date) {
@@ -221,11 +226,39 @@ export default {
       })
           .then(() => {
             this.order.status = 'прибыл в магазин';
+            this.getRoles(1)
+            this.sendEmailForBuyer(1)
           })
+          .catch((error) => {
+            console.log(error);
+            return alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
+    },
+    sendEmailForBuyer(active) {
+      let sendMessage = {}
+      if (active === 1) {
+        sendMessage.address = this.order.author.email
+        sendMessage.subject = `Заказ № ${this.order.id} прибыл`
+        sendMessage.body = `Ваш заказ № ${this.order.id} прибыл в магазин ${this.order.pickpoint.name}`
+      } else  {
+        sendMessage.address = this.order.author.email
+        sendMessage.subject = `Заказ № ${this.order.id} `
+        sendMessage.body = `C заказом № ${this.order.id} возникли проблемы. Пожалуйста, обратитесь в магазин`
+      }
+      axios
+      ({
+        method: 'POST',
+        url: `${config.url}/users/sendmail`,
+        data: sendMessage,
+        headers: {
+          "authorization": this.$cookies.get('authorization')
+        }
+      })
           .catch((error) => {
             console.log(error);
             alert('Ошибка в работе приложения. Обратитесь к администратору.');
           });
+
     },
     orderIssued() {
       let date = new Date();
@@ -260,10 +293,11 @@ export default {
           })
               .then(() => {
                 globalValue.status = 'заказ выдан'
+                this.getRoles(3)
               })
               .catch((error) => {
                 console.log(error);
-                alert('Ошибка в работе приложения. Обратитесь к администратору.');
+                return alert('Ошибка в работе приложения. Обратитесь к администратору.');
               });
         }
       }
@@ -291,13 +325,14 @@ export default {
         )
             .then(() => {
               this.order.status = 'заказ отменен покупателем';
+              this.getRoles(0)
               alert(`Заказ № ${this.order.id} отменен`);
             })
             .catch((error) => {
               this.order.status = 'в обработке'
               console.log(this.order);
               console.log(error);
-              alert('Ошибка в работе приложения. Обратитесь к администратору.');
+              return alert('Ошибка в работе приложения. Обратитесь к администратору.');
             });
       } else {
         if (this.order.status !== 'заказ отменен. покупатель отказался от товаров') {
@@ -313,7 +348,6 @@ export default {
           order.author_id = this.order.author.id
           order.date = nowDate
           order.status = 'заказ выдан'
-
           axios({
                 method: 'PATCH',
                 url: `${config.url}/orders/${this.order.id}`,
@@ -326,15 +360,71 @@ export default {
               .then(() => {
                 alert(`Заказ № ${this.order.id} успешно выдан`);
                 this.order.status = 'заказ выдан';
+                this.getRoles(3)
               })
               .catch((error) => {
                 this.order.status = 'в обработке'
                 console.log(this.order);
                 console.log(error);
-                alert('Ошибка в работе приложения. Обратитесь к администратору.');
+                return alert('Ошибка в работе приложения. Обратитесь к администратору.');
               });
         }
       }
+    },
+    sendEmail(role, message) {
+      for (let i = 0; i < role.length; i++) {
+        console.log(role[i].email)
+        let sendMessage = {}
+        sendMessage.address = role[i].email
+        sendMessage.subject = message.subject
+        sendMessage.body = message.body
+        console.log(sendMessage)
+        axios
+        ({
+          method: 'POST',
+          url: `${config.url}/users/sendmail`,
+          data: sendMessage,
+          headers: {
+            "authorization": this.$cookies.get('authorization')
+          }
+        })
+            .catch((error) => {
+              console.log(error);
+              return alert('Ошибка в работе приложения. Обратитесь к администратору.');
+            });
+      }
+    },
+    getRoles(active) {
+      let send = {}
+      if (active === 1) {
+        send.subject = `Заказ № ${this.order.id} принят в магазине`
+        send.body = `Заказ для пользователя "${this.order.author.fio}" принят на точке "${this.order.pickpoint.name}"`
+      } else if (active === 2) {
+        send.subject = `Заказ № ${this.order.id} изменен`
+        send.body = `Заказ для пользователя "${this.order.author.fio}" принят на точке частично.`
+      } else if (active === 0) {
+        send.subject = `Заказ № ${this.order.id} отменен покупателем`
+        send.body = `Покупатель "${this.order.author.fio}" отказался от заказа. Причина отказа: "${this.sendComment}"`
+      } else if (active === 3) {
+        send.subject = `Заказ № ${this.order.id} выдан покупателю`
+        send.body = `Покупатель "${this.order.author.fio}" получил свой заказ на точке ${this.order.pickpoint.name}"`
+      }
+      axios
+      ({
+        method: 'GET',
+        url: `${config.url}/users/role/admin`,
+        headers: {
+          "authorization": this.$cookies.get('authorization')
+        }
+      })
+          .then((req) => {
+            console.log(req.data)
+            this.sendEmail(req.data, send)
+          })
+          .catch((error) => {
+            console.log(error);
+            return alert('Ошибка в работе приложения. Обратитесь к администратору.');
+          });
     },
   },
 }
