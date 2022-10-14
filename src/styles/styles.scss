@@ -992,6 +992,7 @@ input::placeholder {
 
 .catalog-element-wrap {
   text-align: center;
+
 }
 
 .left {
@@ -1085,10 +1086,9 @@ input::placeholder {
 
 .cart-element-wrap {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   align-content: flex-start;
-  // margin: 10px 0px;
+  justify-content: space-around
 }
 
 .cart-element {
