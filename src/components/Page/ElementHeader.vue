@@ -463,10 +463,15 @@
                     v-if="!logIn"
                     class="personal-cabinet_wrap"
                 >
-                  <img src="/allImage/Icons/cross.svg" @click="toggleLogin" class="header-link-icon pointer close"
-                       alt="close">
-                  <div class="margin-10-0">
-                    <h3 class="title-3">Добрый день</h3>
+
+                  <div >
+                    <div class="pop-up-welcome">
+                    <h3 class="title-3">Добрый день,</h3>
+                    <img src="/allImage/Icons/cross.svg"
+                         @click="toggleLogin"
+                         class="header-link-icon pointer close"
+                         alt="close">
+                    </div>
                     <h3 class="title-3">{{ fio }}</h3>
                   </div>
                   <button
@@ -480,7 +485,7 @@
                       @click="isHistoryOrdersVisible"
                       class="btn"
                   >
-                    История заказов
+                    История
                   </button>
                   <button
                       v-if="historyOrders"
@@ -489,7 +494,7 @@
                   >
                     Скрыть историю заказов
                   </button>
-                  <p class="title-3">Информация о заказах:</p>
+                  <p class="paragraph ">Информация о заказах:</p>
                   <div class="flex-reverse">
                     <PersonalCabinet
                         v-for="orders in ORDERS_USERS"

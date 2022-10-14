@@ -4,6 +4,7 @@
         class="admin-panel"
         v-if="!storage"
     >
+      <div class="create-storage-flex">
       <div class="options-admin">
         <h3 class="title-3 text-centered">Активные склады</h3>
         <div
@@ -12,7 +13,7 @@
         >
           <div
               class="input search"
-              v-if="storage.active || storage.id !== 0"
+              v-if="storage.active && storage.id !== 0"
           >
             <p href="#" class="paragraph">
               {{ storage.name }}
@@ -22,15 +23,16 @@
                     class="paragraph-small"
               >Комментарий:</span
               >
-              <br v-if="storage.comment"/>{{ storage.comment }}
+              <br v-if="storage.comment"/>{{ storage.comment }} <br/>
               Адрес:
               <br/> {{ storage.address }}
             </p>
             <div class="centered">
               <img
                   src="/allImage/Icons/Edit.svg"
-                  class="img-question"
+                  class="img-change"
                   @click="changeCategory(storage)"
+                  :title="changeCategoryTitle"
               />
               <input
                   true-value="1"
@@ -38,12 +40,15 @@
                   type="checkbox"
                   v-model="storage.active"
                   @click="changeVisibility(storage)"
+                  class="pointer"
+                  :title="changeVisibleTitle"
               />
+              <p class="paragraph">Активный</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="options-admin margin-10-0">
+      <div class="options-admin">
         <h3 class="title-3 text-centered">Неактивные склады</h3>
         <div
             v-for="storage in STORAGES"
@@ -55,59 +60,70 @@
           >
             <p href="#" class="paragraph">
               {{ storage.name }} <br/>
-              <span class="paragraph-small"
+              <span v-if="storage.comment !== undefined" class="paragraph-small"
               >комментарий:</span
               >
-              <br/>{{ storage.comment }}
+              {{ storage.comment }}
             </p>
             <div class="centered">
-              <img
-                  src="/allImage/Icons/Edit.svg"
-                  class="img-question"
-                  @click="changeCategory(storage)"
-              />
+
               <input
                   true-value="1"
                   false-value="0"
                   type="checkbox"
                   v-model="storage.active"
                   @click="changeVisibility(storage)"
+                  class="pointer"
+                  :title="changeVisibleTitle"
+
               />
+              <img
+                  src="/allImage/Icons/Edit.svg"
+                  class="img-change"
+                  @click="changeCategory(storage)"
+                  :title="changeCategoryTitle"
+              />
+              <p class="paragraph">Неактивный</p>
             </div>
           </div>
         </div>
       </div>
-      <h3 class="title-3 text-centered">Создание склада</h3>
-      <p class="paragraph">Название:</p>
-      <input
-          class="input"
-          type="text"
-          placeholder="Введите название склада"
-          v-model="createStorage.name"
-          required
-      />
-      <p class="paragraph">Адрес:</p>
-      <input
-          class="input"
-          type="text"
-          placeholder="Введите адрес склада"
-          v-model="createStorage.address"
-          required
-      />
-      <p class="paragraph">Комментарии: <br/>(если требуется)</p>
-      <input
-          class="input"
-          type="text"
-          placeholder="Введите адрес склада"
-          v-model="createStorage.comment"
-          required
-      />
-      <button
-          class="btn"
-          @click="createNewStorage()"
-      >
-        Создать новый склад
-      </button>
+        <div class="options-admin">
+          <h3 class="title-3 text-centered">Создание склада</h3>
+          <p class="paragraph">Название:</p>
+          <input
+              class="input"
+              type="text"
+              placeholder="Введите название склада"
+              v-model="createStorage.name"
+              required
+          />
+          <p class="paragraph">Адрес:</p>
+          <input
+              class="input"
+              type="text"
+              placeholder="Введите адрес склада"
+              v-model="createStorage.address"
+              required
+          />
+          <p class="paragraph">Комментарии: <br/>(если требуется)</p>
+          <div class="column">
+          <input
+              class="input"
+              type="text"
+              placeholder="Введите адрес склада"
+              v-model="createStorage.comment"
+              required
+          />
+          <button
+              class="btn"
+              @click="createNewStorage()"
+          >
+            Создать новый склад
+          </button>
+          </div>
+        </div>
+      </div>
 
     </div>
 
@@ -138,9 +154,11 @@ export default {
     return {
       createStorage: {
         name: '',
-        address: ''
+        address: '',
       },
       storage: true,
+      changeCategoryTitle: 'Изменить категорию',
+      changeVisibleTitle: 'Изменить видимость склада'
     };
   },
   computed: {

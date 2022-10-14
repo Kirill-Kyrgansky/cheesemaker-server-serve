@@ -32,7 +32,7 @@
           </p>
           <input
               type="number"
-              class="input"
+              class="input text-centered"
               step="0.1"
               min="0.1"
               v-model="factWeight"
@@ -69,7 +69,7 @@
                   :key="store.id">
                 <p
                     class="paragraph input search-cart"
-                    v-if="store.name !== 'Не выбранный склад'"
+                    v-if="store.name !== 'Не выбранный склад' && store.active !== 0"
                 >
                   {{ store.name }}
                 </p>

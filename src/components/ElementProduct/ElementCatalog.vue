@@ -14,6 +14,20 @@
           </p>
         </div>
       </transition>
+      <transition name="fade">
+        <div
+            class="error-mesage"
+            v-if="isVisibleAuthorizationCart"
+        >
+          <img
+              src="/allImage/Icons/exclamation-circle-fill.svg"
+              alt="Предупреждение"
+              class="width-70"
+          />
+          <p class="title-3 text-centered">
+            Для добавления товара в&nbsp;корзину необходимо войти в&nbsp;личный кабинет!          </p>
+        </div>
+      </transition>
       <div class="catalog-items-products-img">
         <img
             :src="'http://shop-dev.zdmail.ru' + product.image_path.slice('2')"
@@ -29,26 +43,41 @@
           @mouseover="description = !description"
       />
       <div
-          class="v-select width-200"
+          class="v-select width-200 text-centered"
           v-click-outside="onClickOutside"
       >
         <p
-            class="input"
+            class="input pointer "
             @click="areOptionsVisible = !areOptionsVisible"
+            v-if="this.$cookies.get('authorization')"
         >
           {{ selected.name }}
         </p>
         <div
-            class="options-product"
+            v-for="price in PRICES"
+            :key="price.id"
+            v-if="!this.$cookies.get('authorization')"
+        >
+          <p
+              class="paragraph margin-10-0 bold"
+              v-if="(price.product_id == product.id) && (price.active == 1)"
+          >
+            {{ price.item_price }}&nbsp;₽ \ 1 &nbsp;{{ price.item_measure }}
+          </p>
+        </div>
+        <div
+            class="options-product "
             v-if="areOptionsVisible"
             v-click-outside="onClickOutside"
+
         >
           <div
               v-for="price in PRICES"
               :key="price.id"
+              class="pointer margin-0-10"
           >
             <a
-                class="input bold search"
+                class="input search pointer "
                 v-if="(price.product_id == product.id) && (price.active == 1)"
                 @click="selectOption(price)"
             >
@@ -57,7 +86,7 @@
           </div>
         </div>
       </div>
-      <div class="cart-element">
+      <div class="cart-element" >
         <input
             type="button"
             class="btn margin-0-10"
@@ -67,7 +96,7 @@
         <input
             type="number"
             v-model="filteredAmount"
-            class="input max-width-50"
+            class="input max-width-30 text-centered"
             min="1"
             @keydown="
             if (['+', '-', 'e'].includes($event.key)) $event.preventDefault();
@@ -139,7 +168,9 @@ export default {
       isVisible: false,
       amount: 1,
       cartPrise: [],
-      isVisibleButtonCart: true
+      isVisibleButtonCart: true,
+      isVisibleAuthorizationCart: false
+
     };
   },
   props: {
@@ -246,15 +277,21 @@ export default {
       return this.product.inStock !== 0;
     },
     addToCart() {
-      if (this.selected.name === 'Выбрать упаковку') {
+      if (this.$cookies.get('fio') !== null) {
+        if (this.selected.name === 'Выбрать упаковку') {
+          setTimeout(() => {
+            this.isVisible = !this.isVisible;
+          }, 2000);
+          return (this.isVisible = !this.isVisible);
+        }
+        this.product.amount = this.amount
+        this.$emit('addToCart', this.product, this.selected);
+      } else {
         setTimeout(() => {
-          this.isVisible = !this.isVisible;
+          this.isVisibleAuthorizationCart = !this.isVisibleAuthorizationCart;
         }, 2000);
-        return (this.isVisible = !this.isVisible);
+        return (this.isVisibleAuthorizationCart = !this.isVisibleAuthorizationCart)
       }
-      // this.test1()
-      this.product.amount = this.amount
-      this.$emit('addToCart', this.product, this.selected);
     },
   },
 };

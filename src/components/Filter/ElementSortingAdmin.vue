@@ -1,9 +1,7 @@
 <template>
   <div>
-  <div class="border-surround filter admin-panel">
-    <div class="categories" v-if="!categories">
-      <h3 class="title-3 text-centered">Категории</h3>
-      <div >
+  <div class="border-surround">
+    <div class="categories create-storage-flex" v-if="!categories">
         <div class="options-admin">
           <h3 class="title-3 text-centered">Активные категории</h3>
           <div v-for="option in CATEGORY" :key="option.id">
@@ -12,20 +10,21 @@
                 {{ option.name }}
               </p>
               <div class="centered">
+                <input
+                    true-value="1"
+                    false-value="0"
+                    type="checkbox"
+                    v-model="option.active"
+                    @click="сhangeVisibility(option.id, option.active, option.name)"
+                    :title="areOptionsVisible"
+                />
                 <img
                   @click="changeCategory(option.id, option.name)"
                   src="/allImage/Icons/Edit.svg"
-                  class="img-question"
+                  class="img-change"
+                  :title="changeCategoryTitle"
                 />
-                <input
-                  true-value="1"
-                  false-value="0"
-                  type="checkbox"
-                  v-model="option.active"
-                  @click="
-                    сhangeVisibility(option.id, option.active, option.name)
-                  "
-                />
+                <p class="paragraph">Активный</p>
               </div>
             </div>
           </div>
@@ -38,26 +37,28 @@
                 {{ option.name }}
               </p>
               <div class="centered">
+                <input
+                    true-value="1"
+                    false-value="0"
+                    type="checkbox"
+                    v-model="option.active"
+                    @click="
+                    сhangeVisibility(option.id, option.active, option.name)
+                  "
+                    :title="changeVisibleTitle"
+                />
                 <img
                   @click="changeCategory(option.id, option.name)"
                   src="/allImage/Icons/Edit.svg"
-                  class="img-question"
+                  class="img-change"
+                  :title="changeCategoryTitle"
                 />
-                <input
-                  true-value="1"
-                  false-value="0"
-                  type="checkbox"
-                  v-model="option.active"
-                  @click="
-                    сhangeVisibility(option.id, option.active, option.name)
-                  "
-                />
+                <p class="paragraph">Неактивный</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="admin-panel margin-10-0">
+      <div class="admin-panel options-admin">
         <p class="paragraph-small">{{ searchValue }}</p>
         <p class="paragraph-small margin-10-0">Добавить категорию:</p>
         <input class="input" type="text" v-model="formCategories.name" />
@@ -92,6 +93,8 @@ export default {
         name: '',
       },
       categories: true,
+      changeCategoryTitle: 'Изменить категорию',
+      changeVisibleTitle: 'Изменить видимость категории'
     };
   },
   props: {

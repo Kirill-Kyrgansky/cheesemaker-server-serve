@@ -4,7 +4,7 @@
 @import 'animation.scss';
 @import 'pagination.scss';
 @import "input.scss";
-//@import "scroll.scss";
+@import "scroll.scss";
 
 html {
   scroll-behavior: smooth;
@@ -42,8 +42,14 @@ textarea {
 
 .pickpoint-map-container {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.pop-up-welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .login-pop-up {
@@ -51,12 +57,12 @@ textarea {
   background-image: url(/public/allImage/fone2.svg);
   background-repeat: repeat;
   max-height: 400px;
-  padding: 20px 10px;
+  padding: 5px 0 5px 8px;
 }
 
 .personal-cabinet_wrap {
   overflow: auto;
-  padding: 5px;
+  padding: 2px;
 }
 
 .flex-reverse {
@@ -77,13 +83,18 @@ textarea {
   margin: auto;
 }
 
+.title-3 {
+  @include title-3;
+  margin: 0;
+}
+
 .footer-image-center {
   max-width: 30%;
 }
 
-.create-storage {
-  margin-top: 20px;
-}
+//.create-storage {
+//  margin-top: 20px;
+//}
 
 .statick {
   position: static !important;
@@ -133,18 +144,24 @@ textarea {
 }
 
 .error-mesage {
-  width: 91%;
-  height: 70px;
   background-color: #FDD99E;
   border: 2.5px solid #6E492A;
   border-radius: 10px;
   position: absolute;
-  top: 10px;
+  top: 170px;
   z-index: 999;
   padding: 10px;
+  margin: 0 10px;
   display: flex;
   align-items: center;
-  background-image: url(http://172.16.2.181:8080/img/fonebox2.32716d15.svg);
+  height: 160px;
+  max-width: 200px;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.width-70{
+  width: 70px;
 }
 
 .display {
@@ -240,9 +257,10 @@ textarea {
 }
 
 .close {
-  position: absolute;
-  top: 0;
-  right: 0;
+  //position: absolute;
+  top: 10px;
+  right: 20px;
+  width: 35px !important;
 }
 
 .btn-text {
@@ -293,6 +311,11 @@ textarea {
   width: 25px;
 }
 
+.img-change {
+  margin:  0 5px;
+  width: 25px;
+  cursor: pointer;
+}
 
 .catalog-items-products-img {
   display: flex;
@@ -607,7 +630,7 @@ textarea {
   border-radius: 10px;
   border: 4px solid $text-collor-opacity;
   padding: 15px;
-  margin-right: -8px;
+  //margin-right: -8px;
   background-color: rgba(253, 217, 158, 0.7);
 }
 
@@ -842,13 +865,17 @@ input::placeholder {
   min-width: 300px;
 }
 
+.max-width-30 {
+  max-width: 30px;
+}
+
 .input {
   @include btn-text;
   @include paragraph;
-  text-align: center;
+  //text-align: center;
   background-color: $main-collor;
   margin: 10px 0;
-  padding: 5px 10px;
+  padding: 5px;
   border: 3px solid $text-collor-opacity;
   border-radius: 10px;
 }
@@ -917,7 +944,7 @@ input::placeholder {
 .v-select {
   min-width: 200px;
   position: relative;
-  cursor: pointer;
+  //cursor: pointer;
 }
 
 .options {
@@ -938,15 +965,16 @@ input::placeholder {
 }
 
 .options-admin {
-  background: #faf3d6;
   @include border-radius;
-  top: 50px;
+  padding: 5px;
+  margin: 0 10px;
 }
 
 .search {
   display: flex;
-  margin: 20px 10px;
+  //margin: 20px 10px;
   justify-content: space-between;
+  align-items: center;
 }
 
 .search-cart {
@@ -978,11 +1006,11 @@ input::placeholder {
 
 .map {
   display: flex;
-  gap: 20px 10px;
+  //gap: 20px 10px;
   flex-wrap: wrap;
   justify-content: space-evenly;
   animation: map 0.6s linear 0s 1 normal forwards;
-  margin: 20px 20px;
+  margin-bottom: 20px;
 }
 
 @keyframes map {
@@ -1021,7 +1049,7 @@ input::placeholder {
   flex-direction: column;
   align-items: stretch;
   justify-content: space-between;
-  max-width: 270px;
+  width: 270px;
 
 }
 
@@ -1057,7 +1085,7 @@ input::placeholder {
 
 .cart-element-wrap {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   align-content: flex-start;
   // margin: 10px 0px;
@@ -1151,7 +1179,6 @@ input::placeholder {
 }
 
 .warehouse {
-  overflow: auto;
   background-color: #FDD99E;
   display: grid;
   grid-template-columns: repeat(5, auto);
@@ -1159,7 +1186,6 @@ input::placeholder {
   align-items: center;
   border: 4px solid $text-collor-opacity;
   border-radius: 10px;
-
 }
 
 .warehouse-element-column {
@@ -1167,6 +1193,7 @@ input::placeholder {
   width: 100%;
   height: 100%;
   border-top: 2px solid $text-collor-opacity;
+  padding: 2px;
 }
 
 .warehouse-element-column-first {
@@ -1176,6 +1203,19 @@ input::placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.create-storage-flex {
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 25px;
 }
 
 .header-link-burger {
@@ -1298,6 +1338,16 @@ input::placeholder {
     max-width: 250px;
   }
 
+  .create-storage-flex {
+    flex-direction: column;
+
+  }
+
+  .options-admin {
+    max-width: 300px;
+    margin: 10px 0;
+  }
+
   .order-element-button {
     align-items: stretch;
     flex-direction: column-reverse;
@@ -1356,6 +1406,14 @@ input::placeholder {
   .section {
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .admin-panel {
+    padding: 0;
+  }
+
+  .warehouse {
+    overflow: auto;
   }
 
   .button-right {
@@ -1422,4 +1480,9 @@ input::placeholder {
   .pagination {
     flex-wrap: wrap;
   }
+
+  .search {
+    flex-wrap: wrap;
+  }
+
 }

@@ -123,9 +123,16 @@
                 @click="ApplyPriceChanges(price.active, price, price.id)"
                 v-if="!price.visible"
             />
+            <div class="width-70">
             <p class="paragraph" v-if="!price.visible">
-              {{ price.item_price }}&nbsp;₽&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 {{ price.item_measure }}
+              {{ price.item_price }}&nbsp;₽
             </p>
+            </div>
+            <div class="width-70">
+            <p class="paragraph" v-if="!price.visible">
+              1 {{ price.item_measure }}
+            </p>
+            </div>
             <button
                 class="btn"
                 @click="price.visible = !price.visible"
