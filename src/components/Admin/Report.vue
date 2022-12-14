@@ -1,13 +1,7 @@
 <template>
   <div class="report">
-    <div
-        class="cart-done"
-        v-if="reportDateVisible"
-    >
-      <div
-          class="cart cart-sucsess order-title"
-          v-click-outside="isVisibleReport"
-      >
+    <div class="cart-done">
+      <div class="cart cart-sucsess order-title" >
         <div class="position-end">
           <img
               src="/allImage/Icons/cross.svg"
@@ -27,7 +21,6 @@
             type="button"
             @click="report('order-contents')"
             value="Отчет по движению товара"
-
         >
         <input
             class="btn margin-10-0"
@@ -66,14 +59,6 @@
         </Datepicker>
       </div>
     </div>
-    <div class="report-button">
-      <input
-          class="header-link pointer header-link-report"
-          type="button"
-          @click="reportVisible"
-          value="Отчеты"
-      >
-    </div>
   </div>
 </template>
 
@@ -90,6 +75,11 @@ export default {
   directives: {
     clickOutside: vClickOutside.directive,
   },
+  props: {
+    isShow: {
+      type: Boolean
+    }
+  },
   data() {
     return {
       reportDateVisible: false,
@@ -97,9 +87,6 @@ export default {
     }
   },
   methods: {
-    isVisibleReport() {
-      this.reportDateVisible = false
-    },
     report(url) {
       if (this.date === null) {
         alert('Выберите дату.')
@@ -148,8 +135,8 @@ export default {
       this.$refs.Datepicker.selectDate();
     },
     reportVisible() {
-      this.reportDateVisible = !this.reportDateVisible
-    }
+      this.$emit('toggle-button')
+    },
   },
 }
 

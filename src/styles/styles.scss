@@ -276,6 +276,7 @@ textarea {
 .position-end {
   display: flex;
   justify-content: flex-end;
+  margin-top: -20px;
 }
 
 .arrow-bottom {
@@ -1244,7 +1245,7 @@ input::placeholder {
   }
 
   .header-link-report {
-    width: 160px;
+    //width: 160px;
   }
 
   .header-link {
@@ -1256,7 +1257,7 @@ input::placeholder {
   }
 
   .filter {
-    margin-right: 0px;
+    margin-right: 0;
   }
 
   .catalog-content {
@@ -1265,7 +1266,7 @@ input::placeholder {
     top: 0;
     max-height: none;
     display: block;
-    margin-top: 0px;
+    margin-top: 0;
   }
 
   .header-list {
@@ -1293,7 +1294,7 @@ input::placeholder {
   }
 
   .catalog-items {
-    padding: 0px;
+    padding: 0;
   }
 
   .arrow {
@@ -1391,7 +1392,7 @@ input::placeholder {
 
   .cart-footer {
     flex-direction: column;
-    margin-right: 0px;
+    margin-right: 0;
     margin-bottom: 20px;
   }
 

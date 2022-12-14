@@ -1,6 +1,10 @@
 <template>
   <header>
     <section class="section header">
+      <report
+          v-if="isShow"
+          @toggle-button="closeReportMenu"
+      />
       <div class="container">
         <div class="centered">
           <a
@@ -15,6 +19,8 @@
             />
           </a>
           <nav class="header-nav">
+            <transition name="fade">
+            </transition>
             <transition name="fade">
               <div
                   class="header-list-mobile"
@@ -49,6 +55,12 @@
                     v-if="isCheesemakerAuth"
                 >Сыровар
                 </router-link>
+                <button
+                    class="header-link"
+                    @click="showReportsMenu()"
+                    v-if="isCheesemakerAuth || isAdminAuth"
+                >Отчеты
+                </button>
                 <router-link
                     class="header-link"
                     to="/cheesemaker-orders"
@@ -61,9 +73,6 @@
                     v-if="isCheesemakerAuth || isAdminAuth"
                 >Склад
                 </router-link>
-                <report
-                    v-if="isCheesemakerAuth || isAdminAuth"
-                />
                 <router-link
                     class="header-link"
                     to="/delivery"
@@ -577,7 +586,8 @@ export default {
       historyOrders: false,
       activeOrders: true,
       isServiseMenuVisible: false,
-      user: {}
+      user: {},
+      isShow: false
     };
   },
   computed: {
@@ -591,6 +601,9 @@ export default {
     this.GET_ORDERS_USERS_FROM_API();
   },
   methods: {
+    showReportsMenu() {
+     this.isShow = !this.isShow
+    },
     serviseMenu() {
       this.isServiseMenuVisible = !this.isServiseMenuVisible
     },
@@ -730,6 +743,11 @@ export default {
         this.isServiseMenuVisible = !this.isServiseMenuVisible
       }
     },
+    closeReportMenu() {
+      if (this.isShow === true) {
+        this.isShow = !this.isShow;
+      }
+    }
   },
   directives: {
     clickOutside: vClickOutside.directive,
